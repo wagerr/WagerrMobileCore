@@ -330,7 +330,11 @@ public class BRCoreWalletManager implements
 
     private String getChainDescriptiveName ()
     {
-        if (chainParams == BRCoreChainParams.mainnetChainParams)
+        if (chainParams == BRCoreChainParams.mainnetBiblepayChainParams)
+            return "BiblePay Mainnet";
+        else if (chainParams == BRCoreChainParams.testnetBiblepayChainParams)
+            return "BiblePay Testnet";
+        else if (chainParams == BRCoreChainParams.mainnetChainParams)
             return "Bitcoin Mainnet";
         else if (chainParams == BRCoreChainParams.testnetChainParams)
             return "Bitcoin Testnet";

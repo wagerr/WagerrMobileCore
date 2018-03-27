@@ -39,12 +39,6 @@ extern "C" {
 #pragma message "testnet build"
 #endif
 
-// bitcoin address prefixes
-#define BIBLEPAY_PUBKEY_ADDRESS      25
-#define BIBLEPAY_SCRIPT_ADDRESS      16
-#define BIBLEPAY_PUBKEY_ADDRESS_TEST 140
-#define BIBLEPAY_SCRIPT_ADDRESS_TEST 19
-
 typedef struct {
     char s[75];
 } BRBiblepayAddr;

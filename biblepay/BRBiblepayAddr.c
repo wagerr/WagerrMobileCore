@@ -55,27 +55,27 @@ size_t BRBiblepayAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t 
     if (count == 5 && *elems[0] == OP_DUP && *elems[1] == OP_HASH160 && *elems[2] == 20 &&
         *elems[3] == OP_EQUALVERIFY && *elems[4] == OP_CHECKSIG) {
         // pay-to-pubkey-hash scriptPubKey
-        data[0] = BIBLEPAY_PUBKEY_ADDRESS;
+        data[0] = BITCOIN_PUBKEY_ADDRESS;
 #if BIBLEPAY_TESTNET
-        data[0] = BIBLEPAY_PUBKEY_ADDRESS_TEST;
+        data[0] = BITCOIN_PUBKEY_ADDRESS_TEST;
 #endif
         memcpy(&data[1], BRScriptData(elems[2], &l), 20);
         r = BRBase58CheckEncode(addr, addrLen, data, 21);
     }
     else if (count == 3 && *elems[0] == OP_HASH160 && *elems[1] == 20 && *elems[2] == OP_EQUAL) {
         // pay-to-script-hash scriptPubKey
-        data[0] = BIBLEPAY_SCRIPT_ADDRESS;
+        data[0] = BITCOIN_PUBKEY_ADDRESS;
 #if BIBLEPAY_TESTNET
-        data[0] = BIBLEPAY_SCRIPT_ADDRESS_TEST;
+        data[0] = BITCOIN_SCRIPT_ADDRESS_TEST;
 #endif
         memcpy(&data[1], BRScriptData(elems[1], &l), 20);
         r = BRBase58CheckEncode(addr, addrLen, data, 21);
     }
     else if (count == 2 && (*elems[0] == 65 || *elems[0] == 33) && *elems[1] == OP_CHECKSIG) {
         // pay-to-pubkey scriptPubKey
-        data[0] = BIBLEPAY_PUBKEY_ADDRESS;
+        data[0] = BITCOIN_PUBKEY_ADDRESS;
 #if BIBLEPAY_TESTNET
-        data[0] = BIBLEPAY_PUBKEY_ADDRESS_TEST;
+        data[0] = BITCOIN_PUBKEY_ADDRESS_TEST;
 #endif
         d = BRScriptData(elems[0], &l);
         BRHash160(&data[1], d, l);
@@ -106,9 +106,9 @@ size_t BRBiblepayAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *sc
     const uint8_t *d = NULL, *elems[BRScriptElements(NULL, 0, script, scriptLen)];
     size_t l = 0, count = BRScriptElements(elems, sizeof(elems)/sizeof(*elems), script, scriptLen);
 
-    data[0] = BIBLEPAY_PUBKEY_ADDRESS;
+    data[0] = BITCOIN_PUBKEY_ADDRESS;
 #if BIBLEPAY_TESTNET
-    data[0] = BIBLEPAY_PUBKEY_ADDRESS_TEST;
+    data[0] = BITCOIN_PUBKEY_ADDRESS_TEST;
 #endif
 
     if (count >= 2 && *elems[count - 2] <= OP_PUSHDATA4 &&
@@ -119,9 +119,9 @@ size_t BRBiblepayAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *sc
     }
     else if (count >= 2 && *elems[count - 2] <= OP_PUSHDATA4 && *elems[count - 1] <= OP_PUSHDATA4 &&
              *elems[count - 1] > 0) { // pay-to-script-hash scriptSig
-        data[0] = BIBLEPAY_SCRIPT_ADDRESS;
+        data[0] = BITCOIN_SCRIPT_ADDRESS;
 #if BIBLEPAY_TESTNET
-        data[0] = BIBLEPAY_SCRIPT_ADDRESS_TEST;
+        data[0] = BITCOIN_SCRIPT_ADDRESS_TEST;
 #endif
         d = BRScriptData(elems[count - 1], &l);
         if (d) BRHash160(&data[1], d, l);
@@ -145,14 +145,14 @@ size_t BRBiblepayAddrFromWitness(char *addr, size_t addrLen, const uint8_t *witn
 // returns the number of bytes written, or scriptLen needed if script is NULL
 size_t BRBiblepayAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char *addr)
 {
-    uint8_t data[42], pubkeyAddress = BIBLEPAY_PUBKEY_ADDRESS, scriptAddress = BIBLEPAY_SCRIPT_ADDRESS;
+    uint8_t data[42], pubkeyAddress = BITCOIN_PUBKEY_ADDRESS, scriptAddress = BITCOIN_SCRIPT_ADDRESS;
     char hrp[84], *bech32Prefix = "bc";
     size_t dataLen, r = 0;
 
     assert(addr != NULL);
 #if BIBLEPAY_TESTNET
-    pubkeyAddress = BIBLEPAY_PUBKEY_ADDRESS_TEST;
-    scriptAddress = BIBLEPAY_SCRIPT_ADDRESS_TEST;
+    pubkeyAddress = BITCOIN_PUBKEY_ADDRESS_TEST;
+    scriptAddress = BITCOIN_SCRIPT_ADDRESS_TEST;
     bech32Prefix = "tb";
 #endif
 
@@ -202,9 +202,9 @@ int BRBiblepayAddrIsValid(const char *addr)
     assert(addr != NULL);
 
     if (BRBase58CheckDecode(data, sizeof(data), addr) == 21) {
-        r = (data[0] == BIBLEPAY_PUBKEY_ADDRESS || data[0] == BIBLEPAY_SCRIPT_ADDRESS);
+        r = (data[0] == BITCOIN_PUBKEY_ADDRESS || data[0] == BITCOIN_SCRIPT_ADDRESS);
 #if BIBLEPAY_TESTNET
-        r = (data[0] == BIBLEPAY_PUBKEY_ADDRESS_TEST || data[0] == BIBLEPAY_SCRIPT_ADDRESS_TEST);
+        r = (data[0] == BITCOIN_PUBKEY_ADDRESS_TEST || data[0] == BITCOIN_SCRIPT_ADDRESS_TEST);
 #endif
     }
     else if (BRBech32Decode(hrp, data, addr) > 2) {

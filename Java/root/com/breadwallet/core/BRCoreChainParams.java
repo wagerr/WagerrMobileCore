@@ -62,7 +62,7 @@ public class BRCoreChainParams extends BRCoreJniReference {
 
     // Biblepay
     public static BRCoreChainParams mainnetBiblepayChainParams =
-            new BRCoreChainParams(createJniMainnetBcashChainParams());
+            new BRCoreChainParams(createJniMainnetBiblepayChainParams());
 
     private static native long createJniMainnetBiblepayChainParams();
 
