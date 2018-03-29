@@ -484,7 +484,7 @@ static int _BRPeerAcceptHeadersMessage(BRPeer *peer, const uint8_t *msg, size_t 
                 BRMerkleBlock *block = BRMerkleBlockParse(&msg[off + 81*i], 81);
                 
                 if (! BRMerkleBlockIsValid(block, (uint32_t)now)) {
-                    peer_log(peer, "invalid block header: %s", u256hex(block->blockHash));
+                    peer_log(peer, "_BRPeerAcceptHeadersMessage invalid block header: %s", u256hexBE(block->blockHash));
                     BRMerkleBlockFree(block);
                     r = 0;
                 }
@@ -700,7 +700,7 @@ static int _BRPeerAcceptMerkleblockMessage(BRPeer *peer, const uint8_t *msg, siz
         r = 0;
     }
     else if (! BRMerkleBlockIsValid(block, (uint32_t)time(NULL))) {
-        peer_log(peer, "invalid merkleblock: %s", u256hex(block->blockHash));
+        peer_log(peer, "_BRPeerAcceptMerkleblockMessage invalid merkleblock: %s", u256hexBE(block->blockHash));
         BRMerkleBlockFree(block);
         block = NULL;
         r = 0;
@@ -1396,8 +1396,9 @@ void BRPeerSendGetheaders(BRPeer *peer, const UInt256 locators[], size_t locator
     off += sizeof(UInt256);
 
     if (locatorsCount > 0) {
-        peer_log(peer, "calling getheaders with %zu locators: [%s,%s %s]", locatorsCount, u256hex(locators[0]),
-                 (locatorsCount > 2 ? " ...," : ""), (locatorsCount > 1 ? u256hex(locators[locatorsCount - 1]) : ""));
+        peer_log(peer, "calling getheaders with %zu locators (hashStop=%s): [%s,%s %s]", locatorsCount, u256hexBE(hashStop),
+                 u256hexBE(locators[0]),
+                 (locatorsCount > 2 ? " ...," : ""), (locatorsCount > 1 ? u256hexBE(locators[locatorsCount - 1]) : ""));
         BRPeerSendMessage(peer, msg, off, MSG_GETHEADERS);
     }
 }

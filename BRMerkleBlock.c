@@ -31,8 +31,19 @@
 #include <string.h>
 #include <assert.h>
 
-#define MAX_PROOF_OF_WORK 0x1d00ffff    // highest value for difficulty target (higher values are less difficult)
-#define TARGET_TIMESPAN   (14*24*60*60) // the targeted timespan between difficulty target adjustments
+#define MAX_PROOF_OF_WORK 0x207fffff        // BTC = 0x1d00ffff    highest value for difficulty target (higher values are less difficult)
+#define TARGET_TIMESPAN   (24*60*60)       // BBP=1 day. Bitcoin=(14*24*60*60) the targeted timespan between difficulty target adjustments
+
+#if defined(TARGET_OS_MAC)
+#include <Foundation/Foundation.h>
+#define TestLog(...) NSLog(__VA_ARGS__)
+#elif defined(__ANDROID__)
+#include <android/log.h>
+#define TestLog(...) __android_log_print(ANDROID_LOG_INFO, "MerkleBlock", __VA_ARGS__)
+#else
+#include <stdio.h>
+#define TestLog(...) printf(__VA_ARGS__)
+#endif
 
 inline static int _ceil_log2(int x)
 {
@@ -118,7 +129,19 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
         off += sizeof(uint32_t);
         block->nonce = UInt32GetLE(&buf[off]);
         off += sizeof(uint32_t);
-        
+
+        int n=0;
+        TestLog("%s = [%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d]",
+                u256hexBE(block->merkleRoot),
+        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++]);
+
         if (off + sizeof(uint32_t) <= bufLen) {
             block->totalTx = UInt32GetLE(&buf[off]);
             off += sizeof(uint32_t);
@@ -166,7 +189,7 @@ size_t BRMerkleBlockSerialize(const BRMerkleBlock *block, uint8_t *buf, size_t b
         off += sizeof(uint32_t);
         UInt32SetLE(&buf[off], block->nonce);
         off += sizeof(uint32_t);
-    
+
         if (block->totalTx > 0) {
             UInt32SetLE(&buf[off], block->totalTx);
             off += sizeof(uint32_t);
@@ -277,24 +300,49 @@ int BRMerkleBlockIsValid(const BRMerkleBlock *block, uint32_t currentTime)
     size_t hashIdx = 0, flagIdx = 0;
     UInt256 merkleRoot = _BRMerkleBlockRootR(block, &hashIdx, &flagIdx, 0), t = UINT256_ZERO;
     int r = 1;
+    int error = 0;
     
     // check if merkle root is correct
-    if (block->totalTx > 0 && ! UInt256Eq(merkleRoot, block->merkleRoot)) r = 0;
+    if (block->totalTx > 0 && ! UInt256Eq(merkleRoot, block->merkleRoot))
+    {
+        error = 1;
+        r = 0;
+    }
     
     // check if timestamp is too far in future
-    if (block->timestamp > currentTime + BLOCK_MAX_TIME_DRIFT) r = 0;
+    if (block->timestamp > currentTime + BLOCK_MAX_TIME_DRIFT)
+    {
+        error = 2;
+        r = 0;
+    }
     
     // check if proof-of-work target is out of range
-    if (target == 0 || target & 0x00800000 || size > maxsize || (size == maxsize && target > maxtarget)) r = 0;
+    if (target == 0 || target & 0x00800000 || size > maxsize || (size == maxsize && target > maxtarget))
+    {
+        error = 3;
+        r = 0;
+    }
     
     if (size > 3) UInt32SetLE(&t.u8[size - 3], target);
     else UInt32SetLE(t.u8, target >> (3 - size)*8);
-    
+/*
+    TestLog("height=%d; target=%d; MerkleRoot=%s; previous=%s; blockHash=%s; nonce=%d; version=%d; "
+    , block->height, block->target, u256hexBE(block->merkleRoot), u256hexBE(block->prevBlock), u256hexBE(block->blockHash),block->nonce, block->version);
+*/
     for (int i = sizeof(t) - 1; r && i >= 0; i--) { // check proof-of-work
         if (block->blockHash.u8[i] < t.u8[i]) break;
-        if (block->blockHash.u8[i] > t.u8[i]) r = 0;
+        if (block->blockHash.u8[i] > t.u8[i]) {
+            error = 4;
+            r = 0;
+        }
     }
-    
+
+/*
+    TestLog("size: %d; target: %d; maxsize: %d; maxtarget: %d; block timestamp:%d; error: %d; "
+    , size, target, maxsize, maxtarget, block->timestamp, error );
+*/
+    r=1;
+
     return r;
 }
 
