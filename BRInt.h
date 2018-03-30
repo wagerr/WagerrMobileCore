@@ -138,24 +138,6 @@ inline static UInt256 UInt256Reverse(UInt256 u)
 //#define u256hexBE(u) u256hex(u)
 #define u256hexBE(u) u256hex(UInt256Reverse(u))
 
-#define u256hexBE2(u) ((const char[]) {\
-    _hexc((u).u8[31] >> 4), _hexc((u).u8[31]), _hexc((u).u8[30] >> 4), _hexc((u).u8[30]),\
-    _hexc((u).u8[29] >> 4), _hexc((u).u8[29]), _hexc((u).u8[28] >> 4), _hexc((u).u8[28]),\
-    _hexc((u).u8[27] >> 4), _hexc((u).u8[27]), _hexc((u).u8[26] >> 4), _hexc((u).u8[26]),\
-    _hexc((u).u8[25] >> 4), _hexc((u).u8[25]), _hexc((u).u8[24] >> 4), _hexc((u).u8[24]),\
-    _hexc((u).u8[23] >> 4), _hexc((u).u8[23]), _hexc((u).u8[22] >> 4), _hexc((u).u8[22]),\
-    _hexc((u).u8[21] >> 4), _hexc((u).u8[21]), _hexc((u).u8[20] >> 4), _hexc((u).u8[20]),\
-    _hexc((u).u8[19] >> 4), _hexc((u).u8[19]), _hexc((u).u8[18] >> 4), _hexc((u).u8[18]),\
-    _hexc((u).u8[17] >> 4), _hexc((u).u8[17]), _hexc((u).u8[16] >> 4), _hexc((u).u8[16]),\
-    _hexc((u).u8[15] >> 4), _hexc((u).u8[15]), _hexc((u).u8[14] >> 4), _hexc((u).u8[14]),\
-    _hexc((u).u8[13] >> 4), _hexc((u).u8[13]), _hexc((u).u8[12] >> 4), _hexc((u).u8[12]),\
-    _hexc((u).u8[11] >> 4), _hexc((u).u8[11]), _hexc((u).u8[10] >> 4), _hexc((u).u8[10]),\
-    _hexc((u).u8[ 9] >> 4), _hexc((u).u8[ 9]), _hexc((u).u8[ 8] >> 4), _hexc((u).u8[ 8]),\
-    _hexc((u).u8[ 7] >> 4), _hexc((u).u8[ 7]), _hexc((u).u8[ 6] >> 4), _hexc((u).u8[ 6]),\
-    _hexc((u).u8[ 5] >> 4), _hexc((u).u8[ 5]), _hexc((u).u8[ 4] >> 4), _hexc((u).u8[ 4]),\
-    _hexc((u).u8[ 3] >> 4), _hexc((u).u8[ 3]), _hexc((u).u8[ 2] >> 4), _hexc((u).u8[ 2]),\
-    _hexc((u).u8[ 1] >> 4), _hexc((u).u8[ 1]), _hexc((u).u8[ 0] >> 4), _hexc((u).u8[ 0]), '\0' })
-
 #define uint256(s) ((UInt256) { .u8 = {\
     (_hexu((s)[ 0]) << 4) | _hexu((s)[ 1]), (_hexu((s)[ 2]) << 4) | _hexu((s)[ 3]),\
     (_hexu((s)[ 4]) << 4) | _hexu((s)[ 5]), (_hexu((s)[ 6]) << 4) | _hexu((s)[ 7]),\

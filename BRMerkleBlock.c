@@ -25,6 +25,7 @@
 #include "BRMerkleBlock.h"
 #include "BRCrypto.h"
 #include "BRAddress.h"
+#include "x11.h"
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
@@ -130,18 +131,6 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
         block->nonce = UInt32GetLE(&buf[off]);
         off += sizeof(uint32_t);
 
-        int n=0;
-        TestLog("%s = [%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d]",
-                u256hexBE(block->merkleRoot),
-        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-        buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++]);
-
         if (off + sizeof(uint32_t) <= bufLen) {
             block->totalTx = UInt32GetLE(&buf[off]);
             off += sizeof(uint32_t);
@@ -158,7 +147,22 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
             if (block->flags) memcpy(block->flags, &buf[off], len);
         }
         
-        BRSHA256_2(&block->blockHash, buf, 80);
+        //BRSHA256_2(&block->blockHash, buf, 80);
+        x11_hash(buf, &block->blockHash, 80);       // Biblepay hash function for block hash
+/*
+        int n=0;
+        TestLog("%s, %s = [%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d]",
+                u256hexBE(block->blockHash), u256hexBE(block->prevBlock),
+                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
+                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++]);
+*/
+
     }
     
     return block;
