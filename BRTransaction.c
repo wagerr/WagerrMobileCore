@@ -26,6 +26,7 @@
 #include "BRKey.h"
 #include "BRAddress.h"
 #include "BRArray.h"
+
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
@@ -39,6 +40,18 @@
 #define SIGHASH_SINGLE       0x03 // sign one of the outputs, I don't care where the other outputs go
 #define SIGHASH_ANYONECANPAY 0x80 // let other people add inputs, I don't care where the rest of the bitcoins come from
 #define SIGHASH_FORKID       0x40 // use BIP143 digest method (for b-cash/b-gold signatures)
+
+#if defined(TARGET_OS_MAC)
+#include <Foundation/Foundation.h>
+#define TestLog(...) NSLog(__VA_ARGS__)
+#elif defined(__ANDROID__)
+#include <android/log.h>
+#define TestLog(...) __android_log_print(ANDROID_LOG_INFO, "BRTransaction", __VA_ARGS__)
+#else
+#include <stdio.h>
+#define TestLog(...) printf(__VA_ARGS__)
+#endif
+
 
 // returns a random number less than upperBound, for non-cryptographic use only
 uint32_t BRRand(uint32_t upperBound)
@@ -423,7 +436,12 @@ BRTransaction *BRTransactionParse(const uint8_t *buf, size_t bufLen)
         BRTransactionFree(tx);
         tx = NULL;
     }
-    else if (isSigned) BRSHA256_2(&tx->txHash, buf, off);
+    else if (isSigned)
+    {
+        BRSHA256_2(&tx->txHash, buf, bufLen);       // off replaced by bufLen
+        TestLog("bufLen=%d; version=%d; inCount=%d; outCount=%d; offset=%d;"
+        , bufLen, tx->version, tx->inCount, tx->outCount, off);
+    }
     
     return tx;
 }

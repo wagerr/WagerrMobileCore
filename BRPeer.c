@@ -415,7 +415,7 @@ static int _BRPeerAcceptTxMessage(BRPeer *peer, const uint8_t *msg, size_t msgLe
     }
     else {
         txHash = tx->txHash;
-        peer_log(peer, "got tx: %s", u256hex(txHash));
+        peer_log(peer, "got tx: %s", u256hexBE(txHash));
 
         if (ctx->relayedTx) {
             ctx->relayedTx(ctx->info, tx);
@@ -547,7 +547,7 @@ static int _BRPeerAcceptGetdataMessage(BRPeer *peer, const uint8_t *msg, size_t 
                             sprintf(&txHex[j*2], "%02x", buf[j]);
                         }
                         
-                        peer_log(peer, "publishing tx: %s", txHex);
+                        peer_log(peer, "publishing tx: %s, bufLen=%d;", txHex, bufLen);
                         BRPeerSendMessage(peer, buf, bufLen, MSG_TX);
                         break;
                     }
@@ -748,8 +748,9 @@ static int _BRPeerAcceptRejectMessage(BRPeer *peer, const uint8_t *msg, size_t m
     int r = 1;
     
     if (off + strLen + sizeof(uint8_t) > msgLen) {
-        peer_log(peer, "malformed reject message, length is %zu, should be >= %zu", msgLen,
-                 off + strLen + sizeof(uint8_t));
+        peer_log(peer, "malformed reject message, length is %zu, should be >= %zu, (%zu)", msgLen,
+                 off + strLen + sizeof(uint8_t), strLen);
+
         r = 0;
     }
     else {
@@ -766,7 +767,8 @@ static int _BRPeerAcceptRejectMessage(BRPeer *peer, const uint8_t *msg, size_t m
         if (strncmp(type, MSG_TX, sizeof(type)) == 0) hashLen = sizeof(UInt256);
         
         if (off + strLen + hashLen > msgLen) {
-            peer_log(peer, "malformed reject message, length is %zu, should be >= %zu", msgLen, off + strLen + hashLen);
+            peer_log(peer, "malformed reject message 2, length is %zu, should be >= %zu (%zu,%zu,%zu)"
+            , msgLen, off + strLen + hashLen, off, strLen, hashLen);
             r = 0;
         }
         else {

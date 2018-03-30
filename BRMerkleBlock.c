@@ -149,19 +149,6 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
         
         //BRSHA256_2(&block->blockHash, buf, 80);
         x11_hash(buf, &block->blockHash, 80);       // Biblepay hash function for block hash
-/*
-        int n=0;
-        TestLog("%s, %s = [%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d]",
-                u256hexBE(block->blockHash), u256hexBE(block->prevBlock),
-                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],
-                buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++],buf[n++]);
-*/
 
     }
     
