@@ -75,6 +75,8 @@ typedef struct {
     uint64_t amount;
     uint8_t *script;
     size_t scriptLen;
+    char *message;
+    size_t messageLen;
 } BRTxOutput;
 
 #define BR_TX_OUTPUT_NONE ((BRTxOutput) { "", 0, NULL, 0 })
@@ -116,6 +118,9 @@ void BRTransactionAddInput(BRTransaction *tx, UInt256 txHash, uint32_t index, ui
 
 // adds an output to tx
 void BRTransactionAddOutput(BRTransaction *tx, uint64_t amount, const uint8_t *script, size_t scriptLen);
+
+// adds an output to tx +message string (BBP protocol extension)
+void BRTransactionAddOutputBBP(BRTransaction *tx, uint64_t amount, const uint8_t *script, size_t scriptLen, const char *message, size_t messageLen);
 
 // shuffles order of tx outputs
 void BRTransactionShuffleOutputs(BRTransaction *tx);

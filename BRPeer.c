@@ -541,13 +541,8 @@ static int _BRPeerAcceptGetdataMessage(BRPeer *peer, const uint8_t *msg, size_t 
                     if (tx && BRTransactionSize(tx) < TX_MAX_SIZE) {
                         uint8_t buf[BRTransactionSerialize(tx, NULL, 0)];
                         size_t bufLen = BRTransactionSerialize(tx, buf, sizeof(buf));
-                        char txHex[bufLen*2 + 1];
-                        
-                        for (size_t j = 0; j < bufLen; j++) {
-                            sprintf(&txHex[j*2], "%02x", buf[j]);
-                        }
-                        
-                        peer_log(peer, "publishing tx: %s, bufLen=%d;", txHex, bufLen);
+
+                        peer_log(peer, "publishing tx (%d)", bufLen);
                         BRPeerSendMessage(peer, buf, bufLen, MSG_TX);
                         break;
                     }
@@ -746,11 +741,10 @@ static int _BRPeerAcceptRejectMessage(BRPeer *peer, const uint8_t *msg, size_t m
     BRPeerContext *ctx = (BRPeerContext *)peer;
     size_t off = 0, strLen = (size_t)BRVarInt(msg, msgLen, &off);
     int r = 1;
-    
-    if (off + strLen + sizeof(uint8_t) > msgLen) {
-        peer_log(peer, "malformed reject message, length is %zu, should be >= %zu, (%zu)", msgLen,
-                 off + strLen + sizeof(uint8_t), strLen);
 
+    if (off + strLen + sizeof(uint8_t) > msgLen) {
+        peer_log(peer, "malformed reject message, length is %zu, should be >= %zu", msgLen,
+                 off + strLen + sizeof(uint8_t));
         r = 0;
     }
     else {
@@ -764,11 +758,14 @@ static int _BRPeerAcceptRejectMessage(BRPeer *peer, const uint8_t *msg, size_t m
         code = msg[off++];
         strLen = (size_t)BRVarInt(&msg[off], (off <= msgLen ? msgLen - off : 0), &len);
         off += len;
-        if (strncmp(type, MSG_TX, sizeof(type)) == 0) hashLen = sizeof(UInt256);
+        if (strncmp(type, MSG_TX, sizeof(type)) == 0)
+        {
+            //hashLen = sizeof(UInt256);
+            hashLen = 0;    // hash is empty in BBP, so don't count on it for checking, see main.cpp line 7250
+        }
         
         if (off + strLen + hashLen > msgLen) {
-            peer_log(peer, "malformed reject message 2, length is %zu, should be >= %zu (%zu,%zu,%zu)"
-            , msgLen, off + strLen + hashLen, off, strLen, hashLen);
+            peer_log(peer, "malformed reject message, length is %zu, should be >= %zu", msgLen, off + strLen + hashLen);
             r = 0;
         }
         else {

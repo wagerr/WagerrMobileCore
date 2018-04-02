@@ -37,10 +37,10 @@ public class BRCoreWalletManager implements
         BRCoreWallet.Listener {
 
     protected static boolean SHOW_CALLBACK = true;
-    protected static boolean SHOW_CALLBACK_DETAIL = false;
+    protected static boolean SHOW_CALLBACK_DETAIL = true;
 
-    protected static boolean SHOW_CALLBACK_DETAIL_TX_STATUS = false;
-    protected static boolean SHOW_CALLBACK_DETAIL_TX_IO = false;
+    protected static boolean SHOW_CALLBACK_DETAIL_TX_STATUS = true;
+    protected static boolean SHOW_CALLBACK_DETAIL_TX_IO = true;
 
     protected BRCoreMasterPubKey masterPubKey;
 
@@ -166,7 +166,9 @@ public class BRCoreWalletManager implements
 
     protected int getForkId () {
         if (chainParams == BRCoreChainParams.mainnetChainParams
-                || chainParams == BRCoreChainParams.testnetChainParams)
+                || chainParams == BRCoreChainParams.testnetChainParams
+                || chainParams == BRCoreChainParams.mainnetBiblepayChainParams
+                || chainParams == BRCoreChainParams.testnetBiblepayChainParams)
             return 0x00;
         else if (chainParams == BRCoreChainParams.mainnetBcashChainParams
                 || chainParams == BRCoreChainParams.testnetBcashChainParams)
@@ -207,13 +209,24 @@ public class BRCoreWalletManager implements
 
             if (SHOW_CALLBACK_DETAIL_TX_IO) {
                 for (BRCoreTransactionInput input : transaction.getInputs())
-                    System.out.println(input.toString());
+                    System.out.println("input:"+input.getAddress()+";"+input.getAmount()+";"+bytesToHex(input.getScript())+";"+bytesToHex(input.getHash())+";"+input.getIndex()+";"+input.getSequence()+";"+bytesToHex(input.getSignature()));
                 for (BRCoreTransactionOutput output : transaction.getOutputs())
-                    System.out.println(output.toString());
+                    System.out.println("output:"+output.getAddress()+";"+output.getAmount()+";"+bytesToHex(output.getScript())+";");
             }
         }
         System.out.println ("    balance: " + wallet.getBalance());
     }
+
+    public String StrToHex(String inp)
+    {
+        String ret="";
+
+        for (char ch : inp.toCharArray()) {
+            ret = ret + Integer.toHexString(ch) + " ";
+        }
+        return ret;
+    }
+
     //
     // BRCorePeerManager.Listener
     //
