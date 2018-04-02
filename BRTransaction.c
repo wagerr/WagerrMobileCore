@@ -26,6 +26,8 @@
 #include "BRKey.h"
 #include "BRAddress.h"
 #include "BRArray.h"
+#include "BRInt.h"
+#include "x11.h"
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
@@ -165,11 +167,26 @@ void BRTxOutputSetScript(BRTxOutput *output, const uint8_t *script, size_t scrip
     }
 }
 
+// BBP protocol
+void BRTxOutputSetMessage(BRTxOutput *output, const char *message, size_t messageLen)
+{
+    assert(output != NULL);
+    if (output->message) array_free(output->message);
+    output->message = NULL;
+    output->messageLen = 0;
+
+    if (message) {
+        output->messageLen = messageLen;
+        array_new(output->message, messageLen);
+        array_add_array(output->message, message, messageLen);
+    }
+}
+
 static size_t _BRTransactionOutputData(const BRTransaction *tx, uint8_t *data, size_t dataLen, size_t index)
 {
     BRTxOutput *output;
     size_t i, off = 0;
-    
+
     for (i = (index == SIZE_MAX ? 0 : index); i < tx->outCount && (index == SIZE_MAX || index == i); i++) {
         output = &tx->outputs[i];
         if (data && off + sizeof(uint64_t) <= dataLen) UInt64SetLE(&data[off], output->amount);
@@ -177,6 +194,10 @@ static size_t _BRTransactionOutputData(const BRTransaction *tx, uint8_t *data, s
         off += BRVarIntSet((data ? &data[off] : NULL), (off <= dataLen ? dataLen - off : 0), output->scriptLen);
         if (data && off + output->scriptLen <= dataLen) memcpy(&data[off], output->script, output->scriptLen);
         off += output->scriptLen;
+        // serialize BBP message
+        off += BRVarIntSet((data ? &data[off] : NULL), (off <= dataLen ? dataLen - off : 0), output->messageLen);
+        if (data && off + output->messageLen <= dataLen) memcpy(&data[off], output->message, output->messageLen);
+        off += output->messageLen;
     }
     
     return (! data || off <= dataLen) ? off : 0;
@@ -355,7 +376,7 @@ BRTransaction *BRTransactionCopy(const BRTransaction *tx)
     }
     
     for (size_t i = 0; i < tx->outCount; i++) {
-        BRTransactionAddOutput(cpy, tx->outputs[i].amount, tx->outputs[i].script, tx->outputs[i].scriptLen);
+        BRTransactionAddOutputBBP(cpy, tx->outputs[i].amount, tx->outputs[i].script, tx->outputs[i].scriptLen, tx->outputs[i].message, tx->outputs[i].messageLen);
     }
 
     return cpy;
@@ -405,7 +426,7 @@ BRTransaction *BRTransactionParse(const uint8_t *buf, size_t bufLen)
     tx->outCount = (size_t)BRVarInt(&buf[off], (off <= bufLen ? bufLen - off : 0), &len);
     off += len;
     array_set_count(tx->outputs, tx->outCount);
-    
+
     for (i = 0; off <= bufLen && i < tx->outCount; i++) {
         output = &tx->outputs[i];
         output->amount = (off + sizeof(uint64_t) <= bufLen) ? UInt64GetLE(&buf[off]) : 0;
@@ -413,6 +434,11 @@ BRTransaction *BRTransactionParse(const uint8_t *buf, size_t bufLen)
         sLen = (size_t)BRVarInt(&buf[off], (off <= bufLen ? bufLen - off : 0), &len);
         off += len;
         if (off + sLen <= bufLen) BRTxOutputSetScript(output, &buf[off], sLen);
+        off += sLen;
+        // BBP message string
+        sLen = (size_t)BRVarInt(&buf[off], (off <= bufLen ? bufLen - off : 0), &len);
+        off += len;
+        if (off + sLen <= bufLen) BRTxOutputSetMessage(output, &buf[off], sLen);
         off += sLen;
     }
     
@@ -423,7 +449,17 @@ BRTransaction *BRTransactionParse(const uint8_t *buf, size_t bufLen)
         BRTransactionFree(tx);
         tx = NULL;
     }
-    else if (isSigned) BRSHA256_2(&tx->txHash, buf, off);
+    else if (isSigned)
+    {
+        char txHex[off*2 + 1];
+        for (size_t j = 0; j < off; j++) {
+            sprintf(&txHex[j*2], "%02x", buf[j]);
+        }
+        txHex[off*2]='\0';
+
+        BRSHA256_2(&tx->txHash, buf, off);
+        //x11_hash(buf, &tx->txHash, off);
+    }
     
     return tx;
 }
@@ -457,7 +493,13 @@ void BRTransactionAddInput(BRTransaction *tx, UInt256 txHash, uint32_t index, ui
 }
 
 // adds an output to tx
-void BRTransactionAddOutput(BRTransaction *tx, uint64_t amount, const uint8_t *script, size_t scriptLen)
+void BRTransactionAddOutput(BRTransaction *tx, uint64_t amount, const uint8_t *script, size_t scriptLen )
+{
+    return BRTransactionAddOutputBBP(tx, amount, script,  scriptLen, NULL, 0 );
+}
+
+// adds an output to tx +message string (BBP protocol extension)
+void BRTransactionAddOutputBBP(BRTransaction *tx, uint64_t amount, const uint8_t *script, size_t scriptLen, const char *message, size_t messageLen )
 {
     BRTxOutput output = { "", amount, NULL, 0 };
     
@@ -466,6 +508,7 @@ void BRTransactionAddOutput(BRTransaction *tx, uint64_t amount, const uint8_t *s
     
     if (tx) {
         BRTxOutputSetScript(&output, script, scriptLen);
+        BRTxOutputSetMessage(&output, message, messageLen);
         array_add(tx->outputs, output);
         tx->outCount = array_count(tx->outputs);
     }
@@ -562,11 +605,11 @@ int BRTransactionSign(BRTransaction *tx, int forkId, BRKey keys[], size_t keysCo
         uint8_t sig[73], script[1 + sizeof(sig) + 1 + sizeof(pubKey)];
         size_t sigLen, scriptLen;
         UInt256 md = UINT256_ZERO;
-        
+
         if (elemsCount >= 2 && *elems[elemsCount - 2] == OP_EQUALVERIFY) { // pay-to-pubkey-hash
             uint8_t data[_BRTransactionData(tx, NULL, 0, i, forkId | SIGHASH_ALL)];
             size_t dataLen = _BRTransactionData(tx, data, sizeof(data), i, forkId | SIGHASH_ALL);
-            
+
             BRSHA256_2(&md, data, dataLen);
             sigLen = BRKeySign(&keys[j], sig, sizeof(sig) - 1, md);
             sig[sigLen++] = forkId | SIGHASH_ALL;
