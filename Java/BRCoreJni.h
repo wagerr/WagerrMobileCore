@@ -24,7 +24,7 @@
 
 #include <jni.h>
 #include <BRTransaction.h>
-#include "com_breadwallet_core_BRCoreJniReference.h"
+#include "com_biblepaywallet_core_BRCoreJniReference.h"
 
 /**
  *
