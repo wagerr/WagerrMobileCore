@@ -209,9 +209,9 @@ public class BRCoreWalletManager implements
 
             if (SHOW_CALLBACK_DETAIL_TX_IO) {
                 for (BRCoreTransactionInput input : transaction.getInputs())
-                    System.out.println("input:"+input.getAddress()+";"+input.getAmount()+";"+bytesToHex(input.getScript())+";"+bytesToHex(input.getHash())+";"+input.getIndex()+";"+input.getSequence()+";"+bytesToHex(input.getSignature()));
+                    System.out.println("input:"+input.getAddress()+";"+input.getAmount() /*+";"+bytesToHex(input.getScript())+";"+bytesToHex(input.getHash())+";"+input.getIndex()+";"+input.getSequence()+";"+bytesToHex(input.getSignature())*/ );
                 for (BRCoreTransactionOutput output : transaction.getOutputs())
-                    System.out.println("output:"+output.getAddress()+";"+output.getAmount()+";"+bytesToHex(output.getScript())+";");
+                    System.out.println("output:"+output.getAddress()+";"+output.getAmount() /*+";"+bytesToHex(output.getScript())+";"*/ );
             }
         }
         System.out.println ("    balance: " + wallet.getBalance());

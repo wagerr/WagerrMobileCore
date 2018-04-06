@@ -924,7 +924,7 @@ static void _peerRelayedTx(void *info, BRTransaction *tx)
     size_t relayCount = 0;
     
     pthread_mutex_lock(&manager->lock);
-    peer_log(peer, "relayed tx: %s", u256hex(tx->txHash));
+    peer_log(peer, "relayed tx: %s", u256hexBE(tx->txHash));
     
     for (size_t i = array_count(manager->publishedTx); i > 0; i--) { // see if tx is in list of published tx
         if (UInt256Eq(manager->publishedTxHashes[i - 1], tx->txHash)) {
