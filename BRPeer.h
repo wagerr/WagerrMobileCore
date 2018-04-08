@@ -53,6 +53,7 @@ extern "C" {
 #endif
 
 #define SERVICES_NODE_NETWORK 0x01 // services value indicating a node carries full blocks, not just headers
+#define SERVICES_NODE_GETUTXO 0x02 // BIP064: https://github.com/bitcoin/bips/blob/master/bip-0064.mediawiki
 #define SERVICES_NODE_BLOOM   0x04 // BIP111: https://github.com/bitcoin/bips/blob/master/bip-0111.mediawiki
 #define SERVICES_NODE_BCASH   0x20 // https://github.com/Bitcoin-UAHF/spec/blob/master/uahf-technical-spec.md
     
