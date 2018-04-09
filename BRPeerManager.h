@@ -69,6 +69,9 @@ void BRPeerManagerSetCallbacks(BRPeerManager *manager, void *info,
 // set address to UINT128_ZERO to revert to default behavior
 void BRPeerManagerSetFixedPeer(BRPeerManager *manager, UInt128 address, uint16_t port);
 
+// iOS backwards comp
+int BRPeerManagerIsConnected(BRPeerManager *manager);
+
 // current connect status
 BRPeerStatus BRPeerManagerConnectStatus(BRPeerManager *manager);
 

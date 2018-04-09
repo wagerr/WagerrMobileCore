@@ -1562,6 +1562,12 @@ void BRPeerManagerSetFixedPeer(BRPeerManager *manager, UInt128 address, uint16_t
     pthread_mutex_unlock(&manager->lock);
 }
 
+// old iOS commit backwards comp
+int BRPeerManagerIsConnected(BRPeerManager *manager)
+{
+    return (BRPeerStatusConnected == BRPeerManagerConnectStatus(manager));
+}
+
 // current connect status
 BRPeerStatus BRPeerManagerConnectStatus(BRPeerManager *manager)
 {
