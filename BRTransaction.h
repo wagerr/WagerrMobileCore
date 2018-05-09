@@ -47,7 +47,7 @@ extern "C" {
 #define TXIN_SEQUENCE        UINT32_MAX  // sequence number for a finalized tx input
 
 #define SATOSHIS             100000000LL
-#define MAX_MONEY            (21000000LL*SATOSHIS)
+#define MAX_MONEY            (27299680LL*SATOSHIS)
 
 #define BR_RAND_MAX          ((RAND_MAX > 0x7fffffff) ? 0x7fffffff : RAND_MAX)
 
@@ -118,9 +118,6 @@ void BRTransactionAddInput(BRTransaction *tx, UInt256 txHash, uint32_t index, ui
 
 // adds an output to tx
 void BRTransactionAddOutput(BRTransaction *tx, uint64_t amount, const uint8_t *script, size_t scriptLen);
-
-// adds an output to tx +message string (BBP protocol extension)
-void BRTransactionAddOutputBBP(BRTransaction *tx, uint64_t amount, const uint8_t *script, size_t scriptLen, const char *message, size_t messageLen);
 
 // shuffles order of tx outputs
 void BRTransactionShuffleOutputs(BRTransaction *tx);

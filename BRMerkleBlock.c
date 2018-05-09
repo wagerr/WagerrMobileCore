@@ -25,14 +25,14 @@
 #include "BRMerkleBlock.h"
 #include "BRCrypto.h"
 #include "BRAddress.h"
-#include "x11.h"
+#include "quark.h"
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
 #include <string.h>
 #include <assert.h>
 
-#define MAX_PROOF_OF_WORK 0x207fffff        // BTC = 0x1d00ffff    highest value for difficulty target (higher values are less difficult)
+#define MAX_PROOF_OF_WORK 0x1e0ffff0        // BTC = 0x1d00ffff    highest value for difficulty target (higher values are less difficult)
 #define TARGET_TIMESPAN   (24*60*60)       // BBP=1 day. Bitcoin=(14*24*60*60) the targeted timespan between difficulty target adjustments
 
 #if defined(TARGET_OS_MAC)
@@ -146,10 +146,8 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
             block->flags = (off + len <= bufLen) ? malloc(len) : NULL;
             if (block->flags) memcpy(block->flags, &buf[off], len);
         }
-        
-        //BRSHA256_2(&block->blockHash, buf, 80);
-        x11_hash(buf, &block->blockHash, 80);       // Biblepay hash function for block hash
 
+        quark_hash(buf, &block->blockHash);       // Digiwage hash function for block hash
     }
     
     return block;

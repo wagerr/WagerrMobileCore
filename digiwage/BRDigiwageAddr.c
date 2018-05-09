@@ -1,5 +1,5 @@
 //
-//  BRBiblepayAddr.c
+//  BRDigiwageAddr.c
 //
 //  Created by Aaron Voisine on 9/18/15.
 //  Copyright (c) 2015 breadwallet LLC
@@ -22,7 +22,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#include "BRBiblepayAddr.h"
+#include "BRDigiwageAddr.h"
 #include "BRBase58.h"
 #include "BRBech32.h"
 #include "BRInt.h"
@@ -42,7 +42,7 @@
 
 // writes the bitcoin address for a scriptPubKey to addr
 // returns the number of bytes written, or addrLen needed if addr is NULL
-size_t BRBiblepayAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
+size_t BRDigiwageAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
 {
     assert(script != NULL || scriptLen == 0);
     if (! script || scriptLen == 0 || scriptLen > MAX_SCRIPT_LENGTH) return 0;
@@ -56,7 +56,7 @@ size_t BRBiblepayAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t 
         *elems[3] == OP_EQUALVERIFY && *elems[4] == OP_CHECKSIG) {
         // pay-to-pubkey-hash scriptPubKey
         data[0] = BITCOIN_PUBKEY_ADDRESS;
-#if BIBLEPAY_TESTNET
+#if DIGIWAGE_TESTNET
         data[0] = BITCOIN_PUBKEY_ADDRESS_TEST;
 #endif
         memcpy(&data[1], BRScriptData(elems[2], &l), 20);
@@ -65,7 +65,7 @@ size_t BRBiblepayAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t 
     else if (count == 3 && *elems[0] == OP_HASH160 && *elems[1] == 20 && *elems[2] == OP_EQUAL) {
         // pay-to-script-hash scriptPubKey
         data[0] = BITCOIN_PUBKEY_ADDRESS;
-#if BIBLEPAY_TESTNET
+#if DIGIWAGE_TESTNET
         data[0] = BITCOIN_SCRIPT_ADDRESS_TEST;
 #endif
         memcpy(&data[1], BRScriptData(elems[1], &l), 20);
@@ -74,7 +74,7 @@ size_t BRBiblepayAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t 
     else if (count == 2 && (*elems[0] == 65 || *elems[0] == 33) && *elems[1] == OP_CHECKSIG) {
         // pay-to-pubkey scriptPubKey
         data[0] = BITCOIN_PUBKEY_ADDRESS;
-#if BIBLEPAY_TESTNET
+#if DIGIWAGE_TESTNET
         data[0] = BITCOIN_PUBKEY_ADDRESS_TEST;
 #endif
         d = BRScriptData(elems[0], &l);
@@ -85,7 +85,7 @@ size_t BRBiblepayAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t 
                             (*elems[0] >= OP_1 && *elems[0] <= OP_16 && *elems[1] >= 2 && *elems[1] <= 40))) {
         // pay-to-witness scriptPubKey
         r = BRBech32Encode(a, "bc", script);
-#if BIBLEPAY_TESTNET
+#if DIGIWAGE_TESTNET
         r = BRBech32Encode(a, "tb", script);
 #endif
         if (addr && r > addrLen) r = 0;
@@ -97,7 +97,7 @@ size_t BRBiblepayAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t 
 
 // writes the bitcoin address for a scriptSig to addr
 // returns the number of bytes written, or addrLen needed if addr is NULL
-size_t BRBiblepayAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
+size_t BRDigiwageAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
 {
     assert(script != NULL || scriptLen == 0);
     if (! script || scriptLen == 0 || scriptLen > MAX_SCRIPT_LENGTH) return 0;
@@ -107,7 +107,7 @@ size_t BRBiblepayAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *sc
     size_t l = 0, count = BRScriptElements(elems, sizeof(elems)/sizeof(*elems), script, scriptLen);
 
     data[0] = BITCOIN_PUBKEY_ADDRESS;
-#if BIBLEPAY_TESTNET
+#if DIGIWAGE_TESTNET
     data[0] = BITCOIN_PUBKEY_ADDRESS_TEST;
 #endif
 
@@ -120,7 +120,7 @@ size_t BRBiblepayAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *sc
     else if (count >= 2 && *elems[count - 2] <= OP_PUSHDATA4 && *elems[count - 1] <= OP_PUSHDATA4 &&
              *elems[count - 1] > 0) { // pay-to-script-hash scriptSig
         data[0] = BITCOIN_SCRIPT_ADDRESS;
-#if BIBLEPAY_TESTNET
+#if DIGIWAGE_TESTNET
         data[0] = BITCOIN_SCRIPT_ADDRESS_TEST;
 #endif
         d = BRScriptData(elems[count - 1], &l);
@@ -136,21 +136,21 @@ size_t BRBiblepayAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *sc
 
 // writes the bitcoin address for a witness to addr
 // returns the number of bytes written, or addrLen needed if addr is NULL
-size_t BRBiblepayAddrFromWitness(char *addr, size_t addrLen, const uint8_t *witness, size_t witLen)
+size_t BRDigiwageAddrFromWitness(char *addr, size_t addrLen, const uint8_t *witness, size_t witLen)
 {
     return 0; // TODO: XXX implement
 }
 
 // writes the scriptPubKey for addr to script
 // returns the number of bytes written, or scriptLen needed if script is NULL
-size_t BRBiblepayAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char *addr)
+size_t BRDigiwageAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char *addr)
 {
     uint8_t data[42], pubkeyAddress = BITCOIN_PUBKEY_ADDRESS, scriptAddress = BITCOIN_SCRIPT_ADDRESS;
     char hrp[84], *bech32Prefix = "bc";
     size_t dataLen, r = 0;
 
     assert(addr != NULL);
-#if BIBLEPAY_TESTNET
+#if DIGIWAGE_TESTNET
     pubkeyAddress = BITCOIN_PUBKEY_ADDRESS_TEST;
     scriptAddress = BITCOIN_SCRIPT_ADDRESS_TEST;
     bech32Prefix = "tb";
@@ -193,7 +193,7 @@ size_t BRBiblepayAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char 
 }
 
 // returns true if addr is a valid bitcoin address
-int BRBiblepayAddrIsValid(const char *addr)
+int BRDigiwageAddrIsValid(const char *addr)
 {
     uint8_t data[42];
     char hrp[84];
@@ -203,13 +203,13 @@ int BRBiblepayAddrIsValid(const char *addr)
 
     if (BRBase58CheckDecode(data, sizeof(data), addr) == 21) {
         r = (data[0] == BITCOIN_PUBKEY_ADDRESS || data[0] == BITCOIN_SCRIPT_ADDRESS);
-#if BIBLEPAY_TESTNET
+#if DIGIWAGE_TESTNET
         r = (data[0] == BITCOIN_PUBKEY_ADDRESS_TEST || data[0] == BITCOIN_SCRIPT_ADDRESS_TEST);
 #endif
     }
     else if (BRBech32Decode(hrp, data, addr) > 2) {
         r = (strcmp(hrp, "bc") == 0 && (data[0] != OP_0 || data[1] == 20 || data[1] == 32));
-#if BIBLEPAY_TESTNET
+#if DIGIWAGE_TESTNET
         r = (strcmp(hrp, "tb") == 0 && (data[0] != OP_0 || data[1] == 20 || data[1] == 32));
 #endif
     }
@@ -218,7 +218,7 @@ int BRBiblepayAddrIsValid(const char *addr)
 }
 
 // writes the 20 byte hash160 of addr to md20 and returns true on success
-int BRBiblepayAddrHash160(void *md20, const char *addr)
+int BRDigiwageAddrHash160(void *md20, const char *addr)
 {
     uint8_t data[21];
     int r = 0;
