@@ -25,7 +25,7 @@
 #include "BRCoreJni.h"
 #include "BRChainParams.h"
 #include "bcash/BRBCashParams.h"
-#include "biblepay/BRBiblepayParams.h"
+#include "digiwage/BRDigiwageParams.h"
 #include "com_biblepaywallet_core_BRCoreChainParams.h"
 
 /*
@@ -96,7 +96,7 @@ JNIEXPORT jlong JNICALL Java_com_biblepaywallet_core_BRCoreChainParams_createJni
 JNIEXPORT jlong JNICALL Java_com_biblepaywallet_core_BRCoreChainParams_createJniMainnetBiblepayChainParams
         (JNIEnv *env, jclass thisClass) {
     BRChainParams *result = (BRChainParams *) calloc (1, sizeof (BRChainParams));
-    memcpy (result, &BRBiblepayParams, sizeof (BRChainParams));
+    memcpy (result, &BRDigiwageParams, sizeof (BRChainParams));
     return (jlong) result;
 }
 
@@ -108,6 +108,6 @@ JNIEXPORT jlong JNICALL Java_com_biblepaywallet_core_BRCoreChainParams_createJni
 JNIEXPORT jlong JNICALL Java_com_biblepaywallet_core_BRCoreChainParams_createJniTestnetBiblepayChainParams
         (JNIEnv *env, jclass thisClass) {
     BRChainParams *result = (BRChainParams *) calloc(1, sizeof(BRChainParams));
-    memcpy(result, &BRBiblepayTestNetParams, sizeof(BRChainParams));
+    memcpy(result, &BRDigiwageTestNetParams, sizeof(BRChainParams));
     return (jlong) result;
 }

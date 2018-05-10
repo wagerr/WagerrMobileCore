@@ -34,11 +34,14 @@
 #define BBP_BLOCK_DIFFICULTY_INTERVAL (NPOW_TARGET_TIMESPAN/NPOW_TARGEY_SPACING)
 
 static const char *BRDigiwageDNSSeeds[] = {
-        "207.246.103.145", "207.246.103.145", "45.32.80.64", "45.32.80.64","45.32.65.59", "45.32.65.59","104.238.140.145", "104.238.140.145", NULL
+        "dnsseed1.digiwage.org", "dnsseed2.digiwage.org", "dnsseed3.digiwage.org"
+        ,"207.246.103.145", "207.246.103.145", "45.32.80.64", "45.32.80.64","45.32.65.59", "45.32.65.59","104.238.140.145", "104.238.140.145"
+        ,"104.238.186.15", "140.82.38.254"
+        , NULL
 };
 
 static const char *BRDigiwageTestNetDNSSeeds[] = {
-    "testnet-seed.biblepaydot.io", "test.dnsseed.masternode.io", NULL
+    "testnet-seed.digiwagedot.io", "test.dnsseed.masternode.io", NULL
 };
 
 static const BRCheckPoint BRDigiwageTestNetCheckpoints[] = {
