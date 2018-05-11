@@ -761,7 +761,7 @@ static int _BRPeerAcceptRejectMessage(BRPeer *peer, const uint8_t *msg, size_t m
         if (strncmp(type, MSG_TX, sizeof(type)) == 0)
         {
             //hashLen = sizeof(UInt256);
-            hashLen = 0;    // hash is empty in BBP, so don't count on it for checking, see main.cpp line 7250
+            hashLen = 0;    // hash is empty in WAGE, so don't count on it for checking, see main.cpp line 5445
         }
         
         if (off + strLen + hashLen > msgLen) {

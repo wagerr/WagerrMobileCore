@@ -33,7 +33,7 @@
 #include <assert.h>
 
 #define MAX_PROOF_OF_WORK 0x1e0ffff0        // BTC = 0x1d00ffff    highest value for difficulty target (higher values are less difficult)
-#define TARGET_TIMESPAN   (24*60*60)       // BBP=1 day. Bitcoin=(14*24*60*60) the targeted timespan between difficulty target adjustments
+#define TARGET_TIMESPAN   (24*60*60)       // WAGE=1 day. Bitcoin=(14*24*60*60) the targeted timespan between difficulty target adjustments
 
 #if defined(TARGET_OS_MAC)
 #include <Foundation/Foundation.h>

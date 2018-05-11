@@ -31,7 +31,7 @@
 
 #define NPOW_TARGET_TIMESPAN (24*60*60)        // Digiwage 1 day
 #define NPOW_TARGEY_SPACING (7*60)
-#define BBP_BLOCK_DIFFICULTY_INTERVAL (NPOW_TARGET_TIMESPAN/NPOW_TARGEY_SPACING)
+#define COIN_BLOCK_DIFFICULTY_INTERVAL (NPOW_TARGET_TIMESPAN/NPOW_TARGEY_SPACING)
 
 static const char *BRDigiwageDNSSeeds[] = {
         "dnsseed1.digiwage.org", "dnsseed2.digiwage.org", "dnsseed3.digiwage.org"
