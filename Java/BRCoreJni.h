@@ -24,7 +24,7 @@
 
 #include <jni.h>
 #include <BRTransaction.h>
-#include "com_digiwagewallet_core_BRCoreJniReference.h"
+#include "com_nyxwallet_core_BRCoreJniReference.h"
 
 /**
  *

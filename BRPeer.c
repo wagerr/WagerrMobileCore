@@ -47,8 +47,8 @@
 #define MAX_MSG_LENGTH     0x02000000
 #define MAX_GETDATA_HASHES 50000
 #define ENABLED_SERVICES   0ULL  // we don't provide full blocks to remote nodes
-#define PROTOCOL_VERSION   70810    // bitcoin=70013
-#define MIN_PROTO_VERSION  70710 // peers earlier than this protocol version not supported (need v0.9 txFee relay rules)
+#define PROTOCOL_VERSION   70208    // bitcoin=70013
+#define MIN_PROTO_VERSION  70208 // peers earlier than this protocol version not supported (need v0.9 txFee relay rules)
 #define LOCAL_HOST         ((UInt128) { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0x7f, 0x00, 0x00, 0x01 })
 #define CONNECT_TIMEOUT    3.0
 #define MESSAGE_TIMEOUT    10.0
@@ -761,7 +761,7 @@ static int _BRPeerAcceptRejectMessage(BRPeer *peer, const uint8_t *msg, size_t m
         if (strncmp(type, MSG_TX, sizeof(type)) == 0)
         {
             //hashLen = sizeof(UInt256);
-            hashLen = 0;    // hash is empty in WAGE, so don't count on it for checking, see main.cpp line 5445
+            hashLen = 0;    // hash is empty in Coin, so don't count on it for checking, see main.cpp line 5445
         }
         
         if (off + strLen + hashLen > msgLen) {

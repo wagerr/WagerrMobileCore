@@ -97,7 +97,7 @@ java_comp:	FORCE
 jni_hdr: java_comp
 	@(cd build/com/breadwallet/core; \
 	  for class in BRCore*.class; do \
-	      javah -jni -d $(DIR) -classpath $(DIR)/build com.digiwagewallet.core.$${class%%.class}; \
+	      javah -jni -d $(DIR) -classpath $(DIR)/build com.Nyx.core.$${class%%.class}; \
 	  done)
 	@rm -f com_breadwallet_core_BRCoreWalletManager.h com_breadwallet_core_BRCore*_*.h .h
 

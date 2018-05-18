@@ -25,7 +25,7 @@
 #include "BRMerkleBlock.h"
 #include "BRCrypto.h"
 #include "BRAddress.h"
-#include "quark.h"
+#include "neoscrypt.h"
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
@@ -33,7 +33,7 @@
 #include <assert.h>
 
 #define MAX_PROOF_OF_WORK 0x1e0ffff0        // BTC = 0x1d00ffff    highest value for difficulty target (higher values are less difficult)
-#define TARGET_TIMESPAN   (24*60*60)       // WAGE=1 day. Bitcoin=(14*24*60*60) the targeted timespan between difficulty target adjustments
+#define TARGET_TIMESPAN   (24*60*60)       // COIN=1 day. Bitcoin=(14*24*60*60) the targeted timespan between difficulty target adjustments
 
 #if defined(TARGET_OS_MAC)
 #include <Foundation/Foundation.h>
@@ -147,7 +147,7 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
             if (block->flags) memcpy(block->flags, &buf[off], len);
         }
 
-        quark_hash(buf, &block->blockHash);       // Digiwage hash function for block hash
+        neoscrypt(buf, &block->blockHash, 0x0);       // hash function for block hash
     }
     
     return block;
