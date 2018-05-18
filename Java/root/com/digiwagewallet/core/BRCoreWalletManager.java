@@ -344,9 +344,9 @@ public class BRCoreWalletManager implements
     private String getChainDescriptiveName ()
     {
         if (chainParams == BRCoreChainParams.mainnetDigiwageChainParams)
-            return "BiblePay Mainnet";
+            return "Digiwage Mainnet";
         else if (chainParams == BRCoreChainParams.testnetDigiwageChainParams)
-            return "BiblePay Testnet";
+            return "Digiwage Testnet";
         else if (chainParams == BRCoreChainParams.mainnetChainParams)
             return "Bitcoin Mainnet";
         else if (chainParams == BRCoreChainParams.testnetChainParams)
