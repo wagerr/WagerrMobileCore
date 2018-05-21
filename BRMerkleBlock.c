@@ -25,6 +25,7 @@
 #include "BRMerkleBlock.h"
 #include "BRCrypto.h"
 #include "BRAddress.h"
+#include "x11.h"
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
@@ -135,7 +136,9 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
             if (block->flags) memcpy(block->flags, &buf[off], len);
         }
         
-        BRSHA256_2(&block->blockHash, buf, 80);
+//        BRSHA256_2(&block->blockHash, buf, 80);
+        x11_hash(buf, &block->blockHash, 80);       // Coin hash function for block hash
+
     }
     
     return block;
