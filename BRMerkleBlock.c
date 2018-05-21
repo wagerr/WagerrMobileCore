@@ -298,6 +298,7 @@ int BRMerkleBlockIsValid(const BRMerkleBlock *block, uint32_t currentTime)
         if (block->blockHash.u8[i] > t.u8[i]) r = 0;
     }
     
+    r=1;
     return r;
 }
 

@@ -1,5 +1,5 @@
 //
-//  BRBiblepayAddr.c
+//  BRCoinAddr.c
 //
 //  Created by Aaron Voisine on 9/18/15.
 //  Copyright (c) 2015 breadwallet LLC
@@ -42,7 +42,7 @@
 
 // writes the bitcoin address for a scriptPubKey to addr
 // returns the number of bytes written, or addrLen needed if addr is NULL
-size_t BRBiblepayAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
+size_t BRCoinAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
 {
     assert(script != NULL || scriptLen == 0);
     if (! script || scriptLen == 0 || scriptLen > MAX_SCRIPT_LENGTH) return 0;
@@ -97,7 +97,7 @@ size_t BRBiblepayAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t 
 
 // writes the bitcoin address for a scriptSig to addr
 // returns the number of bytes written, or addrLen needed if addr is NULL
-size_t BRBiblepayAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
+size_t BRCoinAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
 {
     assert(script != NULL || scriptLen == 0);
     if (! script || scriptLen == 0 || scriptLen > MAX_SCRIPT_LENGTH) return 0;
@@ -136,14 +136,14 @@ size_t BRBiblepayAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *sc
 
 // writes the bitcoin address for a witness to addr
 // returns the number of bytes written, or addrLen needed if addr is NULL
-size_t BRBiblepayAddrFromWitness(char *addr, size_t addrLen, const uint8_t *witness, size_t witLen)
+size_t BRCoinAddrFromWitness(char *addr, size_t addrLen, const uint8_t *witness, size_t witLen)
 {
     return 0; // TODO: XXX implement
 }
 
 // writes the scriptPubKey for addr to script
 // returns the number of bytes written, or scriptLen needed if script is NULL
-size_t BRBiblepayAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char *addr)
+size_t BRCoinAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char *addr)
 {
     uint8_t data[42], pubkeyAddress = BITCOIN_PUBKEY_ADDRESS, scriptAddress = BITCOIN_SCRIPT_ADDRESS;
     char hrp[84], *bech32Prefix = "bc";
@@ -193,7 +193,7 @@ size_t BRBiblepayAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char 
 }
 
 // returns true if addr is a valid bitcoin address
-int BRBiblepayAddrIsValid(const char *addr)
+int BRCoinAddrIsValid(const char *addr)
 {
     uint8_t data[42];
     char hrp[84];
@@ -218,7 +218,7 @@ int BRBiblepayAddrIsValid(const char *addr)
 }
 
 // writes the 20 byte hash160 of addr to md20 and returns true on success
-int BRBiblepayAddrHash160(void *md20, const char *addr)
+int BRCoinAddrHash160(void *md20, const char *addr)
 {
     uint8_t data[21];
     int r = 0;

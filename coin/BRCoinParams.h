@@ -1,5 +1,5 @@
 //
-//  BRBiblepayParams.h
+//  BRCoinParams.h
 //
 //  Created by Aaron Voisine on 1/10/18.
 //  Copyright (c) 2019 breadwallet LLC
@@ -22,8 +22,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#ifndef BRBiblepayParams_h
-#define BRBiblepayParams_h
+#ifndef BRCoinParams_h
+#define BRCoinParams_h
 
 #include "BRChainParams.h"
 #include "BRPeer.h"
@@ -33,21 +33,21 @@
 #define NPOW_TARGEY_SPACING (7*60)
 #define BBP_BLOCK_DIFFICULTY_INTERVAL (NPOW_TARGET_TIMESPAN/NPOW_TARGEY_SPACING)
 
-static const char *BRBiblepayDNSSeeds[] = {
+static const char *BRCoinDNSSeeds[] = {
     "dnsseed.biblepay.org", "node.biblepay.org", "dnsseed.biblepay-explorer.org", NULL
 };
 
-static const char *BRBiblepayTestNetDNSSeeds[] = {
+static const char *BRCoinTestNetDNSSeeds[] = {
     "testnet-seed.biblepaydot.io", "test.dnsseed.masternode.io", NULL
 };
 
-static const BRCheckPoint BRBiblepayTestNetCheckpoints[] = {
+static const BRCheckPoint BRCoinTestNetCheckpoints[] = {
     {       1, uint256("18b37b60b422ea27d57ceea9dd794b5f74c561565ecc03e85a22ecdf74cbb33a"), 1511964848, 0x1d00ffff }       // timestamp and target bits probably not ok... just taking info directly from BBP chainparams.cpp
 };
 
 // blockchain checkpoints - these are also used as starting points for partial chain downloads, so they must be at
 // difficulty transition boundaries in order to verify the block difficulty at the immediately following transition
-static const BRCheckPoint BRBiblepayCheckpoints[] = {
+static const BRCheckPoint BRCoinCheckpoints[] = {
     {      7, uint256("00022b1be28b1deb9a51d4d69f3fa393f4ea36621039b6313a6c0796546621de"), 1500845066, 0x1f0575c5 },
     {    120, uint256("00002fc6c9e4889a8d1a9bd5919a6bd4a4b09091e55049480509da14571e5653"), 1500909333, 0x1f00cb06 },
     {   6999, uint256("000000dfbcdec4e6b0ab899f04d7ce8e4d8bc8a725a47169b626acd207ccea8d"), 1505075365, 0x1e01a097 },
@@ -59,36 +59,36 @@ static const BRCheckPoint BRBiblepayCheckpoints[] = {
     {  33460, uint256("e64ff92ae97c2978c14d97ae45c618c1f2140339ce9ccb770945d3efb7d5e0f5"), 1520469785, 0x1c4c0e1b }
 };
 
-static int BRBiblepayVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
+static int BRCoinVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
 {
     // +++ BBP difficulty verification
 
     return 1;
 }
 
-static int BRBiblepayTestNetVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
+static int BRCoinTestNetVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
 {
     return 1; // XXX skip testnet difficulty check for now
 }
 
-static const BRChainParams BRBiblepayParams = {
-    BRBiblepayDNSSeeds,
+static const BRChainParams BRCoinParams = {
+    BRCoinDNSSeeds,
     40000,                // standardPort
     0xbd6b0cbf,          // magicNumber
     0, // services
-    BRBiblepayVerifyDifficulty,
-    BRBiblepayCheckpoints,
-    sizeof(BRBiblepayCheckpoints)/sizeof(*BRBiblepayCheckpoints),
+    BRCoinVerifyDifficulty,
+    BRCoinCheckpoints,
+    sizeof(BRCoinCheckpoints)/sizeof(*BRCoinCheckpoints),
 };
 
-static const BRChainParams BRBiblepayTestNetParams = {
-    BRBiblepayTestNetDNSSeeds,
+static const BRChainParams BRCoinTestNetParams = {
+    BRCoinTestNetDNSSeeds,
     40001,               // standardPort
     0xffcae2ce,          // magicNumber
     0, // services
-    BRBiblepayTestNetVerifyDifficulty,
-    BRBiblepayTestNetCheckpoints,
-    sizeof(BRBiblepayTestNetCheckpoints)/sizeof(*BRBiblepayTestNetCheckpoints)
+    BRCoinTestNetVerifyDifficulty,
+    BRCoinTestNetCheckpoints,
+    sizeof(BRCoinTestNetCheckpoints)/sizeof(*BRCoinTestNetCheckpoints)
 };
 
 #endif // BRChainParams_h
