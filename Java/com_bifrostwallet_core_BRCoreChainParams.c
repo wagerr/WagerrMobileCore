@@ -90,7 +90,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniT
 
 /*
  * Class:     com_breadwallet_core_BRCoreChainParams
- * Method:    createJniMainnetDigiwageChainParams
+ * Method:    createJniMainnetCoinChainParams
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniMainnetCoinChainParams
@@ -102,7 +102,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniM
 
 /*
  * Class:     com_breadwallet_core_BRCoreChainParams
- * Method:    createJniTestnetDigiwageChainParams
+ * Method:    createJniTestnetCoinChainParams
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniTestnetCoinChainParams
