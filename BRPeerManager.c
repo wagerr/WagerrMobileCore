@@ -1191,7 +1191,8 @@ static void _peerRelayedBlock(void *info, BRMerkleBlock *block)
         BRMerkleBlockFree(block);
         block = NULL;
     }
-    else if (manager->bloomFilter == NULL) { // ingore potentially incomplete blocks when a filter update is pending
+    else
+    if (manager->bloomFilter == NULL) { // ingore potentially incomplete blocks when a filter update is pending
         BRMerkleBlockFree(block);
         block = NULL;
 

@@ -131,6 +131,11 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
         block->nonce = UInt32GetLE(&buf[off]);
         off += sizeof(uint32_t);
 
+        if ( block->version > 3 ) {
+            block->nAccumulatorCheckpoint = UInt256Get(&buf[off]);
+            off += sizeof(UInt256);
+        }
+
         if (off + sizeof(uint32_t) <= bufLen) {
             block->totalTx = UInt32GetLE(&buf[off]);
             off += sizeof(uint32_t);
@@ -147,7 +152,12 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
             if (block->flags) memcpy(block->flags, &buf[off], len);
         }
 
-        hash9(buf, &block->blockHash, 80);       // hash function for block hash
+        if ( block->version < 4 ) {
+            hash9(buf, &block->blockHash, 80);       // hash function for block hash
+        }
+        else {
+            BRSHA256_2(&block->blockHash, buf, 112);     // 80 + Uint256 nAccumulatorCheckpoint
+        }
     }
     
     return block;
@@ -156,7 +166,7 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
 // returns number of bytes written to buf, or total bufLen needed if buf is NULL (block->height is not serialized)
 size_t BRMerkleBlockSerialize(const BRMerkleBlock *block, uint8_t *buf, size_t bufLen)
 {
-    size_t off = 0, len = 80;
+    size_t off = 0, len = ( block->version > 3 )? 112 : 80;
     
     assert(block != NULL);
     
@@ -178,6 +188,10 @@ size_t BRMerkleBlockSerialize(const BRMerkleBlock *block, uint8_t *buf, size_t b
         off += sizeof(uint32_t);
         UInt32SetLE(&buf[off], block->nonce);
         off += sizeof(uint32_t);
+        if ( block->version > 3 ) {
+            UInt256Set(&buf[off], block->nAccumulatorCheckpoint);
+            off += sizeof(UInt256);
+        }
 
         if (block->totalTx > 0) {
             UInt32SetLE(&buf[off], block->totalTx);

@@ -47,8 +47,8 @@
 #define MAX_MSG_LENGTH     0x02000000
 #define MAX_GETDATA_HASHES 50000
 #define ENABLED_SERVICES   0ULL  // we don't provide full blocks to remote nodes
-#define PROTOCOL_VERSION   70711    // bitcoin=70013
-#define MIN_PROTO_VERSION  70710 // peers earlier than this protocol version not supported (need v0.9 txFee relay rules)
+#define PROTOCOL_VERSION   70712    // bitcoin=70013
+#define MIN_PROTO_VERSION  70712 // peers earlier than this protocol version not supported (need v0.9 txFee relay rules)
 #define LOCAL_HOST         ((UInt128) { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0x7f, 0x00, 0x00, 0x01 })
 #define CONNECT_TIMEOUT    3.0
 #define MESSAGE_TIMEOUT    10.0
@@ -681,6 +681,20 @@ static int _BRPeerAcceptPongMessage(BRPeer *peer, const uint8_t *msg, size_t msg
     return r;
 }
 
+
+
+static void DumpBuffer(BRPeer *peer,const uint8_t *msg, size_t msgLen)
+{
+    char str[(msgLen*2)+1];
+    int i = 0;
+    for(i=0;i<msgLen;i++)
+    {
+        sprintf( str + (2*i), "%02X", msg[i] );
+    }
+    str[msgLen*2] = '\0';
+    peer_log(peer, "buffer dump: %s", str);
+}
+
 static int _BRPeerAcceptMerkleblockMessage(BRPeer *peer, const uint8_t *msg, size_t msgLen)
 {
     // Bitcoin nodes don't support querying arbitrary transactions, only transactions not yet accepted in a block. After
@@ -689,7 +703,7 @@ static int _BRPeerAcceptMerkleblockMessage(BRPeer *peer, const uint8_t *msg, siz
     BRPeerContext *ctx = (BRPeerContext *)peer;
     BRMerkleBlock *block = BRMerkleBlockParse(msg, msgLen);
     int r = 1;
-  
+
     if (! block) {
         peer_log(peer, "malformed merkleblock message with length: %zu", msgLen);
         r = 0;

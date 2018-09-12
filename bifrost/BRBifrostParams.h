@@ -34,7 +34,7 @@
 #define COIN_BLOCK_DIFFICULTY_INTERVAL (NPOW_TARGET_TIMESPAN/NPOW_TARGEY_SPACING)
 
 static const char *BRBifrostDNSSeeds[] = {
-        "dnsseed.bifrostcoin.io", "149.28.174.219", "144.202.41.68", "explorer2.bifrostcoin.io"
+        "dnsseed.bifrostcoin.io", "212.47.243.59", "95.179.157.221"
         , NULL
 };
 
@@ -58,8 +58,12 @@ static const BRCheckPoint BRBifrostCheckpoints[] = {
     {   1000, uint256("6ba268b0a5a87360b5942084a03e44b10b99bc9942153843be8f30be9946d709"), 1523922742, 0x1c021634 },
     {   5000, uint256("7b905329a6adabf53cba6a4c69fe4152a14a1154852f8459e7928f3566a99434"), 1524163348, 0x1b5a3fac },
     {  10000, uint256("35f56a42078ed92afa103fa5d8fe0684e0d5f800350f5230e3bf5e56f83fcc08"), 1524466756, 0x1b5d6109 },
-    {  15000, uint256("278fa794765bcaf37b9b3f61c14584c2957b602cda5512f02a16dda8f702f751"), 1524769569, 0x1b51a826 }
-
+    {  15000, uint256("278fa794765bcaf37b9b3f61c14584c2957b602cda5512f02a16dda8f702f751"), 1524769569, 0x1b51a826 },
+    { 100000, uint256("bc47e4959664446a7ebc294446c2693e3e441eee2748b00defbd9248d498fd7d"), 1529924775, 0x1b05640b },
+    { 120290, uint256("e6fbbf7e0df5c271eab87e05060c6bb4c13a97f0cb9299dbe824a119855f028f"), 1531156886, 0x1b05cd7d },
+    { 140000, uint256("a7dc9c64e7b7902288c3fa82614edf09e70349f96e2aa71ade15343f15e61e04"), 1532351940, 0x1b02d51b }, 
+    { 165440, uint256("eac04567483851d28843e3b235fc09694758a2d29e929e63add5f1baaae82109"), 1533894349, 0x1b04918a },
+    { 169300, uint256("d0bbbc3530be25a6324e3e94be931fc0e225f97ce95b9f804aff0f6d7e14286b"), 1534128752, 0x1b03d109 } 
 };
 
 static int BRBifrostVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
