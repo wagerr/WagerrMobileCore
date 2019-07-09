@@ -22,44 +22,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.bifrostwallet.core;
+package com.wagerrwallet.core;
 
-/**
- *
- */
-public abstract class BRCoreJniReference {
-
-    protected static boolean SHOW_FINALIZE = false;
-    /**
-     * C Pointer (as a Java long) to the underlying Breadwallet Core entity allocated from the
-     * C heap memory.  The referenced Core entity is used to implement native functions that
-     * call Core functions (and thus expect a Core entity).
-     *
-     * The address must be determined in a subclass specific way and thus must be provided in the
-     * subclasses constructor.
-     */
-    protected long jniReferenceAddress;
-
-    protected BRCoreJniReference (long jniReferenceAddress)
-    {
-        this.jniReferenceAddress = jniReferenceAddress;
-    }
-
+public class BRCorePaymentProtocolRequest extends BRCoreJniReference {
     //
     //
     //
-    protected void finalize () throws Throwable {
-        if (SHOW_FINALIZE) System.err.println("Finalize: " + toString());
-        dispose ();
+    public BRCorePaymentProtocolRequest(byte[] data) {
+        super(createPaymentProtocolRequest(data));
     }
 
-    public void dispose () {
-        disposeNative ();
-    }
+    public native String getNetwork();
+
+    public native BRCoreTransactionOutput[] getOutputs ();
+
+    public native long getTime ();
+
+    public native long getExpires();
+
+    public native String getMemo();
+
+    public native String getPaymentURL ();
+
+    public native byte[] getMerchantData ();
+
+    public native long getVersion ();
+
+    public native String getPKIType ();
+
+    public native byte[] getPKIData ();
+
+    public native byte[] getSignature ();
+
+    public native byte[] getDigest ();
+
+    public native byte[][] getCerts ();
+
+    private static native long createPaymentProtocolRequest(byte[] data);
+
+    public native byte[] serialize ();
 
     public native void disposeNative ();
 
-    public String toString() {
-        return getClass().getName() + "@" + Integer.toHexString(hashCode()) + " JNI=" + Long.toHexString(jniReferenceAddress);
-    }
+    protected static native void initializeNative ();
+
+    static { initializeNative(); }
 }

@@ -25,7 +25,7 @@
 #include "BRCoreJni.h"
 #include "BRChainParams.h"
 #include "bcash/BRBCashParams.h"
-#include "bifrost/BRBifrostParams.h"
+#include "BRWagerrParams.h"
 #include "com_bifrostwallet_core_BRCoreChainParams.h"
 
 /*

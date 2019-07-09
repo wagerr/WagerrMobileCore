@@ -1,7 +1,7 @@
 /*
  * BreadWallet
  *
- * Created by Ed Gamble <ed@breadwallet.com> on 1/22/18.
+ * Created by Ed Gamble <ed@breadwallet.com> on 1/31/18.
  * Copyright (c) 2018 breadwallet LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,29 +22,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.bifrostwallet.core;
+package com.wagerrwallet.core;
 
+public class BRCoreTransactionOutput extends BRCoreJniReference {
 
-public class BRCorePaymentProtocolPayment extends BRCoreJniReference {
-    public BRCorePaymentProtocolPayment(byte[] data) {
-        super(createPaymentProtocolPayment(data));
+    public BRCoreTransactionOutput(long amount,
+                                   byte[] script) {
+        this(createTransactionOutput(amount, script));
     }
 
-    public native byte[] getMerchantData ();
+    public BRCoreTransactionOutput(long jniReferenceAddress) {
+        super(jniReferenceAddress);
+    }
 
-    public native BRCoreTransaction[] getTransactions ();
+    protected static native long createTransactionOutput(long amount,
+                                                         byte[] script);
 
-    public native BRCoreTransactionOutput[] getRefundTo ();
+    public native String getAddress();
 
-    public native String getMerchantMemo ();
+    private native void setAddress(String address);
 
-    private static native long createPaymentProtocolPayment(byte[] data);
+    public native long getAmount();
 
-    public native byte[] serialize ();
+    /**
+     * Change the output amount - typically used after computing transaction fees.
+     */
+    public native void setAmount(long amount);
 
-    public native void disposeNative ();
-
-    protected static native void initializeNative ();
-
-    static { initializeNative(); }
+    public native byte[] getScript();
 }

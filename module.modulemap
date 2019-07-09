@@ -23,7 +23,7 @@ module BRCore [system] [extern_c] {
     header "neoscrypt.h"
     header "bcash/BRBCashParams.h"
     header "bcash/BRBCashAddr.h"
-    header "bifrost/BRBifrostParams.h"
-    header "bifrost/BRBifrostAddr.h"
+    header "wagerr/BRBifrostParams.h"
+    header "wagerr/BRBifrostAddr.h"
     export *
 }

@@ -1,7 +1,7 @@
 /*
  * BreadWallet
  *
- * Created by Ed Gamble <ed@breadwallet.com> on 1/31/18.
+ * Created by Ed Gamble <ed@breadwallet.com> on 2/1/18.
  * Copyright (c) 2018 breadwallet LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,32 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.bifrostwallet.core;
+package com.wagerrwallet.core;
 
-public class BRCoreTransactionOutput extends BRCoreJniReference {
-
-    public BRCoreTransactionOutput(long amount,
-                                   byte[] script) {
-        this(createTransactionOutput(amount, script));
+public class BRCorePaymentProtocolACK extends BRCoreJniReference {
+    public BRCorePaymentProtocolACK(byte[] data) {
+        this(createPaymentProtocolACK(data));
     }
 
-    public BRCoreTransactionOutput(long jniReferenceAddress) {
-        super(jniReferenceAddress);
+    protected BRCorePaymentProtocolACK(long jniReferenceAddress) {
+        super (jniReferenceAddress);
     }
 
-    protected static native long createTransactionOutput(long amount,
-                                                         byte[] script);
+    public native String getCustomerMemo ();
 
-    public native String getAddress();
+    public native byte[] getMerchantData ();
 
-    private native void setAddress(String address);
+    public native BRCoreTransaction[] getTransactions ();
 
-    public native long getAmount();
+    public native BRCoreTransactionOutput[] getRefundTo ();
 
-    /**
-     * Change the output amount - typically used after computing transaction fees.
-     */
-    public native void setAmount(long amount);
+    public native String getMerchantMemo ();
 
-    public native byte[] getScript();
+    private static native long createPaymentProtocolACK(byte[] data);
+
+    public native byte[] serialize ();
+
+    public native void disposeNative ();
+
+    protected static native void initializeNative ();
+
+    static { initializeNative(); }
 }

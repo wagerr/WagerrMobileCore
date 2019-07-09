@@ -23,10 +23,8 @@
  * THE SOFTWARE.
  */
 
-package com.bifrostwallet.core;
+package com.wagerrwallet.core;
 
-
-import java.util.Arrays;
 
 public class BRCoreKey extends BRCoreJniReference {
 

@@ -1,5 +1,5 @@
 //
-//  BRBifrostAddr.c
+//  BRWagerrAddr.c
 //
 //  Created by Aaron Voisine on 9/18/15.
 //  Copyright (c) 2015 breadwallet LLC
@@ -22,7 +22,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#include "BRBifrostAddr.h"
+#include "BRWagerrAddr.h"
 #include "BRBase58.h"
 #include "BRBech32.h"
 #include "BRInt.h"
@@ -42,7 +42,7 @@
 
 // writes the bitcoin address for a scriptPubKey to addr
 // returns the number of bytes written, or addrLen needed if addr is NULL
-size_t BRBifrostAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
+size_t BRWagerrAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
 {
     assert(script != NULL || scriptLen == 0);
     if (! script || scriptLen == 0 || scriptLen > MAX_SCRIPT_LENGTH) return 0;
@@ -97,7 +97,7 @@ size_t BRBifrostAddrFromScriptPubKey(char *addr, size_t addrLen, const uint8_t *
 
 // writes the bitcoin address for a scriptSig to addr
 // returns the number of bytes written, or addrLen needed if addr is NULL
-size_t BRBifrostAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
+size_t BRWagerrAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *script, size_t scriptLen)
 {
     assert(script != NULL || scriptLen == 0);
     if (! script || scriptLen == 0 || scriptLen > MAX_SCRIPT_LENGTH) return 0;
@@ -136,14 +136,14 @@ size_t BRBifrostAddrFromScriptSig(char *addr, size_t addrLen, const uint8_t *scr
 
 // writes the bitcoin address for a witness to addr
 // returns the number of bytes written, or addrLen needed if addr is NULL
-size_t BRBifrostAddrFromWitness(char *addr, size_t addrLen, const uint8_t *witness, size_t witLen)
+size_t BRWagerrAddrFromWitness(char *addr, size_t addrLen, const uint8_t *witness, size_t witLen)
 {
     return 0; // TODO: XXX implement
 }
 
 // writes the scriptPubKey for addr to script
 // returns the number of bytes written, or scriptLen needed if script is NULL
-size_t BRBifrostAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char *addr)
+size_t BRWagerrAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char *addr)
 {
     uint8_t data[42], pubkeyAddress = BITCOIN_PUBKEY_ADDRESS, scriptAddress = BITCOIN_SCRIPT_ADDRESS;
     char hrp[84], *bech32Prefix = "bc";
@@ -193,7 +193,7 @@ size_t BRBifrostAddrScriptPubKey(uint8_t *script, size_t scriptLen, const char *
 }
 
 // returns true if addr is a valid bitcoin address
-int BRBifrostAddrIsValid(const char *addr)
+int BRWagerrAddrIsValid(const char *addr)
 {
     uint8_t data[42];
     char hrp[84];
@@ -218,7 +218,7 @@ int BRBifrostAddrIsValid(const char *addr)
 }
 
 // writes the 20 byte hash160 of addr to md20 and returns true on success
-int BRBifrostAddrHash160(void *md20, const char *addr)
+int BRWagerrAddrHash160(void *md20, const char *addr)
 {
     uint8_t data[21];
     int r = 0;

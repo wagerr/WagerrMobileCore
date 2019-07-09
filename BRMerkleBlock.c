@@ -25,7 +25,7 @@
 #include "BRMerkleBlock.h"
 #include "BRCrypto.h"
 #include "BRAddress.h"
-#include "hash9.h"
+#include "quark.h"
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
@@ -153,7 +153,7 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
         }
 
         if ( block->version < 4 ) {
-            hash9(buf, &block->blockHash, 80);       // hash function for block hash
+            quark_hash(buf, &block->blockHash);       // hash function for block hash
         }
         else {
             BRSHA256_2(&block->blockHash, buf, 112);     // 80 + Uint256 nAccumulatorCheckpoint

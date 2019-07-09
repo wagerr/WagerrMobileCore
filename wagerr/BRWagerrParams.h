@@ -1,5 +1,5 @@
 //
-//  BRBifrostParams.h
+//  BRWagerrParams.h
 //
 //  Created by Aaron Voisine on 1/10/18.
 //  Copyright (c) 2019 breadwallet LLC
@@ -22,8 +22,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#ifndef BRBifrostParams_h
-#define BRBifrostParams_h
+#ifndef BRWagerrParams_h
+#define BRWagerrParams_h
 
 #include "BRChainParams.h"
 #include "BRPeer.h"
@@ -33,23 +33,23 @@
 #define NPOW_TARGEY_SPACING (7*60)
 #define COIN_BLOCK_DIFFICULTY_INTERVAL (NPOW_TARGET_TIMESPAN/NPOW_TARGEY_SPACING)
 
-static const char *BRBifrostDNSSeeds[] = {
+static const char *BRWagerrDNSSeeds[] = {
         "dnsseed.bifrostcoin.io", "212.47.243.59", "95.179.157.221"
         , NULL
 };
 
-static const char *BRBifrostTestNetDNSSeeds[] = {
+static const char *BRWagerrTestNetDNSSeeds[] = {
     NULL
 };
 
-static const BRCheckPoint BRBifrostTestNetCheckpoints[] = {
+static const BRCheckPoint BRWagerrTestNetCheckpoints[] = {
     {       0, uint256("0000040df09b15ba874400ba995f342b82573864b9ee10c255dc4448ce334438"), 1517054400, 0x1d00ffff }       // timestamp and target bits probably not ok... chainparams.cpp
 };
 
 
 // blockchain checkpoints - these are also used as starting points for partial chain downloads, so they must be at
 // difficulty transition boundaries in order to verify the block difficulty at the immediately following transition
-static const BRCheckPoint BRBifrostCheckpoints[] = {
+static const BRCheckPoint BRWagerrCheckpoints[] = {
     {      0, uint256("000006e6fa091a20a38fe6f0212d03e5df72b44d76e2eb4246b4d366dbb01faf"), 1523854631, 0x1e0fffff },
     {      1, uint256("0000066df97de78fdde0f1cd5e78cf7ff17e1a8d6cbf4137afa99f1587fe7d2e"), 1523873817, 0x1e0fffff },
     {      2, uint256("00000b7cf8dc27bc4c98c91089adf58f5ec673e022c1b8ea0d5146d13bc49bb7"), 1523873820, 0x1e0fffff },
@@ -66,34 +66,34 @@ static const BRCheckPoint BRBifrostCheckpoints[] = {
     { 169300, uint256("d0bbbc3530be25a6324e3e94be931fc0e225f97ce95b9f804aff0f6d7e14286b"), 1534128752, 0x1b03d109 } 
 };
 
-static int BRBifrostVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
+static int BRWagerrVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
 {
        return 1;
 }
 
-static int BRBifrostTestNetVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
+static int BRWagerrTestNetVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
 {
     return 1; // XXX skip testnet difficulty check for now
 }
 
-static const BRChainParams BRBifrostParams = {
-    BRBifrostDNSSeeds,
+static const BRChainParams BRWagerrParams = {
+    BRWagerrDNSSeeds,
     9229,                // standardPort
     0xd6e1a2c5,          // magicNumber
     0, // services
-    BRBifrostVerifyDifficulty,
-    BRBifrostCheckpoints,
-    sizeof(BRBifrostCheckpoints)/sizeof(*BRBifrostCheckpoints),
+    BRWagerrVerifyDifficulty,
+    BRWagerrCheckpoints,
+    sizeof(BRWagerrCheckpoints)/sizeof(*BRWagerrCheckpoints),
 };
 
-static const BRChainParams BRBifrostTestNetParams = {
-    BRBifrostTestNetDNSSeeds,
+static const BRChainParams BRWagerrTestNetParams = {
+    BRWagerrTestNetDNSSeeds,
     19229,               // standardPort
     0x86756453,          // magicNumber
     0, // services
-    BRBifrostTestNetVerifyDifficulty,
-    BRBifrostTestNetCheckpoints,
-    sizeof(BRBifrostTestNetCheckpoints)/sizeof(*BRBifrostTestNetCheckpoints)
+    BRWagerrTestNetVerifyDifficulty,
+    BRWagerrTestNetCheckpoints,
+    sizeof(BRWagerrTestNetCheckpoints)/sizeof(*BRWagerrTestNetCheckpoints)
 };
 
 #endif // BRChainParams_h

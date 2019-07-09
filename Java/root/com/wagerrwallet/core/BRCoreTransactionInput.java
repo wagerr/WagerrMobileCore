@@ -22,9 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.bifrostwallet.core;
-
-import java.util.Arrays;
+package com.wagerrwallet.core;
 
 public class BRCoreTransactionInput extends BRCoreJniReference {
 

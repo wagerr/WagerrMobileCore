@@ -22,49 +22,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.bifrostwallet.core;
+package com.wagerrwallet.core;
 
-public class BRCorePaymentProtocolRequest extends BRCoreJniReference {
-    //
-    //
-    //
-    public BRCorePaymentProtocolRequest(byte[] data) {
-        super(createPaymentProtocolRequest(data));
+
+public class BRCorePaymentProtocolEncryptedMessage extends BRCoreJniReference {
+    public BRCorePaymentProtocolEncryptedMessage (byte[] data) {
+        super (createPaymentProtocolEncryptedMessage (data));
     }
 
-    public native String getNetwork();
+    public native byte[] getMessage ();
 
-    public native BRCoreTransactionOutput[] getOutputs ();
+    public BRCoreKey getReceiverPublicKey () {
+        return new BRCoreKey (getReceiverPublicKeyReference());
+    }
 
-    public native long getTime ();
+    public native long getReceiverPublicKeyReference ();
 
-    public native long getExpires();
+    public BRCoreKey getSenderPublicKey () {
+        return new BRCoreKey (getSenderPublicKeyReference());
+    }
 
-    public native String getMemo();
+    public native long getSenderPublicKeyReference ();
 
-    public native String getPaymentURL ();
-
-    public native byte[] getMerchantData ();
-
-    public native long getVersion ();
-
-    public native String getPKIType ();
-
-    public native byte[] getPKIData ();
+    public native long getNonce ();
 
     public native byte[] getSignature ();
 
-    public native byte[] getDigest ();
+    public native byte[] getIdentifier ();
 
-    public native byte[][] getCerts ();
+    public native long getStatusCode ();
 
-    private static native long createPaymentProtocolRequest(byte[] data);
+    public native String getStatusMessage ();
+
+    private static native long createPaymentProtocolEncryptedMessage (byte[] data);
 
     public native byte[] serialize ();
 
     public native void disposeNative ();
-
-    protected static native void initializeNative ();
-
-    static { initializeNative(); }
 }

@@ -22,24 +22,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.bifrostwallet.core.test;
+package com.wagerrwallet.core.test;
 
-import com.bifrostwallet.core.BRCoreAddress;
-import com.bifrostwallet.core.BRCoreChainParams;
-import com.bifrostwallet.core.BRCoreKey;
-import com.bifrostwallet.core.BRCoreMasterPubKey;
-import com.bifrostwallet.core.BRCoreMerkleBlock;
-import com.bifrostwallet.core.BRCorePaymentProtocolACK;
-import com.bifrostwallet.core.BRCorePaymentProtocolInvoiceRequest;
-import com.bifrostwallet.core.BRCorePaymentProtocolMessage;
-import com.bifrostwallet.core.BRCorePaymentProtocolRequest;
-import com.bifrostwallet.core.BRCorePeer;
-import com.bifrostwallet.core.BRCorePeerManager;
-import com.bifrostwallet.core.BRCoreTransaction;
-import com.bifrostwallet.core.BRCoreTransactionInput;
-import com.bifrostwallet.core.BRCoreTransactionOutput;
-import com.bifrostwallet.core.BRCoreWallet;
-import com.bifrostwallet.core.BRCoreWalletManager;
+import com.wagerrwallet.core.BRCoreAddress;
+import com.wagerrwallet.core.BRCoreChainParams;
+import com.wagerrwallet.core.BRCoreKey;
+import com.wagerrwallet.core.BRCoreMasterPubKey;
+import com.wagerrwallet.core.BRCoreMerkleBlock;
+import com.wagerrwallet.core.BRCorePaymentProtocolACK;
+import com.wagerrwallet.core.BRCorePaymentProtocolInvoiceRequest;
+import com.wagerrwallet.core.BRCorePaymentProtocolMessage;
+import com.wagerrwallet.core.BRCorePaymentProtocolRequest;
+import com.wagerrwallet.core.BRCorePeer;
+import com.wagerrwallet.core.BRCorePeerManager;
+import com.wagerrwallet.core.BRCoreTransaction;
+import com.wagerrwallet.core.BRCoreTransactionInput;
+import com.wagerrwallet.core.BRCoreTransactionOutput;
+import com.wagerrwallet.core.BRCoreWallet;
+import com.wagerrwallet.core.BRCoreWalletManager;
 
 import java.security.SecureRandom;
 import java.util.Arrays;

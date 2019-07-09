@@ -1,7 +1,7 @@
 /*
  * BreadWallet
  *
- * Created by Ed Gamble <ed@breadwallet.com> on 2/1/18.
+ * Created by Ed Gamble <ed@breadwallet.com> on 1/22/18.
  * Copyright (c) 2018 breadwallet LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,18 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.bifrostwallet.core;
+package com.wagerrwallet.core;
 
-public class BRCorePaymentProtocolACK extends BRCoreJniReference {
-    public BRCorePaymentProtocolACK(byte[] data) {
-        this(createPaymentProtocolACK(data));
+
+public class BRCorePaymentProtocolPayment extends BRCoreJniReference {
+    public BRCorePaymentProtocolPayment(byte[] data) {
+        super(createPaymentProtocolPayment(data));
     }
-
-    protected BRCorePaymentProtocolACK(long jniReferenceAddress) {
-        super (jniReferenceAddress);
-    }
-
-    public native String getCustomerMemo ();
 
     public native byte[] getMerchantData ();
 
@@ -43,7 +38,7 @@ public class BRCorePaymentProtocolACK extends BRCoreJniReference {
 
     public native String getMerchantMemo ();
 
-    private static native long createPaymentProtocolACK(byte[] data);
+    private static native long createPaymentProtocolPayment(byte[] data);
 
     public native byte[] serialize ();
 

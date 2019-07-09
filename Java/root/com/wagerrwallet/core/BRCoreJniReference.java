@@ -22,41 +22,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.bifrostwallet.core;
+package com.wagerrwallet.core;
 
+/**
+ *
+ */
+public abstract class BRCoreJniReference {
 
-public class BRCorePaymentProtocolEncryptedMessage extends BRCoreJniReference {
-    public BRCorePaymentProtocolEncryptedMessage (byte[] data) {
-        super (createPaymentProtocolEncryptedMessage (data));
+    protected static boolean SHOW_FINALIZE = false;
+    /**
+     * C Pointer (as a Java long) to the underlying Breadwallet Core entity allocated from the
+     * C heap memory.  The referenced Core entity is used to implement native functions that
+     * call Core functions (and thus expect a Core entity).
+     *
+     * The address must be determined in a subclass specific way and thus must be provided in the
+     * subclasses constructor.
+     */
+    protected long jniReferenceAddress;
+
+    protected BRCoreJniReference (long jniReferenceAddress)
+    {
+        this.jniReferenceAddress = jniReferenceAddress;
     }
 
-    public native byte[] getMessage ();
-
-    public BRCoreKey getReceiverPublicKey () {
-        return new BRCoreKey (getReceiverPublicKeyReference());
+    //
+    //
+    //
+    protected void finalize () throws Throwable {
+        if (SHOW_FINALIZE) System.err.println("Finalize: " + toString());
+        dispose ();
     }
 
-    public native long getReceiverPublicKeyReference ();
-
-    public BRCoreKey getSenderPublicKey () {
-        return new BRCoreKey (getSenderPublicKeyReference());
+    public void dispose () {
+        disposeNative ();
     }
-
-    public native long getSenderPublicKeyReference ();
-
-    public native long getNonce ();
-
-    public native byte[] getSignature ();
-
-    public native byte[] getIdentifier ();
-
-    public native long getStatusCode ();
-
-    public native String getStatusMessage ();
-
-    private static native long createPaymentProtocolEncryptedMessage (byte[] data);
-
-    public native byte[] serialize ();
 
     public native void disposeNative ();
+
+    public String toString() {
+        return getClass().getName() + "@" + Integer.toHexString(hashCode()) + " JNI=" + Long.toHexString(jniReferenceAddress);
+    }
 }
