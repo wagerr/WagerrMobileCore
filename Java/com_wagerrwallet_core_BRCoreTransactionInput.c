@@ -26,7 +26,7 @@
 #include <string.h>
 #include <BRInt.h>
 #include <BRTransaction.h>
-#include "com_bifrostwallet_core_BRCoreTransactionInput.h"
+#include "com_wagerrwallet_core_BRCoreTransactionInput.h"
 
 /*
  * Class:     com_breadwallet_core_BRCoreTransactionInput

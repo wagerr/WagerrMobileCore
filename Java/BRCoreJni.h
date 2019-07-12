@@ -24,7 +24,7 @@
 
 #include <jni.h>
 #include <BRTransaction.h>
-#include "com_bifrostwallet_core_BRCoreJniReference.h"
+#include "com_wagerrwallet_core_BRCoreJniReference.h"
 
 /**
  *

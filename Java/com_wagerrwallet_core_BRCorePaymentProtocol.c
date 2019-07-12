@@ -24,7 +24,7 @@
 #include <malloc.h>
 #include <assert.h>
 #include "BRCoreJni.h"
-#include "com_bifrostwallet_core_BRCorePaymentProtocol.h"
+#include "com_wagerrwallet_core_BRCorePaymentProtocol.h"
 
 //
 // Statically Initialize Java References

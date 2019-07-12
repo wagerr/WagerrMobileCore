@@ -25,7 +25,7 @@
 #include <assert.h>
 #include <malloc.h>
 #include <BRTransaction.h>
-#include "com_bifrostwallet_core_BRCoreTransactionOutput.h"
+#include "com_wagerrwallet_core_BRCoreTransactionOutput.h"
 
 /*
  * Class:     com_breadwallet_core_BRCoreTransactionOutput

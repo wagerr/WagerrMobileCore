@@ -27,7 +27,7 @@
 #include "BRBIP39Mnemonic.h"
 #include "BRBIP32Sequence.h"
 #include "BRCoreJni.h"
-#include "com_bifrostwallet_core_BRCoreMasterPubKey.h"
+#include "com_wagerrwallet_core_BRCoreMasterPubKey.h"
 
 /*
  * Class:     com_breadwallet_core_BRCoreMasterPubKey

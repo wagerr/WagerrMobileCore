@@ -23,7 +23,7 @@
 #include <assert.h>
 #include "BRCoreJni.h"
 #include "BRMerkleBlock.h"
-#include "com_bifrostwallet_core_BRCoreMerkleBlock.h"
+#include "com_wagerrwallet_core_BRCoreMerkleBlock.h"
 
 /*
  * Class:     com_breadwallet_core_BRCoreMerkleBlock

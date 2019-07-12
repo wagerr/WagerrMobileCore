@@ -29,7 +29,7 @@
 #include <BRBIP39Mnemonic.h>
 #include <BRBIP38Key.h>
 #include <BRBIP32Sequence.h>
-#include "com_bifrostwallet_core_BRCoreKey.h"
+#include "com_wagerrwallet_core_BRCoreKey.h"
 
 /*
  * Class:     com_breadwallet_core_BRCoreKey

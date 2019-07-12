@@ -25,7 +25,7 @@
 #include <malloc.h>
 #include <BRInt.h>
 #include "BRCoreJni.h"
-#include "com_bifrostwallet_core_BRCoreTransaction.h"
+#include "com_wagerrwallet_core_BRCoreTransaction.h"
 
 //
 // Statically Initialize Java References

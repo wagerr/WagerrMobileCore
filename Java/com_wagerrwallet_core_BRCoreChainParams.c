@@ -26,7 +26,7 @@
 #include "BRChainParams.h"
 #include "bcash/BRBCashParams.h"
 #include "BRWagerrParams.h"
-#include "com_bifrostwallet_core_BRCoreChainParams.h"
+#include "com_wagerrwallet_core_BRCoreChainParams.h"
 
 /*
  * Class:     com_breadwallet_core_BRCoreChainParams

@@ -28,8 +28,8 @@
 #include "BRCoreJni.h"
 #include "BRTransaction.h"
 #include "BRPeerManager.h"
-#include "com_bifrostwallet_core_BRCoreWallet.h"
-#include "com_bifrostwallet_core_BRCoreTransaction.h"
+#include "com_wagerrwallet_core_BRCoreWallet.h"
+#include "com_wagerrwallet_core_BRCoreTransaction.h"
 
 static BRTransaction *
 JNI_COPY_TRANSACTION (BRTransaction *tx) {
