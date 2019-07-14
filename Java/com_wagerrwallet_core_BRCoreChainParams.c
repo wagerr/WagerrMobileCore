@@ -33,7 +33,7 @@
  * Method:    getJniMagicNumber
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_getJniMagicNumber
+JNIEXPORT jint JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_getJniMagicNumber
         (JNIEnv *env, jobject thisObject)
 {
     BRChainParams *params = (BRChainParams *) getJNIReference(env, thisObject);
@@ -45,7 +45,7 @@ JNIEXPORT jint JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_getJniMagic
  * Method:    createJniMainnetChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniMainnetChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniMainnetChainParams
         (JNIEnv *env, jclass thisClass) {
     BRChainParams *result = (BRChainParams *) calloc (1, sizeof (BRChainParams));
     memcpy (result, &BRMainNetParams, sizeof (BRChainParams));
@@ -57,7 +57,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniM
  * Method:    createJniTestnetChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniTestnetChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniTestnetChainParams
         (JNIEnv *env, jclass thisClass) {
     BRChainParams *result = (BRChainParams *) calloc (1, sizeof (BRChainParams));
     memcpy (result, &BRTestNetParams, sizeof (BRChainParams));
@@ -69,7 +69,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniT
  * Method:    createJniMainnetBcashChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniMainnetBcashChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniMainnetBcashChainParams
         (JNIEnv *env, jclass thisClass) {
     BRChainParams *result = (BRChainParams *) calloc (1, sizeof (BRChainParams));
     memcpy (result, &BRBCashParams, sizeof (BRChainParams));
@@ -81,7 +81,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniM
  * Method:    createJniTestnetBcashChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniTestnetBcashChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniTestnetBcashChainParams
         (JNIEnv *env, jclass thisClass) {
     BRChainParams *result = (BRChainParams *) calloc(1, sizeof(BRChainParams));
     memcpy(result, &BRBCashTestNetParams, sizeof(BRChainParams));
@@ -93,10 +93,10 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniT
  * Method:    createJniMainnetCoinChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniMainnetCoinChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniMainnetCoinChainParams
         (JNIEnv *env, jclass thisClass) {
     BRChainParams *result = (BRChainParams *) calloc (1, sizeof (BRChainParams));
-    memcpy (result, &BRBifrostParams, sizeof (BRChainParams));
+    memcpy (result, &BRWagerrParams, sizeof (BRChainParams));
     return (jlong) result;
 }
 
@@ -105,9 +105,9 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniM
  * Method:    createJniTestnetCoinChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniTestnetCoinChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniTestnetCoinChainParams
         (JNIEnv *env, jclass thisClass) {
     BRChainParams *result = (BRChainParams *) calloc(1, sizeof(BRChainParams));
-    memcpy(result, &BRBifrostTestNetParams, sizeof(BRChainParams));
+    memcpy(result, &BRWagerrTestNetParams, sizeof(BRChainParams));
     return (jlong) result;
 }

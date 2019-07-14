@@ -34,36 +34,37 @@
 #define COIN_BLOCK_DIFFICULTY_INTERVAL (NPOW_TARGET_TIMESPAN/NPOW_TARGEY_SPACING)
 
 static const char *BRWagerrDNSSeeds[] = {
-        "dnsseed.bifrostcoin.io", "212.47.243.59", "95.179.157.221"
+        "main.seederv1.wgr.host", "main.seederv2.wgr.host", "main.devseeder1.wgr.host", "main.devseeder2.wgr.host"
         , NULL
 };
 
 static const char *BRWagerrTestNetDNSSeeds[] = {
-    NULL
+        "testnet-seeder-01.wgr.host", "testnet.testnet-seeder-01.wgr.host",
+        "testnet-seeder-02.wgr.host", "testnet.testnet-seeder-02.wgr.host"
+        , NULL
 };
 
 static const BRCheckPoint BRWagerrTestNetCheckpoints[] = {
-    {       0, uint256("0000040df09b15ba874400ba995f342b82573864b9ee10c255dc4448ce334438"), 1517054400, 0x1d00ffff }       // timestamp and target bits probably not ok... chainparams.cpp
+    {       1, uint256("0x00000385558ec1b9af7f939e1626a3116b9fb988c86c2f915e6451e8efcd0521"), 1517054400, 0x1d00ffff},
+    {   20040, uint256("0x03a92984c2deba55ac8f9e8194b1bc745fbad9f7a0f3ed94ebb8c372935bed9c"), 1517054400, 0x1d00ffff},   // tx 40878
+    {   93286, uint256("0xdc68d97761ceac8c177a81487569bfe92b720f513fbbf5c2184988f1d74c5061"), 1517054400, 0x1d00ffff} // tx 227380
 };
 
 
 // blockchain checkpoints - these are also used as starting points for partial chain downloads, so they must be at
 // difficulty transition boundaries in order to verify the block difficulty at the immediately following transition
 static const BRCheckPoint BRWagerrCheckpoints[] = {
-    {      0, uint256("000006e6fa091a20a38fe6f0212d03e5df72b44d76e2eb4246b4d366dbb01faf"), 1523854631, 0x1e0fffff },
-    {      1, uint256("0000066df97de78fdde0f1cd5e78cf7ff17e1a8d6cbf4137afa99f1587fe7d2e"), 1523873817, 0x1e0fffff },
-    {      2, uint256("00000b7cf8dc27bc4c98c91089adf58f5ec673e022c1b8ea0d5146d13bc49bb7"), 1523873820, 0x1e0fffff },
-    {     61, uint256("0000001e7aa6833af7660e4e58d739560af233922fa8f043b103af40d8043ee7"), 1523876041, 0x1e01e76a },
-    {    200, uint256("000001b018bb282b454914e42f9653b0e26fb8065562e50cbd9ce63283904b6a"), 1523885537, 0x1e02479a },
-    {   1000, uint256("6ba268b0a5a87360b5942084a03e44b10b99bc9942153843be8f30be9946d709"), 1523922742, 0x1c021634 },
-    {   5000, uint256("7b905329a6adabf53cba6a4c69fe4152a14a1154852f8459e7928f3566a99434"), 1524163348, 0x1b5a3fac },
-    {  10000, uint256("35f56a42078ed92afa103fa5d8fe0684e0d5f800350f5230e3bf5e56f83fcc08"), 1524466756, 0x1b5d6109 },
-    {  15000, uint256("278fa794765bcaf37b9b3f61c14584c2957b602cda5512f02a16dda8f702f751"), 1524769569, 0x1b51a826 },
-    { 100000, uint256("bc47e4959664446a7ebc294446c2693e3e441eee2748b00defbd9248d498fd7d"), 1529924775, 0x1b05640b },
-    { 120290, uint256("e6fbbf7e0df5c271eab87e05060c6bb4c13a97f0cb9299dbe824a119855f028f"), 1531156886, 0x1b05cd7d },
-    { 140000, uint256("a7dc9c64e7b7902288c3fa82614edf09e70349f96e2aa71ade15343f15e61e04"), 1532351940, 0x1b02d51b }, 
-    { 165440, uint256("eac04567483851d28843e3b235fc09694758a2d29e929e63add5f1baaae82109"), 1533894349, 0x1b04918a },
-    { 169300, uint256("d0bbbc3530be25a6324e3e94be931fc0e225f97ce95b9f804aff0f6d7e14286b"), 1534128752, 0x1b03d109 } 
+    {       1, uint256("000001364c4ed20f1b240810b5aa91fee23ae9b64b6e746b594b611cf6d8c87b"), 1518743781, 0x1e0fffff },          // First PoW premine block
+    {     101, uint256("0000005e89a1fab52bf996e7eb7d653962a0eb064c16c09887504797deb7feaf"), 1518746959, 0x1d769f71 },          // Last premine block
+    {    1001, uint256("0000002a314058a8f61293e18ddbef5664a2097ac0178005f593444549dd5b8c"), 1518803284, 0x1d307420 },          // Last PoW block
+    {    5530, uint256("b3a8e6eb90085394c1af916d5690fd5b83d53c43cf60c7b6dd1e904e0ede8e88"), 1519055199, 0x1a0a131e },          // Block on which switch off happened, 5531, 5532 differed
+    {   14374, uint256("61dc2dbb225de3146bc59ab96dedf48047ece84d004acaf8f386ae7a7d074983"), 1519653932, 0x1a0dde43 },
+    {   70450, uint256("ea83266a9dfd7cf92a96aa07f86bdf60d45850bd47c175745e71a1aaf60b4091"), 1523055044, 0x1a0cb4c0 },
+    {  257142, uint256("eca635870323e7c0785fec1e663f4cb8645b7e84b5df4511ba4c189e580bfafd"), 1534374855, 0x1a14f60f },
+    {  290000, uint256("5a70e614a2e6035be0fa1dd1a67bd6caa0a78e396e889aac42bbbc08e11cdabd"), 1536367184, 0x1a0d4db7 },
+    {  294400, uint256("01be3c3c84fd6063ba27080996d346318242d5335efec936408c1e1ae3fdb4a1"), 1536634958, 0x1a14c311 },
+    {  320000, uint256("9060f8d44058c539653f37eaac4c53de7397e457dda264c5ee1be94293e9f6bb"), 1538190282, 0x1a15305d },         // tx 671130
+    {  695857, uint256("680a170b5363f308cc0698a53ab6a83209dab06c138c98f91110f9e11e273778"), 1560967688, 0x1a508433 }
 };
 
 static int BRWagerrVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
@@ -78,8 +79,8 @@ static int BRWagerrTestNetVerifyDifficulty(const BRMerkleBlock *block, const BRS
 
 static const BRChainParams BRWagerrParams = {
     BRWagerrDNSSeeds,
-    9229,                // standardPort
-    0xd6e1a2c5,          // magicNumber
+    55002,                // standardPort
+    0xfd612d84,          // magicNumber
     0, // services
     BRWagerrVerifyDifficulty,
     BRWagerrCheckpoints,
@@ -88,8 +89,8 @@ static const BRChainParams BRWagerrParams = {
 
 static const BRChainParams BRWagerrTestNetParams = {
     BRWagerrTestNetDNSSeeds,
-    19229,               // standardPort
-    0x86756453,          // magicNumber
+    55004,               // standardPort
+    0x99d19e87,          // magicNumber
     0, // services
     BRWagerrTestNetVerifyDifficulty,
     BRWagerrTestNetCheckpoints,

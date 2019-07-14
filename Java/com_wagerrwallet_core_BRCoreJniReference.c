@@ -61,7 +61,7 @@ extern void *getJNIReference (
  * Method:    disposeNative
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreJniReference_disposeNative
+JNIEXPORT void JNICALL Java_com_wagerrwallet_core_BRCoreJniReference_disposeNative
         (JNIEnv *env, jobject thisObject) {
     void *reference = getJNIReference(env, thisObject);
 

@@ -10,65 +10,65 @@ extern "C" {
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    createJniCoreWallet
- * Signature: ([Lcom/bifrostwallet/core/BRCoreTransaction;Lcom/bifrostwallet/core/BRCoreMasterPubKey;)J
+ * Signature: ([Lcom/wagerrwallet/core/BRCoreTransaction;Lcom/wagerrwallet/core/BRCoreMasterPubKey;)J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_createJniCoreWallet
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_createJniCoreWallet
   (JNIEnv *, jclass, jobjectArray, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    installListener
- * Signature: (Lcom/bifrostwallet/core/BRCoreWallet/Listener;)V
+ * Signature: (Lcom/wagerrwallet/core/BRCoreWallet/Listener;)V
  */
-JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreWallet_installListener
+JNIEXPORT void JNICALL Java_com_wagerrwallet_core_BRCoreWallet_installListener
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    getReceiveAddress
- * Signature: ()Lcom/bifrostwallet/core/BRCoreAddress;
+ * Signature: ()Lcom/wagerrwallet/core/BRCoreAddress;
  */
-JNIEXPORT jobject JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getReceiveAddress
+JNIEXPORT jobject JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getReceiveAddress
   (JNIEnv *, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    getAllAddresses
- * Signature: ()[Lcom/bifrostwallet/core/BRCoreAddress;
+ * Signature: ()[Lcom/wagerrwallet/core/BRCoreAddress;
  */
-JNIEXPORT jobjectArray JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getAllAddresses
+JNIEXPORT jobjectArray JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getAllAddresses
   (JNIEnv *, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    containsAddress
- * Signature: (Lcom/bifrostwallet/core/BRCoreAddress;)Z
+ * Signature: (Lcom/wagerrwallet/core/BRCoreAddress;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreWallet_containsAddress
+JNIEXPORT jboolean JNICALL Java_com_wagerrwallet_core_BRCoreWallet_containsAddress
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    addressIsUsed
- * Signature: (Lcom/bifrostwallet/core/BRCoreAddress;)Z
+ * Signature: (Lcom/wagerrwallet/core/BRCoreAddress;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreWallet_addressIsUsed
+JNIEXPORT jboolean JNICALL Java_com_wagerrwallet_core_BRCoreWallet_addressIsUsed
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    jniGetTransactions
- * Signature: ()[Lcom/bifrostwallet/core/BRCoreTransaction;
+ * Signature: ()[Lcom/wagerrwallet/core/BRCoreTransaction;
  */
-JNIEXPORT jobjectArray JNICALL Java_com_bifrostwallet_core_BRCoreWallet_jniGetTransactions
+JNIEXPORT jobjectArray JNICALL Java_com_wagerrwallet_core_BRCoreWallet_jniGetTransactions
   (JNIEnv *, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    getTransactionsConfirmedBefore
- * Signature: (J)[Lcom/bifrostwallet/core/BRCoreTransaction;
+ * Signature: (J)[Lcom/wagerrwallet/core/BRCoreTransaction;
  */
-JNIEXPORT jobjectArray JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getTransactionsConfirmedBefore
+JNIEXPORT jobjectArray JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getTransactionsConfirmedBefore
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -76,7 +76,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getTrans
  * Method:    getBalance
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getBalance
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getBalance
   (JNIEnv *, jobject);
 
 /*
@@ -84,7 +84,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getBalance
  * Method:    getTotalSent
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getTotalSent
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getTotalSent
   (JNIEnv *, jobject);
 
 /*
@@ -92,7 +92,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getTotalSent
  * Method:    getTotalReceived
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getTotalReceived
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getTotalReceived
   (JNIEnv *, jobject);
 
 /*
@@ -100,7 +100,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getTotalReceive
  * Method:    getFeePerKb
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getFeePerKb
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getFeePerKb
   (JNIEnv *, jobject);
 
 /*
@@ -108,7 +108,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getFeePerKb
  * Method:    setFeePerKb
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreWallet_setFeePerKb
+JNIEXPORT void JNICALL Java_com_wagerrwallet_core_BRCoreWallet_setFeePerKb
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -116,7 +116,7 @@ JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreWallet_setFeePerKb
  * Method:    getMaxFeePerKb
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getMaxFeePerKb
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getMaxFeePerKb
   (JNIEnv *, jobject);
 
 /*
@@ -124,47 +124,47 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getMaxFeePerKb
  * Method:    getDefaultFeePerKb
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getDefaultFeePerKb
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getDefaultFeePerKb
   (JNIEnv *, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    createTransaction
- * Signature: (JLcom/bifrostwallet/core/BRCoreAddress;)Lcom/bifrostwallet/core/BRCoreTransaction;
+ * Signature: (JLcom/wagerrwallet/core/BRCoreAddress;)Lcom/wagerrwallet/core/BRCoreTransaction;
  */
-JNIEXPORT jobject JNICALL Java_com_bifrostwallet_core_BRCoreWallet_createTransaction
+JNIEXPORT jobject JNICALL Java_com_wagerrwallet_core_BRCoreWallet_createTransaction
   (JNIEnv *, jobject, jlong, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    createTransactionForOutputs
- * Signature: ([Lcom/bifrostwallet/core/BRCoreTransactionOutput;)Lcom/bifrostwallet/core/BRCoreTransaction;
+ * Signature: ([Lcom/wagerrwallet/core/BRCoreTransactionOutput;)Lcom/wagerrwallet/core/BRCoreTransaction;
  */
-JNIEXPORT jobject JNICALL Java_com_bifrostwallet_core_BRCoreWallet_createTransactionForOutputs
+JNIEXPORT jobject JNICALL Java_com_wagerrwallet_core_BRCoreWallet_createTransactionForOutputs
   (JNIEnv *, jobject, jobjectArray);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    signTransaction
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;I[B)Z
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;I[B)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreWallet_signTransaction
+JNIEXPORT jboolean JNICALL Java_com_wagerrwallet_core_BRCoreWallet_signTransaction
   (JNIEnv *, jobject, jobject, jint, jbyteArray);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    containsTransaction
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;)Z
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreWallet_containsTransaction
+JNIEXPORT jboolean JNICALL Java_com_wagerrwallet_core_BRCoreWallet_containsTransaction
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    jniRegisterTransaction
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;)Z
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreWallet_jniRegisterTransaction
+JNIEXPORT jboolean JNICALL Java_com_wagerrwallet_core_BRCoreWallet_jniRegisterTransaction
   (JNIEnv *, jobject, jobject);
 
 /*
@@ -172,7 +172,7 @@ JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreWallet_jniRegisterT
  * Method:    removeTransaction
  * Signature: ([B)V
  */
-JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreWallet_removeTransaction
+JNIEXPORT void JNICALL Java_com_wagerrwallet_core_BRCoreWallet_removeTransaction
   (JNIEnv *, jobject, jbyteArray);
 
 /*
@@ -180,71 +180,71 @@ JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreWallet_removeTransactio
  * Method:    updateTransactions
  * Signature: ([[BJJ)V
  */
-JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreWallet_updateTransactions
+JNIEXPORT void JNICALL Java_com_wagerrwallet_core_BRCoreWallet_updateTransactions
   (JNIEnv *, jobject, jobjectArray, jlong, jlong);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    jniTransactionForHash
- * Signature: ([B)Lcom/bifrostwallet/core/BRCoreTransaction;
+ * Signature: ([B)Lcom/wagerrwallet/core/BRCoreTransaction;
  */
-JNIEXPORT jobject JNICALL Java_com_bifrostwallet_core_BRCoreWallet_jniTransactionForHash
+JNIEXPORT jobject JNICALL Java_com_wagerrwallet_core_BRCoreWallet_jniTransactionForHash
   (JNIEnv *, jobject, jbyteArray);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    transactionIsValid
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;)Z
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreWallet_transactionIsValid
+JNIEXPORT jboolean JNICALL Java_com_wagerrwallet_core_BRCoreWallet_transactionIsValid
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    transactionIsPending
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;)Z
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreWallet_transactionIsPending
+JNIEXPORT jboolean JNICALL Java_com_wagerrwallet_core_BRCoreWallet_transactionIsPending
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    transactionIsVerified
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;)Z
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreWallet_transactionIsVerified
+JNIEXPORT jboolean JNICALL Java_com_wagerrwallet_core_BRCoreWallet_transactionIsVerified
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    getTransactionFee
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;)J
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;)J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getTransactionFee
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getTransactionFee
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    getTransactionAmountSent
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;)J
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;)J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getTransactionAmountSent
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getTransactionAmountSent
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    getTransactionAmountReceived
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;)J
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;)J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getTransactionAmountReceived
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getTransactionAmountReceived
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    getBalanceAfterTransaction
- * Signature: (Lcom/bifrostwallet/core/BRCoreTransaction;)J
+ * Signature: (Lcom/wagerrwallet/core/BRCoreTransaction;)J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getBalanceAfterTransaction
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getBalanceAfterTransaction
   (JNIEnv *, jobject, jobject);
 
 /*
@@ -252,7 +252,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getBalanceAfter
  * Method:    getFeeForTransactionSize
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getFeeForTransactionSize
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getFeeForTransactionSize
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -260,7 +260,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getFeeForTransa
  * Method:    getFeeForTransactionAmount
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getFeeForTransactionAmount
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getFeeForTransactionAmount
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -268,7 +268,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getFeeForTransa
  * Method:    getMinOutputAmount
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getMinOutputAmount
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getMinOutputAmount
   (JNIEnv *, jobject);
 
 /*
@@ -276,7 +276,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getMinOutputAmo
  * Method:    getMaxOutputAmount
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getMaxOutputAmount
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreWallet_getMaxOutputAmount
   (JNIEnv *, jobject);
 
 /*
@@ -284,7 +284,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreWallet_getMaxOutputAmo
  * Method:    disposeNative
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreWallet_disposeNative
+JNIEXPORT void JNICALL Java_com_wagerrwallet_core_BRCoreWallet_disposeNative
   (JNIEnv *, jobject);
 
 /*
@@ -292,7 +292,7 @@ JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreWallet_disposeNative
  * Method:    initializeNative
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_bifrostwallet_core_BRCoreWallet_initializeNative
+JNIEXPORT void JNICALL Java_com_wagerrwallet_core_BRCoreWallet_initializeNative
   (JNIEnv *, jclass);
 
 #ifdef __cplusplus

@@ -12,7 +12,7 @@ extern "C" {
  * Method:    serialize
  * Signature: ()[B
  */
-JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_serialize
+JNIEXPORT jbyteArray JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_serialize
   (JNIEnv *, jobject);
 
 /*
@@ -20,7 +20,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_seri
  * Method:    getPubKey
  * Signature: ()[B
  */
-JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_getPubKey
+JNIEXPORT jbyteArray JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_getPubKey
   (JNIEnv *, jobject);
 
 /*
@@ -28,7 +28,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_getP
  * Method:    createPubKey
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_createPubKey
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_createPubKey
   (JNIEnv *, jobject);
 
 /*
@@ -36,7 +36,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_createPub
  * Method:    createJniCoreMasterPubKeyFromPhrase
  * Signature: ([B)J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromPhrase
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromPhrase
   (JNIEnv *, jclass, jbyteArray);
 
 /*
@@ -44,7 +44,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_createJni
  * Method:    createJniCoreMasterPubKeyFromSerialization
  * Signature: ([B)J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromSerialization
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromSerialization
   (JNIEnv *, jclass, jbyteArray);
 
 /*
@@ -52,7 +52,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_createJni
  * Method:    bip32BitIDKey
  * Signature: ([BILjava/lang/String;)[B
  */
-JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_bip32BitIDKey
+JNIEXPORT jbyteArray JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_bip32BitIDKey
   (JNIEnv *, jclass, jbyteArray, jint, jstring);
 
 /*
@@ -60,7 +60,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_bip3
  * Method:    validateRecoveryPhrase
  * Signature: ([Ljava/lang/String;Ljava/lang/String;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_validateRecoveryPhrase
+JNIEXPORT jboolean JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_validateRecoveryPhrase
   (JNIEnv *, jclass, jobjectArray, jstring);
 
 /*
@@ -68,7 +68,7 @@ JNIEXPORT jboolean JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_valida
  * Method:    generatePaperKey
  * Signature: ([B[Ljava/lang/String;)[B
  */
-JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_generatePaperKey
+JNIEXPORT jbyteArray JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_generatePaperKey
   (JNIEnv *, jclass, jbyteArray, jobjectArray);
 
 #ifdef __cplusplus

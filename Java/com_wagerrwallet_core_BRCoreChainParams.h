@@ -12,7 +12,7 @@ extern "C" {
  * Method:    getJniMagicNumber
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_getJniMagicNumber
+JNIEXPORT jint JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_getJniMagicNumber
   (JNIEnv *, jobject);
 
 /*
@@ -20,7 +20,7 @@ JNIEXPORT jint JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_getJniMagic
  * Method:    createJniMainnetChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniMainnetChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniMainnetChainParams
   (JNIEnv *, jclass);
 
 /*
@@ -28,7 +28,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniM
  * Method:    createJniTestnetChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniTestnetChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniTestnetChainParams
   (JNIEnv *, jclass);
 
 /*
@@ -36,7 +36,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniT
  * Method:    createJniMainnetBcashChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniMainnetBcashChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniMainnetBcashChainParams
   (JNIEnv *, jclass);
 
 /*
@@ -44,7 +44,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniM
  * Method:    createJniTestnetBcashChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniTestnetBcashChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniTestnetBcashChainParams
   (JNIEnv *, jclass);
 
 /*
@@ -52,7 +52,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniT
  * Method:    createJniMainnetBiblepayChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniMainnetCoinChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniMainnetCoinChainParams
         (JNIEnv *, jclass);
 
 /*
@@ -60,7 +60,7 @@ JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniM
  * Method:    createJniTestnetBiblepayChainParams
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_bifrostwallet_core_BRCoreChainParams_createJniTestnetCoinChainParams
+JNIEXPORT jlong JNICALL Java_com_wagerrwallet_core_BRCoreChainParams_createJniTestnetCoinChainParams
         (JNIEnv *, jclass);
 
 

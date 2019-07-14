@@ -34,7 +34,7 @@
  * Method:    serialize
  * Signature: ()[B
  */
-JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_serialize
+JNIEXPORT jbyteArray JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_serialize
         (JNIEnv *env, jobject thisObject) {
     BRMasterPubKey *key = (BRMasterPubKey *) getJNIReference (env, thisObject);
 
@@ -50,7 +50,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_seri
  * Method:    getPubKey
  * Signature: ()[B
  */
-JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_getPubKey
+JNIEXPORT jbyteArray JNICALL Java_com_wagerrwallet_core_BRCoreMasterPubKey_getPubKey
         (JNIEnv *env, jobject thisObject) {
     BRMasterPubKey *key = (BRMasterPubKey *) getJNIReference (env, thisObject);
 
@@ -67,7 +67,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_bifrostwallet_core_BRCoreMasterPubKey_getP
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL
-Java_com_bifrostwallet_core_BRCoreMasterPubKey_createPubKey
+Java_com_wagerrwallet_core_BRCoreMasterPubKey_createPubKey
         (JNIEnv *env, jobject thisObject) {
     BRMasterPubKey *mpk = (BRMasterPubKey *) getJNIReference (env, thisObject);
 
@@ -83,7 +83,7 @@ Java_com_bifrostwallet_core_BRCoreMasterPubKey_createPubKey
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_bifrostwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromPhrase
+Java_com_wagerrwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromPhrase
         (JNIEnv *env, jclass thisClass,
          jbyteArray phrase) {
 
@@ -147,7 +147,7 @@ Java_com_bifrostwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromPhra
  * Signature: ([B)J
  */
 JNIEXPORT jlong JNICALL
-Java_com_bifrostwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromSerialization
+Java_com_wagerrwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromSerialization
         (JNIEnv *env, jclass thisClass,
          jbyteArray serialization) {
     jsize serializationLength = (*env)->GetArrayLength (env, serialization);
@@ -166,7 +166,7 @@ Java_com_bifrostwallet_core_BRCoreMasterPubKey_createJniCoreMasterPubKeyFromSeri
  * Signature: ([BILjava/lang/String;)[B
  */
 JNIEXPORT jbyteArray JNICALL
-Java_com_bifrostwallet_core_BRCoreMasterPubKey_bip32BitIDKey
+Java_com_wagerrwallet_core_BRCoreMasterPubKey_bip32BitIDKey
         (JNIEnv *env, jclass thisClass, jbyteArray seed, jint index, jstring strUri) {
     int seedLength = (*env)->GetArrayLength(env, seed);
     const char *uri = (*env)->GetStringUTFChars(env, strUri, NULL);
@@ -191,7 +191,7 @@ Java_com_bifrostwallet_core_BRCoreMasterPubKey_bip32BitIDKey
  * Signature: ([Ljava/lang/String;Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL
-Java_com_bifrostwallet_core_BRCoreMasterPubKey_validateRecoveryPhrase
+Java_com_wagerrwallet_core_BRCoreMasterPubKey_validateRecoveryPhrase
         (JNIEnv *env, jclass thisClass, jobjectArray stringArray, jstring jPhrase) {
     int wordsCount = (*env)->GetArrayLength(env, stringArray);
     char *wordList[wordsCount];
@@ -220,7 +220,7 @@ Java_com_bifrostwallet_core_BRCoreMasterPubKey_validateRecoveryPhrase
  * Signature: ([B[Ljava/lang/String;)[B
  */
 JNIEXPORT jbyteArray JNICALL
-Java_com_bifrostwallet_core_BRCoreMasterPubKey_generatePaperKey
+Java_com_wagerrwallet_core_BRCoreMasterPubKey_generatePaperKey
         (JNIEnv *env, jclass thisClass, jbyteArray seed, jobjectArray stringArray) {
 
     int wordsCount = (*env)->GetArrayLength(env, stringArray);

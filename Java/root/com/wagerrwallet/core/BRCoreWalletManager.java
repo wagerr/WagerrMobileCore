@@ -344,9 +344,9 @@ public class BRCoreWalletManager implements
     private String getChainDescriptiveName ()
     {
         if (chainParams == BRCoreChainParams.mainnetCoinChainParams)
-            return "Bifrost Mainnet";
+            return "Wagerr Mainnet";
         else if (chainParams == BRCoreChainParams.testnetCoinChainParams)
-            return "Bifrost Testnet";
+            return "Wagerr Testnet";
         else if (chainParams == BRCoreChainParams.mainnetChainParams)
             return "Bitcoin Mainnet";
         else if (chainParams == BRCoreChainParams.testnetChainParams)
