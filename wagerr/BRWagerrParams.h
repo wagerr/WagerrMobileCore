@@ -45,9 +45,9 @@ static const char *BRWagerrTestNetDNSSeeds[] = {
 };
 
 static const BRCheckPoint BRWagerrTestNetCheckpoints[] = {
-    {       1, uint256("0x00000385558ec1b9af7f939e1626a3116b9fb988c86c2f915e6451e8efcd0521"), 1517054400, 0x1d00ffff},
-    {   20040, uint256("0x03a92984c2deba55ac8f9e8194b1bc745fbad9f7a0f3ed94ebb8c372935bed9c"), 1517054400, 0x1d00ffff},   // tx 40878
-    {   93286, uint256("0xdc68d97761ceac8c177a81487569bfe92b720f513fbbf5c2184988f1d74c5061"), 1517054400, 0x1d00ffff} // tx 227380
+    {       1, uint256("00000385558ec1b9af7f939e1626a3116b9fb988c86c2f915e6451e8efcd0521"), 1517054400, 0x1d00ffff},
+    {   20040, uint256("03a92984c2deba55ac8f9e8194b1bc745fbad9f7a0f3ed94ebb8c372935bed9c"), 1517054400, 0x1d00ffff},   // tx 40878
+    {   93286, uint256("dc68d97761ceac8c177a81487569bfe92b720f513fbbf5c2184988f1d74c5061"), 1517054400, 0x1d00ffff} // tx 227380
 };
 
 
