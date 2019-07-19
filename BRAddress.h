@@ -57,6 +57,23 @@ extern "C" {
 #define OP_EQUALVERIFY 0x88
 #define OP_HASH160     0xa9
 #define OP_CHECKSIG    0xac
+#define OP_RETURN      0x6a
+
+// Wagerr opcodes
+#define OP_SMOKETEST                0x42
+#define OP_BTX_MAPPING              0x01
+#define OP_BTX_PEERLESS_EVENT       0x02
+#define OP_BTX_PEERLESS_BET         0x03
+#define OP_BTX_PEERLESS_RESULT      0x04
+#define OP_BTX_PEERLESS_UPD_ODDS    0x05
+#define OP_BTX_CHAIN_EVENT          0x06
+#define OP_BTX_CHAIN_BET            0x07
+#define OP_BTX_CHAIN_RESULT         0x08
+#define OP_BTX_PEERLESS_SPREADS_MKT 0x09
+#define OP_BTX_PEERLESS_TOTALS_MKT  0x0a
+
+
+
 
 // reads a varint from buf and stores its length in intLen if intLen is non-NULL
 // returns the varint value

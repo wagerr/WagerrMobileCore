@@ -44,6 +44,17 @@ static const char *BRWagerrTestNetDNSSeeds[] = {
         , NULL
 };
 
+static const char *BRWagerrBetAddresses[] = {
+        "WTogNAzaHf9oEbBoAv9RA49FdxyWaGLmdZ"
+        , NULL
+};
+
+static const char *BRWagerrTestnetBetAddresses[] = {
+        "TGFKr64W3tTMLZrKBhMAou9wnQmdNMrSG2",     // Oracle Masternode Event & Result Posting Wallet Address (Testnet).
+        "TWM5BQzfjDkBLGbcDtydfuNcuPfzPVSEhc"
+        , NULL
+};
+
 static const BRCheckPoint BRWagerrTestNetCheckpoints[] = {
     {       1, uint256("00000385558ec1b9af7f939e1626a3116b9fb988c86c2f915e6451e8efcd0521"), 1517054400, 0x1d00ffff},
     {   20040, uint256("03a92984c2deba55ac8f9e8194b1bc745fbad9f7a0f3ed94ebb8c372935bed9c"), 1517054400, 0x1d00ffff},   // tx 40878
@@ -85,6 +96,7 @@ static const BRChainParams BRWagerrParams = {
     BRWagerrVerifyDifficulty,
     BRWagerrCheckpoints,
     sizeof(BRWagerrCheckpoints)/sizeof(*BRWagerrCheckpoints),
+    BRWagerrBetAddresses
 };
 
 static const BRChainParams BRWagerrTestNetParams = {
@@ -94,7 +106,8 @@ static const BRChainParams BRWagerrTestNetParams = {
     0, // services
     BRWagerrTestNetVerifyDifficulty,
     BRWagerrTestNetCheckpoints,
-    sizeof(BRWagerrTestNetCheckpoints)/sizeof(*BRWagerrTestNetCheckpoints)
+    sizeof(BRWagerrTestNetCheckpoints)/sizeof(*BRWagerrTestNetCheckpoints),
+    BRWagerrTestnetBetAddresses
 };
 
 #endif // BRChainParams_h
