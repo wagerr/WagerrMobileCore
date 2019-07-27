@@ -26,6 +26,8 @@
 package com.wagerrwallet.core;
 
 
+import org.eclipse.jetty.util.ArrayUtil;
+
 public class BRCoreKey extends BRCoreJniReference {
 
     //
@@ -152,6 +154,15 @@ public class BRCoreKey extends BRCoreJniReference {
         final StringBuilder builder = new StringBuilder();
         for (byte b : in) {
             builder.append(String.format("%02x", b));
+        }
+        return builder.toString();
+    }
+
+    // reverse for BE hashes
+    public static String encodeHexRev(byte[] in) {
+        final StringBuilder builder = new StringBuilder();
+        for (byte b : in) {
+            builder.insert(0, String.format("%02x", b));
         }
         return builder.toString();
     }
