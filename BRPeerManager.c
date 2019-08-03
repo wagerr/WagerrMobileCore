@@ -934,9 +934,9 @@ static void _peerRelayedTx(void *info, BRTransaction *tx)
     void (*txCallback)(void *, int) = NULL;
     int isWalletTx = 0, hasPendingCallbacks = 0;
     size_t relayCount = 0;
-    
+
     pthread_mutex_lock(&manager->lock);
-    peer_log(peer, "relayed tx: %s", u256hexBE(tx->txHash));
+    //peer_log(peer, "relayed tx: %s", u256hexBE(tx->txHash));
     
     for (size_t i = array_count(manager->publishedTx); i > 0; i--) { // see if tx is in list of published tx
         if (UInt256Eq(manager->publishedTxHashes[i - 1], tx->txHash)) {
@@ -959,8 +959,14 @@ static void _peerRelayedTx(void *info, BRTransaction *tx)
         if (isWalletTx) tx = BRWalletTransactionForHash(manager->wallet, tx->txHash);
     }
     else {
-        BRTransactionFree(tx);
-        tx = NULL;
+        BRTxOutput *out = BRWalletBetTransactionGetOutput(manager->wallet, tx);
+        if (out != NULL)    {
+            BRWalletRegisterBetTransaction(manager->wallet, tx);
+        }
+        else {
+            BRTransactionFree(tx);
+            tx = NULL;
+        }
     }
     
     if (tx && isWalletTx) {

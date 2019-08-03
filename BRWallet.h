@@ -73,6 +73,8 @@ void BRWalletSetCallbacks(BRWallet *wallet, void *info,
                           void (*txAdded)(void *info, BRTransaction *tx),
                           void (*txUpdated)(void *info, const UInt256 txHashes[], size_t txCount, uint32_t blockHeight,
                                             uint32_t timestamp),
+                          void (*txBetUpdated)(void *info, const BRTransaction betTxs[], size_t txCount, uint32_t blockHeight,
+                                            uint32_t timestamp),
                           void (*txDeleted)(void *info, UInt256 txHash, int notifyUser, int recommendRescan));
 
 // wallets are composed of chains of addresses
@@ -198,6 +200,15 @@ int64_t BRLocalAmount(int64_t amount, double price);
 // returns the given local currency amount in satoshis
 // price is local currency units (i.e. pennies, pence) per bitcoin
 int64_t BRBitcoinAmount(int64_t localAmount, double price);
+
+// Wagerr: obtain the opcode output
+BRTxOutput* BRWalletBetTransactionGetOutput(BRWallet* wallet, const BRTransaction *tx);
+
+// Wagerr: register
+int BRWalletRegisterBetTransaction(BRWallet *wallet, BRTransaction *tx);
+
+// Wagerr: checks if betting TX and sends though normal tx notificatino
+int BRWalletTransactionCheckBet(BRWallet *wallet, const BRTransaction *tx);
 
 #ifdef __cplusplus
 }

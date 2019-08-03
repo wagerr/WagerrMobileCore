@@ -318,6 +318,14 @@ public class BRCoreWalletManager implements
         showTxDetail("onTxUpdated");
     }
 
+    public void onBetTxUpdated(BRCoreTransaction transaction) {
+        if (!SHOW_CALLBACK) return;
+        System.out.println (getChainDescriptiveName() + ": onBetTxUpdated: " + transaction.getReverseHash());
+
+        if (!SHOW_CALLBACK_DETAIL_TX_STATUS) return;
+        showTxDetail("onBetTxUpdated");
+    }
+
     @Override
     public void onTxDeleted(String hash, int notifyUser, int recommendRescan) {
         if (!SHOW_CALLBACK) return;
@@ -559,6 +567,14 @@ public class BRCoreWalletManager implements
         }
 
         @Override
+        public void onBetTxUpdated(BRCoreTransaction transaction) {
+            try { listener.onBetTxUpdated(transaction); }
+            catch (Exception ex) {
+                ex.printStackTrace(System.err);
+            }
+        }
+
+        @Override
         public void onTxDeleted(String hash, int notifyUser, int recommendRescan) {
             try { listener.onTxDeleted (hash, notifyUser, recommendRescan); }
             catch (Exception ex) {
@@ -608,6 +624,16 @@ public class BRCoreWalletManager implements
                 @Override
                 public void run() {
                     listener.onTxUpdated (hash, blockHeight, timeStamp);
+                }
+            });
+        }
+
+        @Override
+        public void onBetTxUpdated(final BRCoreTransaction transaction) {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    listener.onBetTxUpdated (transaction);
                 }
             });
         }

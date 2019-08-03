@@ -50,6 +50,9 @@ static void txAdded(void *info, BRTransaction *tx);
 static void txUpdated(void *info, const UInt256 txHashes[], size_t count,
                       uint32_t blockHeight,
                       uint32_t timestamp);
+static void txBetUpdated(void *info, const BRTransaction betTxs[], size_t count,
+                      uint32_t blockHeight,
+                      uint32_t timestamp);
 static void txDeleted(void *info, UInt256 txHash, int notifyUser, int recommendRescan);
 
 //
@@ -111,6 +114,7 @@ JNIEXPORT void JNICALL Java_com_wagerrwallet_core_BRCoreWallet_installListener
                          balanceChanged,
                          txAdded,
                          txUpdated,
+                         txBetUpdated,
                          txDeleted);
 }
 
@@ -767,6 +771,34 @@ txUpdated(void *info, const UInt256 txHashes[], size_t count, uint32_t blockHeig
                                blockHeight,
                                timestamp);
         (*env)->DeleteLocalRef(env, hash);
+    }
+    (*env)->DeleteLocalRef(env, listener);
+}
+
+static void
+txBetUpdated(void *info, const BRTransaction betTxs[], size_t count, uint32_t blockHeight,
+          uint32_t timestamp) {
+
+    JNIEnv *env = getEnv();
+    if (NULL == env) return;
+
+    jobject listener = (*env)->NewLocalRef (env, (jobject) info);
+    if ((*env)->IsSameObject (env, listener, NULL)) return; // GC reclaimed
+
+    // The onTxUpdated callback
+    jmethodID listenerMethod =
+            lookupListenerMethod(env, listener,
+                                 "onBetTxUpdated",
+                                 "(Lcom/wagerrwallet/core/BRCoreTransaction;)V");
+    assert (NULL != listenerMethod);
+
+    // Invoke the callback for each of txHashes.
+    for (size_t i = 0; i < count; i++) {
+        jobject transaction = (*env)->NewObject (env, transactionClass, transactionConstructor,
+                                                 (jlong) JNI_COPY_TRANSACTION(&betTxs[i]));
+
+        (*env)->CallVoidMethod(env, listener, listenerMethod, transaction);
+        (*env)->DeleteLocalRef (env, transaction);
     }
     (*env)->DeleteLocalRef(env, listener);
 }

@@ -906,6 +906,10 @@ public class BRWalletManager extends BRCoreWalletManager {
                 System.out.println(String.format("            tx updated: %s", hash));
             }
 
+            public void onBetTxUpdated(BRCoreTransaction transaction) {
+                System.out.println(String.format("            bettx updated: %s", transaction.getReverseHash()));
+            }
+
             @Override
             public void onTxDeleted(String hash, int notifyUser, int recommendRescan) {
                 System.out.println(String.format("            tx deleted: %s", hash));

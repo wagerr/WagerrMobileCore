@@ -34,6 +34,17 @@
 #include <pthread.h>
 #include <assert.h>
 
+#if defined(TARGET_OS_MAC)
+#include <Foundation/Foundation.h>
+#define WalletLog(...) NSLog(__VA_ARGS__)
+#elif defined(__ANDROID__)
+#include <android/log.h>
+#define WalletLog(...) __android_log_print(ANDROID_LOG_INFO, "BRWallet", __VA_ARGS__)
+#else
+#include <stdio.h>
+#define WalletLog(...) printf(__VA_ARGS__)
+#endif
+
 struct BRWalletStruct {
     uint64_t balance, totalSent, totalReceived, feePerKb, *balanceHist;
     uint32_t blockHeight;
@@ -41,11 +52,12 @@ struct BRWalletStruct {
     BRTransaction **transactions;
     BRMasterPubKey masterPubKey;
     BRAddress *internalChain, *externalChain;
-    BRSet *allTx, *invalidTx, *pendingTx, *spentOutputs, *usedAddrs, *allAddrs;
+    BRSet *allTx, *invalidTx, *pendingTx, *betTx, *spentOutputs, *usedAddrs, *allAddrs;
     void *callbackInfo;
     void (*balanceChanged)(void *info, uint64_t balance);
     void (*txAdded)(void *info, BRTransaction *tx);
     void (*txUpdated)(void *info, const UInt256 txHashes[], size_t txCount, uint32_t blockHeight, uint32_t timestamp);
+    void (*txBetUpdated)(void *info, const BRTransaction betTxs[], size_t txCount, uint32_t blockHeight, uint32_t timestamp);
     void (*txDeleted)(void *info, UInt256 txHash, int notifyUser, int recommendRescan);
     pthread_mutex_t lock;
 };
@@ -264,6 +276,7 @@ BRWallet *BRWalletNew(BRTransaction *transactions[], size_t txCount, BRMasterPub
     wallet->allTx = BRSetNew(BRTransactionHash, BRTransactionEq, txCount + 100);
     wallet->invalidTx = BRSetNew(BRTransactionHash, BRTransactionEq, 10);
     wallet->pendingTx = BRSetNew(BRTransactionHash, BRTransactionEq, 10);
+    wallet->betTx = BRSetNew(BRTransactionHash, BRTransactionEq, 1000);     // big set, will be purged after storing
     wallet->spentOutputs = BRSetNew(BRUTXOHash, BRUTXOEq, txCount + 100);
     wallet->usedAddrs = BRSetNew(BRAddressHash, BRAddressEq, txCount + 100);
     wallet->allAddrs = BRSetNew(BRAddressHash, BRAddressEq, txCount + 100);
@@ -305,6 +318,8 @@ void BRWalletSetCallbacks(BRWallet *wallet, void *info,
                           void (*txAdded)(void *info, BRTransaction *tx),
                           void (*txUpdated)(void *info, const UInt256 txHashes[], size_t txCount, uint32_t blockHeight,
                                             uint32_t timestamp),
+                          void (*txBetUpdated)(void *info, const BRTransaction betTxs[], size_t txCount, uint32_t blockHeight,
+                                            uint32_t timestamp),
                           void (*txDeleted)(void *info, UInt256 txHash, int notifyUser, int recommendRescan))
 {
     assert(wallet != NULL);
@@ -312,6 +327,7 @@ void BRWalletSetCallbacks(BRWallet *wallet, void *info,
     wallet->balanceChanged = balanceChanged;
     wallet->txAdded = txAdded;
     wallet->txUpdated = txUpdated;
+    wallet->txBetUpdated = txBetUpdated;
     wallet->txDeleted = txDeleted;
 }
 
@@ -710,6 +726,58 @@ int BRWalletContainsTransaction(BRWallet *wallet, const BRTransaction *tx)
     return r;
 }
 
+// Wagerr start
+BRTxOutput* BRWalletBetTransactionGetOutput(BRWallet* wallet, const BRTransaction *tx)
+{
+    BRTxOutput *r = NULL;
+    for (size_t i = 0; ! r && i < tx->outCount; i++) {
+        if (tx->outputs[i].script[0] == OP_RETURN && tx->outputs[i].script[2] == OP_SMOKETEST)  {
+            r = &tx->outputs[i];
+            break;
+        }
+    }
+    return r;
+}
+
+int BRWalletRegisterBetTransaction(BRWallet *wallet, BRTransaction *tx)
+{
+    int r = 0;
+    if (tx) {
+        pthread_mutex_lock(&wallet->lock);
+        if (! BRSetContains(wallet->betTx, tx)) {
+            BRSetAdd(wallet->betTx, tx);
+        }
+        pthread_mutex_unlock(&wallet->lock);
+    }
+    else r = 0;
+
+    return r;
+}
+
+int BRWalletTransactionCheckBet(BRWallet* wallet, const BRTransaction *tx)
+{
+    int r = 0;
+    if (tx->timestamp==0)   return 0;   // not useful yet
+
+    time_t timeLimit = time(NULL) - OP_TIME_THRESHOLD;      // 15 days
+
+    // if found, discard older that 15 days unless they are mappings to avoid spam
+    BRTxOutput *out = BRWalletBetTransactionGetOutput(wallet, tx);
+    if (out != NULL) {
+        if (out->script[4] == OP_BTX_MAPPING ||
+           (out->script[4] != OP_BTX_MAPPING && tx->timestamp > timeLimit) ) {
+            r = 1;
+            WalletLog("Accepted bettx BTX=%02x : %s , ", out->script[4], u256hexBE(tx->txHash)  );
+        }
+        else {
+            WalletLog("Discarded bettx BTX=%02x, %d hours early : %s , ", out->script[4], (int)((tx->timestamp-timeLimit)/3600),u256hexBE(tx->txHash)  );
+        }
+    }
+    return r;
+}
+
+// Wagerr end
+
 // adds a transaction to the wallet, or returns false if it isn't associated with the wallet
 int BRWalletRegisterTransaction(BRWallet *wallet, BRTransaction *tx)
 {
@@ -931,42 +999,63 @@ int BRWalletTransactionIsVerified(BRWallet *wallet, const BRTransaction *tx)
 void BRWalletUpdateTransactions(BRWallet *wallet, const UInt256 txHashes[], size_t txCount, uint32_t blockHeight,
                                 uint32_t timestamp)
 {
-    BRTransaction *tx;
+    BRTransaction *tx, *bettx;
     UInt256 hashes[txCount];
+    BRTransaction betTxs[txCount];
     int needsUpdate = 0;
-    size_t i, j, k;
+    size_t i, j, k, b;
     
     assert(wallet != NULL);
     assert(txHashes != NULL || txCount == 0);
     pthread_mutex_lock(&wallet->lock);
     if (blockHeight > wallet->blockHeight) wallet->blockHeight = blockHeight;
     
-    for (i = 0, j = 0; txHashes && i < txCount; i++) {
+    for (i = 0, j = 0, b = 0; txHashes && i < txCount; i++) {
         tx = BRSetGet(wallet->allTx, &txHashes[i]);
-        if (! tx || (tx->blockHeight == blockHeight && tx->timestamp == timestamp)) continue;
-        tx->timestamp = timestamp;
-        tx->blockHeight = blockHeight;
-        
-        if (_BRWalletContainsTx(wallet, tx)) {
-            for (k = array_count(wallet->transactions); k > 0; k--) { // remove and re-insert tx to keep wallet sorted
-                if (! BRTransactionEq(wallet->transactions[k - 1], tx)) continue;
-                array_rm(wallet->transactions, k - 1);
-                _BRWalletInsertTx(wallet, tx);
-                break;
+        bettx = BRSetGet(wallet->betTx, &txHashes[i]);
+        if ( tx ) {
+            if (tx->blockHeight == blockHeight && tx->timestamp == timestamp) continue;
+            tx->timestamp = timestamp;
+            tx->blockHeight = blockHeight;
+
+            if (_BRWalletContainsTx(wallet, tx)) {
+                for (k = array_count(wallet->transactions); k > 0; k--) { // remove and re-insert tx to keep wallet sorted
+                    if (! BRTransactionEq(wallet->transactions[k - 1], tx)) continue;
+                    array_rm(wallet->transactions, k - 1);
+                    _BRWalletInsertTx(wallet, tx);
+                    break;
+                }
+
+                hashes[j++] = txHashes[i];
+                if (BRSetContains(wallet->pendingTx, tx) || BRSetContains(wallet->invalidTx, tx)) needsUpdate = 1;
             }
-            
-            hashes[j++] = txHashes[i];
-            if (BRSetContains(wallet->pendingTx, tx) || BRSetContains(wallet->invalidTx, tx)) needsUpdate = 1;
+            else if (blockHeight != TX_UNCONFIRMED) { // remove and free confirmed non-wallet tx
+                BRSetRemove(wallet->allTx, tx);
+                BRTransactionFree(tx);
+            }
         }
-        else if (blockHeight != TX_UNCONFIRMED) { // remove and free confirmed non-wallet tx
-            BRSetRemove(wallet->allTx, tx);
-            BRTransactionFree(tx);
+        else {
+            if ( bettx ) {
+                if (bettx->blockHeight == blockHeight && bettx->timestamp == timestamp) continue;
+                bettx->timestamp = timestamp;
+                bettx->blockHeight = blockHeight;
+
+                if ( BRWalletTransactionCheckBet(wallet, bettx ) ) {
+                    betTxs[b++] = *bettx;
+                }
+                else {
+                    BRSetRemove(wallet->betTx, bettx);
+                    BRTransactionFree(bettx);
+                }
+            }
+            else continue;
         }
     }
     
     if (needsUpdate) _BRWalletUpdateBalance(wallet);
     pthread_mutex_unlock(&wallet->lock);
     if (j > 0 && wallet->txUpdated) wallet->txUpdated(wallet->callbackInfo, hashes, j, blockHeight, timestamp);
+    if (b > 0 && wallet->txBetUpdated) wallet->txBetUpdated(wallet->callbackInfo, betTxs, b, blockHeight, timestamp);
 }
 
 // marks all transactions confirmed after blockHeight as unconfirmed (useful for chain re-orgs)
@@ -1173,6 +1262,7 @@ void BRWalletFree(BRWallet *wallet)
     BRSetFree(wallet->allAddrs);
     BRSetFree(wallet->usedAddrs);
     BRSetFree(wallet->invalidTx);
+    BRSetFree(wallet->betTx);
     BRSetFree(wallet->pendingTx);
     BRSetApply(wallet->allTx, NULL, _setApplyFreeTx);
     BRSetFree(wallet->allTx);

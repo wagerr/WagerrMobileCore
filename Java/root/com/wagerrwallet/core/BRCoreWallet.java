@@ -41,6 +41,9 @@ public class BRCoreWallet extends BRCoreJniReference
         // func txUpdated(_ txHashes: [UInt256], blockHeight: UInt32, timestamp: UInt32)
         void onTxUpdated(String hash, int blockHeight, int timeStamp);
 
+        // func txBetUpdated(_ tx: BRTxRef)
+        void onBetTxUpdated(BRCoreTransaction transaction);
+
         // func txDeleted(_ txHash: UInt256, notifyUser: Bool, recommendRescan: Bool)
         void onTxDeleted(String hash, int notifyUser, final int recommendRescan);
     }
