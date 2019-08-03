@@ -207,6 +207,9 @@ BRTxOutput* BRWalletBetTransactionGetOutput(BRWallet* wallet, const BRTransactio
 // Wagerr: register
 int BRWalletRegisterBetTransaction(BRWallet *wallet, BRTransaction *tx);
 
+// Wagerr: register
+int BRWalletUnregisterBetTransaction(BRWallet *wallet, BRTransaction *tx);
+
 // Wagerr: checks if betting TX and sends though normal tx notificatino
 int BRWalletTransactionCheckBet(BRWallet *wallet, const BRTransaction *tx);
 

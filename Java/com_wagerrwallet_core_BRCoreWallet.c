@@ -469,6 +469,19 @@ Java_com_wagerrwallet_core_BRCoreWallet_removeTransaction
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
+ * Method:    removeBetTransaction
+ * Signature: ([B)V
+ */
+JNIEXPORT void JNICALL
+Java_com_wagerrwallet_core_BRCoreWallet_removeBetTransaction
+        (JNIEnv *env, jobject thisObject, jobject transactionObject) {
+    BRWallet  *wallet  = (BRWallet  *) getJNIReference (env, thisObject);
+    BRTransaction *transaction = (BRTransaction *) getJNIReference (env, transactionObject);
+    BRWalletUnregisterBetTransaction(wallet, transaction);
+}
+
+/*
+ * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    updateTransactions
  * Signature: ([[BJJ)V
  */

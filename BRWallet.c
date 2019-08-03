@@ -754,6 +754,22 @@ int BRWalletRegisterBetTransaction(BRWallet *wallet, BRTransaction *tx)
     return r;
 }
 
+int BRWalletUnregisterBetTransaction(BRWallet *wallet, BRTransaction *tx)
+{
+    int r = 0;
+    if (tx) {
+        pthread_mutex_lock(&wallet->lock);
+        if (BRSetContains(wallet->betTx, tx)) {
+            BRSetRemove(wallet->betTx, tx);
+            BRTransactionFree(tx);
+        }
+        pthread_mutex_unlock(&wallet->lock);
+    }
+    else r = 0;
+
+    return r;
+}
+
 int BRWalletTransactionCheckBet(BRWallet* wallet, const BRTransaction *tx)
 {
     int r = 0;

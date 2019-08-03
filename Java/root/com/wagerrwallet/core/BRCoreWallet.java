@@ -189,6 +189,8 @@ public class BRCoreWallet extends BRCoreJniReference
 
     public native void removeTransaction (byte[] transactionHash);
 
+    public native void removeBetTransaction (BRCoreTransaction transaction);
+
     public native void updateTransactions (byte[][] transactionsHashes, long blockHeight, long timestamp);
 
     /**
