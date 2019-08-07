@@ -207,6 +207,9 @@ BRTxOutput* BRWalletBetTransactionGetOutput(BRWallet* wallet, const BRTransactio
 // Wagerr: register
 int BRWalletRegisterBetTransaction(BRWallet *wallet, BRTransaction *tx);
 
+// Wagerr: get tx for hash
+BRTransaction *BRWalletBetTransactionForHash(BRWallet *wallet, UInt256 txHash);
+
 // Wagerr: register
 int BRWalletUnregisterBetTransaction(BRWallet *wallet, BRTransaction *tx);
 

@@ -754,6 +754,19 @@ int BRWalletRegisterBetTransaction(BRWallet *wallet, BRTransaction *tx)
     return r;
 }
 
+// Wagerr: returns the bet transaction with the given hash if it's been registered in the wallet
+BRTransaction *BRWalletBetTransactionForHash(BRWallet *wallet, UInt256 txHash)
+{
+    BRTransaction *tx;
+
+    assert(wallet != NULL);
+    assert(! UInt256IsZero(txHash));
+    pthread_mutex_lock(&wallet->lock);
+    tx = BRSetGet(wallet->betTx, &txHash);
+    pthread_mutex_unlock(&wallet->lock);
+    return tx;
+}
+
 int BRWalletUnregisterBetTransaction(BRWallet *wallet, BRTransaction *tx)
 {
     int r = 0;
@@ -779,14 +792,17 @@ int BRWalletTransactionCheckBet(BRWallet* wallet, const BRTransaction *tx)
 
     // if found, discard older that 15 days unless they are mappings to avoid spam
     BRTxOutput *out = BRWalletBetTransactionGetOutput(wallet, tx);
+    int isMapping = out->script[4] == OP_BTX_MAPPING;
+    int isTimeAccepted = (out->script[4] != OP_BTX_MAPPING && tx->timestamp > timeLimit);
+    int isOwnBet = (out->script[4] == OP_BTX_PEERLESS_BET || out->script[4] == OP_BTX_CHAIN_BET) && BRWalletContainsTransaction(wallet, tx);
+
     if (out != NULL) {
-        if (out->script[4] == OP_BTX_MAPPING ||
-           (out->script[4] != OP_BTX_MAPPING && tx->timestamp > timeLimit) ) {
+        if ( isMapping || isOwnBet || isTimeAccepted )  {
             r = 1;
             WalletLog("Accepted bettx BTX=%02x : %s , ", out->script[4], u256hexBE(tx->txHash)  );
         }
         else {
-            WalletLog("Discarded bettx BTX=%02x, %d hours early : %s , ", out->script[4], (int)((tx->timestamp-timeLimit)/3600),u256hexBE(tx->txHash)  );
+            WalletLog("Discarded bettx BTX=%02x, %d hours early : %s , ", out->script[4], (int)((timeLimit-tx->timestamp)/3600),u256hexBE(tx->txHash)  );
         }
     }
     return r;

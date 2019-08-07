@@ -45,7 +45,8 @@ static const char *BRWagerrTestNetDNSSeeds[] = {
 };
 
 static const char *BRWagerrBetAddresses[] = {
-        "WTogNAzaHf9oEbBoAv9RA49FdxyWaGLmdZ"
+        "WcsijutAF46tSLTcojk9mR9zV9wqwUUYpC",
+        "Weqz3PFBq3SniYF5HS8kuj72q9FABKzDrP"
         , NULL
 };
 
