@@ -40,9 +40,9 @@ extern "C" {
 #define PEER_MAX_CONNECTIONS 3
 
 #if BITCOIN_TESTNET
-#define WAGERR_OPCODE_CUTOVER 90000
+#define WAGERR_OPCODE_CUTOVER 80000
 #else
-#define WAGERR_OPCODE_CUTOVER 752700        // 752900 but we start 200 before just in case
+#define WAGERR_OPCODE_CUTOVER 700000        // 752900 but we start before just in case
 #endif
 
 typedef struct BRPeerManagerStruct BRPeerManager;
