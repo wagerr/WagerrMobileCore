@@ -39,6 +39,10 @@ extern "C" {
 #define MIN_FEE_PER_KB     ((TX_FEE_PER_KB*1000 + 190)/191) // minimum relay fee on a 191byte tx
 #define MAX_FEE_PER_KB     ((1000100ULL*1000 + 190)/191) // slightly higher than a 10000bit fee on a 191byte tx
 
+// Wagerr
+#define MIN_BET_AMOUNT 25 * SATOSHIS
+#define MAX_BET_AMOUNT 10000 * SATOSHIS
+
 typedef struct {
     UInt256 hash;
     uint32_t n;
@@ -215,6 +219,10 @@ int BRWalletUnregisterBetTransaction(BRWallet *wallet, BRTransaction *tx);
 
 // Wagerr: checks if betting TX and sends though normal tx notificatino
 int BRWalletTransactionCheckBet(BRWallet *wallet, const BRTransaction *tx);
+
+// Wagerr: create bet transaction
+// result must be freed using BRTransactionFree()
+BRTransaction *BRWalletCreateBetTransaction(BRWallet *wallet, uint64_t amount, int type, int eventID, int outcome);
 
 #ifdef __cplusplus
 }

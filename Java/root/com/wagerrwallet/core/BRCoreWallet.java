@@ -152,6 +152,23 @@ public class BRCoreWallet extends BRCoreJniReference
     public native BRCoreTransaction createTransaction (long amount, BRCoreAddress address);
 
     /**
+     * Creates a BRCoreTransaction for betting `amount` to for outcome of eventID of type.  Will create a
+     * BRCoreTransactionOutput for `address` with a script of:
+     *      OP_RETURN var_str_len(05 or 08) 01 type eventID(2 or 4 bytes) [outcome]
+     *
+     * Will iterate over the wallet's UTXOs adding in their transaction output (amount, script) as
+     * a BRCoreTransactionInput.  If the UTXOs can't cover `amount` then `null` is returned;
+     * otherwise a 'change' output is added for an unused wallet address.
+     *
+     * @param amount the amount to send
+     * @param type the event type (peerless or chain lotto)
+     * @param eventID the event ID
+     * @param outcome outcome code
+     * @return a consistently constructed transaction.
+     */
+    public native BRCoreTransaction createBetTransaction (long amount, int type, int eventID, int outcome);
+
+    /**
      * Create a BRCoreTransaction with the provided outputs
      *
      * @param outputs the outputs to include

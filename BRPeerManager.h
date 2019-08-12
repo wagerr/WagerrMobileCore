@@ -42,7 +42,7 @@ extern "C" {
 #if BITCOIN_TESTNET
 #define WAGERR_OPCODE_CUTOVER 80000
 #else
-#define WAGERR_OPCODE_CUTOVER 700000        // 752900 but we start before just in case
+#define WAGERR_OPCODE_CUTOVER 0        // 752900 but we start before just in case
 #endif
 
 typedef struct BRPeerManagerStruct BRPeerManager;

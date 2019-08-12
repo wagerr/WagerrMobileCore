@@ -808,6 +808,38 @@ int BRWalletTransactionCheckBet(BRWallet* wallet, const BRTransaction *tx)
     return r;
 }
 
+BRTransaction *BRWalletCreateBetTransaction(BRWallet *wallet, uint64_t amount, int type, int eventID, int outcome)
+{
+    BRTxOutput o = BR_TX_OUTPUT_NONE;
+
+    assert(wallet != NULL);
+    assert(amount >= MIN_BET_AMOUNT && amount <= MAX_BET_AMOUNT);
+    assert(type == OP_BTX_PEERLESS_BET || type == OP_BTX_CHAIN_BET );
+    assert(outcome>0 && outcome<8);     // current legal outcome opcodes
+
+    o.amount = amount;
+    o.script = NULL;
+    o.scriptLen = (type == OP_BTX_PEERLESS_BET)?10:7;
+    array_new(o.script, o.scriptLen);
+    array_set_count(o.script, o.scriptLen);
+    o.script[0] = OP_RETURN;
+    o.script[1] = o.scriptLen-2;
+    o.script[2] = OP_SMOKETEST;
+    o.script[3] = OP_BET_VERSION;
+    o.script[4] = type;
+    if (type == OP_BTX_PEERLESS_BET)    {
+        o.script[5] = (eventID >> 24) & 0xFF;
+        o.script[6] = (eventID >> 16) & 0xFF;
+        o.script[7] = (eventID >> 8) & 0xFF;
+        o.script[8] = (eventID) & 0xFF;
+        o.script[9] = outcome & 0xFF;
+    }
+    else {      // type == OP_BTX_CHAIN_BET
+        o.script[5] = (eventID >> 8) & 0xFF;
+        o.script[6] = (eventID) & 0xFF;
+    }
+    return BRWalletCreateTxForOutputs(wallet, &o, 1);
+}
 // Wagerr end
 
 // adds a transaction to the wallet, or returns false if it isn't associated with the wallet

@@ -55,6 +55,7 @@ extern "C" {
 
 // Wagerr opcodes
 #define OP_SMOKETEST                0x42
+#define OP_BET_VERSION              0x01
 #define OP_BTX_MAPPING              0x01
 #define OP_BTX_PEERLESS_EVENT       0x02
 #define OP_BTX_PEERLESS_BET         0x03
