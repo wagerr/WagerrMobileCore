@@ -813,7 +813,7 @@ BRTransaction *BRWalletCreateBetTransaction(BRWallet *wallet, uint64_t amount, i
     BRTxOutput o = BR_TX_OUTPUT_NONE;
 
     assert(wallet != NULL);
-    assert(amount >= MIN_BET_AMOUNT && amount <= MAX_BET_AMOUNT);
+   // assert(amount >= MIN_BET_AMOUNT && amount <= MAX_BET_AMOUNT);
     assert(type == OP_BTX_PEERLESS_BET || type == OP_BTX_CHAIN_BET );
     assert(outcome>0 && outcome<8);     // current legal outcome opcodes
 
@@ -828,15 +828,15 @@ BRTransaction *BRWalletCreateBetTransaction(BRWallet *wallet, uint64_t amount, i
     o.script[3] = OP_BET_VERSION;
     o.script[4] = type;
     if (type == OP_BTX_PEERLESS_BET)    {
-        o.script[5] = (eventID >> 24) & 0xFF;
-        o.script[6] = (eventID >> 16) & 0xFF;
-        o.script[7] = (eventID >> 8) & 0xFF;
-        o.script[8] = (eventID) & 0xFF;
+        o.script[8] = (eventID >> 24) & 0xFF;
+        o.script[7] = (eventID >> 16) & 0xFF;
+        o.script[6] = (eventID >> 8) & 0xFF;
+        o.script[5] = (eventID) & 0xFF;
         o.script[9] = outcome & 0xFF;
     }
     else {      // type == OP_BTX_CHAIN_BET
-        o.script[5] = (eventID >> 8) & 0xFF;
-        o.script[6] = (eventID) & 0xFF;
+        o.script[6] = (eventID >> 8) & 0xFF;
+        o.script[5] = (eventID) & 0xFF;
     }
     return BRWalletCreateTxForOutputs(wallet, &o, 1);
 }
