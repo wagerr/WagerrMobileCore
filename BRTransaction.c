@@ -612,17 +612,20 @@ void BRTransactionFree(BRTransaction *tx)
     assert(tx != NULL);
 
     if (tx) {
-        for (size_t i = 0; i < tx->inCount; i++) {
-            BRTxInputSetScript(&tx->inputs[i], NULL, 0);
-            BRTxInputSetSignature(&tx->inputs[i], NULL, 0);
+        if (tx->inputs!=NULL) {
+            for (size_t i = 0; i < tx->inCount; i++) {
+                BRTxInputSetScript(&tx->inputs[i], NULL, 0);
+                BRTxInputSetSignature(&tx->inputs[i], NULL, 0);
+            }
+            array_free(tx->inputs);
         }
 
-        for (size_t i = 0; i < tx->outCount; i++) {
-            BRTxOutputSetScript(&tx->outputs[i], NULL, 0);
+        if (tx->outputs!=NULL) {
+            for (size_t i = 0; i < tx->outCount; i++) {
+                BRTxOutputSetScript(&tx->outputs[i], NULL, 0);
+            }
+            array_free(tx->outputs);
         }
-
-        array_free(tx->outputs);
-        array_free(tx->inputs);
         free(tx);
     }
 }

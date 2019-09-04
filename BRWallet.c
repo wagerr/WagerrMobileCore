@@ -793,11 +793,13 @@ int BRWalletTransactionCheckBet(BRWallet* wallet, const BRTransaction *tx)
     // if found, discard older that 15 days unless they are mappings to avoid spam
     BRTxOutput *out = BRWalletBetTransactionGetOutput(wallet, tx);
     int isMapping = out->script[4] == OP_BTX_MAPPING;
-    int isTimeAccepted = (out->script[4] != OP_BTX_MAPPING && tx->timestamp > timeLimit);
-    int isOwnBet = (out->script[4] == OP_BTX_PEERLESS_BET || out->script[4] == OP_BTX_CHAIN_BET) && BRWalletContainsTransaction(wallet, tx);
+    int isBet = (out->script[4] == OP_BTX_PEERLESS_BET || out->script[4] == OP_BTX_CHAIN_BET);
+    //int isOwnBet = isBet && _BRWalletContainsTx(wallet, tx);
+
+    int isTimeAccepted = (!isMapping && !isBet) && tx->timestamp > timeLimit;
 
     if (out != NULL) {
-        if ( isMapping || isOwnBet || isTimeAccepted )  {
+        if ( isMapping || isTimeAccepted )  {
             r = 1;
             WalletLog("Accepted bettx BTX=%02x : %s , ", out->script[4], u256hexBE(tx->txHash)  );
         }
@@ -805,6 +807,8 @@ int BRWalletTransactionCheckBet(BRWallet* wallet, const BRTransaction *tx)
             WalletLog("Discarded bettx BTX=%02x, %d hours early : %s , ", out->script[4], (int)((timeLimit-tx->timestamp)/3600),u256hexBE(tx->txHash)  );
         }
     }
+    WalletLog("!!! STEP 6 process bet txs");
+
     return r;
 }
 
@@ -1104,7 +1108,7 @@ void BRWalletUpdateTransactions(BRWallet *wallet, const UInt256 txHashes[], size
                 bettx->timestamp = timestamp;
                 bettx->blockHeight = blockHeight;
 
-                if ( BRWalletTransactionCheckBet(wallet, bettx ) ) {
+                if ( !_BRWalletContainsTx(wallet, bettx) && BRWalletTransactionCheckBet(wallet, bettx ) ) {
                     betTxs[b++] = *bettx;
                 }
                 else {
@@ -1119,7 +1123,9 @@ void BRWalletUpdateTransactions(BRWallet *wallet, const UInt256 txHashes[], size
     if (needsUpdate) _BRWalletUpdateBalance(wallet);
     pthread_mutex_unlock(&wallet->lock);
     if (j > 0 && wallet->txUpdated) wallet->txUpdated(wallet->callbackInfo, hashes, j, blockHeight, timestamp);
-    if (b > 0 && wallet->txBetUpdated) wallet->txBetUpdated(wallet->callbackInfo, betTxs, b, blockHeight, timestamp);
+    if (b > 0 && wallet->txBetUpdated) {
+        wallet->txBetUpdated(wallet->callbackInfo, betTxs, b, blockHeight, timestamp);
+    }
 }
 
 // marks all transactions confirmed after blockHeight as unconfirmed (useful for chain re-orgs)

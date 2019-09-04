@@ -24,6 +24,8 @@
  */
 package com.wagerrwallet.core;
 
+import android.util.Log;
+
 import java.util.concurrent.Executor;
 
 /**
@@ -323,7 +325,7 @@ public class BRCoreWalletManager implements
         System.out.println (getChainDescriptiveName() + ": onBetTxUpdated: " + transaction.getReverseHash());
 
         if (!SHOW_CALLBACK_DETAIL_TX_STATUS) return;
-        showTxDetail("onBetTxUpdated");
+        //showTxDetail("onBetTxUpdated");
     }
 
     @Override

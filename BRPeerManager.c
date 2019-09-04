@@ -280,6 +280,7 @@ static void _BRPeerManagerLoadBloomFilter(BRPeerManager *manager, BRPeer *peer)
     uint32_t blockHeight = (manager->lastBlock->height > 100) ? manager->lastBlock->height - 100 : 0;
 
     size_t betAddressesCount = 0;
+
     if (blockHeight>WAGERR_OPCODE_CUTOVER) {
         for (size_t i = 0;manager->params->betAddresses[i];i++) {
             betAddressesCount++;
@@ -304,6 +305,7 @@ static void _BRPeerManagerLoadBloomFilter(BRPeerManager *manager, BRPeer *peer)
                               BLOOM_UPDATE_ALL); // BUG: XXX txCount not the same as number of spent wallet outputs
 
     // Add betting addresses if cutover height for new opcodes reached for faster sync
+
     if (blockHeight>WAGERR_OPCODE_CUTOVER) {
         for (size_t i = 0; manager->params->betAddresses[i]; i++) {
             const char *betAddress = manager->params->betAddresses[i];
