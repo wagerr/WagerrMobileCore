@@ -807,7 +807,6 @@ int BRWalletTransactionCheckBet(BRWallet* wallet, const BRTransaction *tx)
             WalletLog("Discarded bettx BTX=%02x, %d hours early : %s , ", out->script[4], (int)((timeLimit-tx->timestamp)/3600),u256hexBE(tx->txHash)  );
         }
     }
-    WalletLog("!!! STEP 6 process bet txs");
 
     return r;
 }
@@ -1124,7 +1123,9 @@ void BRWalletUpdateTransactions(BRWallet *wallet, const UInt256 txHashes[], size
     pthread_mutex_unlock(&wallet->lock);
     if (j > 0 && wallet->txUpdated) wallet->txUpdated(wallet->callbackInfo, hashes, j, blockHeight, timestamp);
     if (b > 0 && wallet->txBetUpdated) {
+        WalletLog("###Before txBetUpdated (%d)", b);
         wallet->txBetUpdated(wallet->callbackInfo, betTxs, b, blockHeight, timestamp);
+        WalletLog("###After txBetUpdated (%d)", b);
     }
 }
 
