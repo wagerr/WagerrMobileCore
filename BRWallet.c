@@ -788,14 +788,16 @@ int BRWalletTransactionCheckBet(BRWallet* wallet, const BRTransaction *tx)
     int r = 0;
     if (tx->timestamp==0)   return 0;   // not useful yet
 
+    return 1;       // accept all regardless of date
+    /*
     time_t timeLimit = time(NULL) - OP_TIME_THRESHOLD;      // 15 days
 
     // if found, discard older that 15 days unless they are mappings to avoid spam
     BRTxOutput *out = BRWalletBetTransactionGetOutput(wallet, tx);
     int isMapping = out->script[4] == OP_BTX_MAPPING;
     int isBet = (out->script[4] == OP_BTX_PEERLESS_BET || out->script[4] == OP_BTX_CHAIN_BET);
-    //int isOwnBet = isBet && _BRWalletContainsTx(wallet, tx);
 
+    // always accept all events
     int isTimeAccepted = (!isMapping && !isBet) && tx->timestamp > timeLimit;
 
     if (out != NULL) {
@@ -809,6 +811,7 @@ int BRWalletTransactionCheckBet(BRWallet* wallet, const BRTransaction *tx)
     }
 
     return r;
+    */
 }
 
 BRTransaction *BRWalletCreateBetTransaction(BRWallet *wallet, uint64_t amount, int type, int eventID, int outcome)
