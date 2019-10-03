@@ -32,7 +32,9 @@
 #include <stddef.h>
 #include <inttypes.h>
 
-#define peer_log(peer, ...)
+//#define peer_log(peer, ...)
+#define peer_log(peer, ...) _peer_log("%s:%"PRIu16" " _va_first(__VA_ARGS__, NULL) "\n", BRPeerHost(peer),\
+                                      (peer)->port, _va_rest(__VA_ARGS__, NULL))
 #define _va_first(first, ...) first
 #define _va_rest(first, ...) __VA_ARGS__
 

@@ -1126,9 +1126,7 @@ void BRWalletUpdateTransactions(BRWallet *wallet, const UInt256 txHashes[], size
     pthread_mutex_unlock(&wallet->lock);
     if (j > 0 && wallet->txUpdated) wallet->txUpdated(wallet->callbackInfo, hashes, j, blockHeight, timestamp);
     if (b > 0 && wallet->txBetUpdated) {
-        WalletLog("###Before txBetUpdated (%d)", b);
         wallet->txBetUpdated(wallet->callbackInfo, betTxs, b, blockHeight, timestamp);
-        WalletLog("###After txBetUpdated (%d)", b);
     }
 }
 

@@ -813,6 +813,22 @@ txBetUpdated(void *info, const BRTransaction betTxs[], size_t count, uint32_t bl
           uint32_t timestamp) {
 
     JNIEnv *env = getEnv();
+
+    // local reference leaks debugging
+/*    jclass vm_class;
+    jmethodID dump_mid;
+
+    vm_class = (*env)->FindClass(env, "dalvik/system/VMDebug");
+    assert (NULL != vm_class);
+    dump_mid = (*env)->GetStaticMethodID( env, vm_class, "dumpReferenceTables", "()V" );
+    assert (NULL != dump_mid);
+
+#if defined (__ANDROID_NDK__)
+    __android_log_print(ANDROID_LOG_DEBUG, "JNI", "!!!step 1");
+#endif
+
+    (*env)->CallStaticVoidMethod( env, vm_class, dump_mid );
+*/
     if (NULL == env) return;
 
     jobject listener = (*env)->NewLocalRef (env, (jobject) info);
@@ -825,18 +841,6 @@ txBetUpdated(void *info, const BRTransaction betTxs[], size_t count, uint32_t bl
                                  "(Lcom/wagerrwallet/core/BRCoreTransaction;)V");
     assert (NULL != listenerMethod);
 
-    // local reference leaks debugging
-    jclass vm_class;
-    jmethodID dump_mid;
-
-    /*
-    vm_class = (*env)->FindClass(env, "dalvik/system/VMDebug");
-    assert (NULL != vm_class);
-    dump_mid = (*env)->GetStaticMethodID( env, vm_class, "dumpReferenceTables", "()V" );
-    assert (NULL != dump_mid);
-
-    (*env)->CallStaticVoidMethod( env, vm_class, dump_mid );
-*/
     // Invoke the callback for each of txHashes.
     for (size_t i = 0; i < count; i++) {
         jobject transaction = (*env)->NewObject (env, transactionClass, transactionConstructor,
@@ -845,11 +849,16 @@ txBetUpdated(void *info, const BRTransaction betTxs[], size_t count, uint32_t bl
         (*env)->CallVoidMethod(env, listener, listenerMethod, transaction);
         (*env)->DeleteLocalRef (env, transaction);
     }
+
+    (*env)->DeleteLocalRef(env, listener);
 /*
+#if defined (__ANDROID_NDK__)
+    __android_log_print(ANDROID_LOG_DEBUG, "JNI", "!!!step 2");
+#endif
+
     (*env)->CallStaticVoidMethod( env, vm_class, dump_mid );
     (*env)->DeleteLocalRef(env, vm_class);
 */
-    (*env)->DeleteLocalRef(env, listener);
 }
 
 static void

@@ -944,7 +944,7 @@ static void _peerRelayedTx(void *info, BRTransaction *tx)
     size_t relayCount = 0;
 
     pthread_mutex_lock(&manager->lock);
-    //peer_log(peer, "relayed tx: %s", u256hexBE(tx->txHash));
+    peer_log(peer, "relayed tx: %s", u256hexBE(tx->txHash));
     
     for (size_t i = array_count(manager->publishedTx); i > 0; i--) { // see if tx is in list of published tx
         if (UInt256Eq(manager->publishedTxHashes[i - 1], tx->txHash)) {
@@ -962,18 +962,29 @@ static void _peerRelayedTx(void *info, BRTransaction *tx)
         BRPeerScheduleDisconnect(peer, -1); // cancel publish tx timeout
     }
 
-    if (manager->syncStartHeight == 0 || BRWalletContainsTransaction(manager->wallet, tx)) {
+    //peer_log(peer, "###relayed before check height tx: %s", u256hexBE(tx->txHash));
+    if ( BRWalletContainsTransaction(manager->wallet, tx) ) {
+        peer_log(peer, "###relayed BRWalletContainsTransaction tx: %s", u256hexBE(tx->txHash));
         isWalletTx = BRWalletRegisterTransaction(manager->wallet, tx);
         if (isWalletTx) tx = BRWalletTransactionForHash(manager->wallet, tx->txHash);
     }
     else {
+        //peer_log(peer, "###relayed BRWalletBetTransactionGetOutput tx: %s", u256hexBE(tx->txHash));
         BRTxOutput *out = BRWalletBetTransactionGetOutput(manager->wallet, tx);
         if (out != NULL)    {
+            peer_log(peer, "###relayed bet tx: %s", u256hexBE(tx->txHash));
             BRWalletRegisterBetTransaction(manager->wallet, tx);
         }
         else {
-            BRTransactionFree(tx);
-            tx = NULL;
+            if (manager->syncStartHeight == 0)  {
+                peer_log(peer, "###relayed syncStartHeight=0 tx: %s", u256hexBE(tx->txHash));
+                isWalletTx = BRWalletRegisterTransaction(manager->wallet, tx);
+                if (isWalletTx) tx = BRWalletTransactionForHash(manager->wallet, tx->txHash);
+            }
+            else {
+                BRTransactionFree(tx);
+                tx = NULL;
+            }
         }
     }
     

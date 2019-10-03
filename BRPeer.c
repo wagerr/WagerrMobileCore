@@ -320,7 +320,7 @@ static int _BRPeerAcceptInvMessage(BRPeer *peer, const uint8_t *msg, size_t msgL
         const uint8_t *transactions[count], *blocks[count];
         size_t i, j, txCount = 0, blockCount = 0;
         
-        peer_log(peer, "got inv with %zu item(s)", count);
+        //peer_log(peer, "got inv with %zu item(s)", count);
 
         for (i = 0; i < count; i++) {
             type = UInt32GetLE(&msg[off]);
@@ -848,7 +848,7 @@ static int _BRPeerAcceptMessage(BRPeer *peer, const uint8_t *msg, size_t msgLen,
     else if (strncmp(MSG_MERKLEBLOCK, type, 12) == 0) r = _BRPeerAcceptMerkleblockMessage(peer, msg, msgLen);
     else if (strncmp(MSG_REJECT, type, 12) == 0) r = _BRPeerAcceptRejectMessage(peer, msg, msgLen);
     else if (strncmp(MSG_FEEFILTER, type, 12) == 0) r = _BRPeerAcceptFeeFilterMessage(peer, msg, msgLen);
-    else peer_log(peer, "dropping %s, length %zu, not implemented", type, msgLen);
+    //else peer_log(peer, "dropping %s, length %zu, not implemented", type, msgLen);
 
     return r;
 }
