@@ -830,6 +830,7 @@ txBetUpdated(void *info, const BRTransaction betTxs[], size_t count, uint32_t bl
     (*env)->CallStaticVoidMethod( env, vm_class, dump_mid );
 */
     if (NULL == env) return;
+    (*env)->PushLocalFrame(env, 128);
 
     jobject listener = (*env)->NewLocalRef (env, (jobject) info);
     if ((*env)->IsSameObject (env, listener, NULL)) return; // GC reclaimed
@@ -851,6 +852,8 @@ txBetUpdated(void *info, const BRTransaction betTxs[], size_t count, uint32_t bl
     }
 
     (*env)->DeleteLocalRef(env, listener);
+
+    (*env)->PopLocalFrame(env, NULL);
 /*
 #if defined (__ANDROID_NDK__)
     __android_log_print(ANDROID_LOG_DEBUG, "JNI", "!!!step 2");
