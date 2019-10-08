@@ -35,10 +35,14 @@
 extern "C" {
 #endif
 
-#define DEFAULT_FEE_PER_KB ((5000ULL*1000 + 99)/100) // bitcoind 0.11 min relay fee on 100bytes
+#define DEFAULT_FEE_PER_KB ((100000ULL*1000 + 99)/100) // bitcoind 0.11 min relay fee on 100bytes
 #define MIN_FEE_PER_KB     ((TX_FEE_PER_KB*1000 + 190)/191) // minimum relay fee on a 191byte tx
 #define MAX_FEE_PER_KB     ((1000100ULL*1000 + 190)/191) // slightly higher than a 10000bit fee on a 191byte tx
 
+    // Wagerr
+#define MIN_BET_AMOUNT 25 * SATOSHIS
+#define MAX_BET_AMOUNT 10000 * SATOSHIS
+    
 typedef struct {
     UInt256 hash;
     uint32_t n;

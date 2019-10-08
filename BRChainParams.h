@@ -44,6 +44,7 @@ typedef struct {
     int (*verifyDifficulty)(const BRMerkleBlock *block, const BRSet *blockSet); // blockSet must have last 2016 blocks
     const BRCheckPoint *checkpoints;
     size_t checkpointsCount;
+    const char * const *betAddresses;
 } BRChainParams;
 
 static const char *BRMainNetDNSSeeds[] = {

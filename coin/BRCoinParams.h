@@ -29,40 +29,58 @@
 #include "BRPeer.h"
 #include "BRInt.h"
 
-#define NPOW_TARGET_TIMESPAN (24*60*60)        // Biblepay 1 day
+#define NPOW_TARGET_TIMESPAN (24*60*60)        // Coin 1 day
 #define NPOW_TARGEY_SPACING (7*60)
-#define BBP_BLOCK_DIFFICULTY_INTERVAL (NPOW_TARGET_TIMESPAN/NPOW_TARGEY_SPACING)
+#define COIN_BLOCK_DIFFICULTY_INTERVAL (NPOW_TARGET_TIMESPAN/NPOW_TARGEY_SPACING)
 
 static const char *BRCoinDNSSeeds[] = {
-    "dnsseed.biblepay.org", "node.biblepay.org", "dnsseed.biblepay-explorer.org", NULL
+    "main.seederv1.wgr.host", "main.seederv2.wgr.host", "main.devseeder1.wgr.host", "main.devseeder2.wgr.host"
+    , NULL
 };
 
 static const char *BRCoinTestNetDNSSeeds[] = {
-    "testnet-seed.biblepaydot.io", "test.dnsseed.masternode.io", NULL
+    "testnet-seeder-01.wgr.host", "testnet.testnet-seeder-01.wgr.host",
+    "testnet-seeder-02.wgr.host", "testnet.testnet-seeder-02.wgr.host"
+    , NULL
+};
+
+static const char *BRCoinBetAddresses[] = {
+    "WcsijutAF46tSLTcojk9mR9zV9wqwUUYpC",
+    "Weqz3PFBq3SniYF5HS8kuj72q9FABKzDrP"
+    , NULL
+};
+
+static const char *BRCoinTestnetBetAddresses[] = {
+    "TGFKr64W3tTMLZrKBhMAou9wnQmdNMrSG2",     // Oracle Masternode Event & Result Posting Wallet Address (Testnet).
+    "TWM5BQzfjDkBLGbcDtydfuNcuPfzPVSEhc"
+    , NULL
 };
 
 static const BRCheckPoint BRCoinTestNetCheckpoints[] = {
-    {       1, uint256("18b37b60b422ea27d57ceea9dd794b5f74c561565ecc03e85a22ecdf74cbb33a"), 1511964848, 0x1d00ffff }       // timestamp and target bits probably not ok... just taking info directly from BBP chainparams.cpp
+    {       1, uint256("00000385558ec1b9af7f939e1626a3116b9fb988c86c2f915e6451e8efcd0521"), 1517054400, 0x1d00ffff},
+    {   20040, uint256("03a92984c2deba55ac8f9e8194b1bc745fbad9f7a0f3ed94ebb8c372935bed9c"), 1517054400, 0x1d00ffff},   // tx 40878
+    {   93286, uint256("dc68d97761ceac8c177a81487569bfe92b720f513fbbf5c2184988f1d74c5061"), 1517054400, 0x1d00ffff} // tx 227380
 };
+
 
 // blockchain checkpoints - these are also used as starting points for partial chain downloads, so they must be at
 // difficulty transition boundaries in order to verify the block difficulty at the immediately following transition
 static const BRCheckPoint BRCoinCheckpoints[] = {
-    {      7, uint256("00022b1be28b1deb9a51d4d69f3fa393f4ea36621039b6313a6c0796546621de"), 1500845066, 0x1f0575c5 },
-    {    120, uint256("00002fc6c9e4889a8d1a9bd5919a6bd4a4b09091e55049480509da14571e5653"), 1500909333, 0x1f00cb06 },
-    {   6999, uint256("000000dfbcdec4e6b0ab899f04d7ce8e4d8bc8a725a47169b626acd207ccea8d"), 1505075365, 0x1e01a097 },
-    {  18900, uint256("94a1ff5e84a31219d5472536215f5a77b00cfd61f3fb99d0e9d3ab392f2ed2a6"), 1511954034, 0x1b0a6ecf },
-    {  20900, uint256("23d0b5887ca89fc2dddb2f34810675cb1826371172a91b1211be4677fd260490"), 1513114026, 0x1b0306ed },
-    {  21650, uint256("756e18f6a20d02d7af0a32c5705960d58adc4daba24c6a7dd9a8b80776bcca73"), 1513595068, 0x1c028131 },
-    {  21960, uint256("dd7e0acd7b9569b6fbf84a8262bb5fe3ea28af259f12d060acbcd62d4241fb51"), 1513776131, 0x1c00f22d },
-    {  32500, uint256("acb4534f70da9624fee2b9032d2fe47fe6d7d3e8cffdbfbca4d0a3a63394045a"), 1519902767, 0x1b1af846 },
-    {  33460, uint256("e64ff92ae97c2978c14d97ae45c618c1f2140339ce9ccb770945d3efb7d5e0f5"), 1520469785, 0x1c4c0e1b }
+    {       1, uint256("000001364c4ed20f1b240810b5aa91fee23ae9b64b6e746b594b611cf6d8c87b"), 1518743781, 0x1e0fffff },          // First PoW premine block
+    {     101, uint256("0000005e89a1fab52bf996e7eb7d653962a0eb064c16c09887504797deb7feaf"), 1518746959, 0x1d769f71 },          // Last premine block
+    {    1001, uint256("0000002a314058a8f61293e18ddbef5664a2097ac0178005f593444549dd5b8c"), 1518803284, 0x1d307420 },          // Last PoW block
+    {    5530, uint256("b3a8e6eb90085394c1af916d5690fd5b83d53c43cf60c7b6dd1e904e0ede8e88"), 1519055199, 0x1a0a131e },          // Block on which switch off happened, 5531, 5532 differed
+    {   14374, uint256("61dc2dbb225de3146bc59ab96dedf48047ece84d004acaf8f386ae7a7d074983"), 1519653932, 0x1a0dde43 },
+    {   70450, uint256("ea83266a9dfd7cf92a96aa07f86bdf60d45850bd47c175745e71a1aaf60b4091"), 1523055044, 0x1a0cb4c0 },
+    {  257142, uint256("eca635870323e7c0785fec1e663f4cb8645b7e84b5df4511ba4c189e580bfafd"), 1534374855, 0x1a14f60f },
+    {  290000, uint256("5a70e614a2e6035be0fa1dd1a67bd6caa0a78e396e889aac42bbbc08e11cdabd"), 1536367184, 0x1a0d4db7 },
+    {  294400, uint256("01be3c3c84fd6063ba27080996d346318242d5335efec936408c1e1ae3fdb4a1"), 1536634958, 0x1a14c311 },
+    {  320000, uint256("9060f8d44058c539653f37eaac4c53de7397e457dda264c5ee1be94293e9f6bb"), 1538190282, 0x1a15305d },         // tx 671130
+    {  695857, uint256("680a170b5363f308cc0698a53ab6a83209dab06c138c98f91110f9e11e273778"), 1560967688, 0x1a508433 }
 };
 
 static int BRCoinVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
 {
-    // +++ BBP difficulty verification
-
     return 1;
 }
 
@@ -73,22 +91,24 @@ static int BRCoinTestNetVerifyDifficulty(const BRMerkleBlock *block, const BRSet
 
 static const BRChainParams BRCoinParams = {
     BRCoinDNSSeeds,
-    40000,                // standardPort
-    0xbd6b0cbf,          // magicNumber
+    55002,                // standardPort
+    0xfd612d84,          // magicNumber
     0, // services
     BRCoinVerifyDifficulty,
     BRCoinCheckpoints,
     sizeof(BRCoinCheckpoints)/sizeof(*BRCoinCheckpoints),
+    BRCoinBetAddresses
 };
 
 static const BRChainParams BRCoinTestNetParams = {
     BRCoinTestNetDNSSeeds,
-    40001,               // standardPort
-    0xffcae2ce,          // magicNumber
+    55004,               // standardPort
+    0x99d19e87,          // magicNumber
     0, // services
     BRCoinTestNetVerifyDifficulty,
     BRCoinTestNetCheckpoints,
-    sizeof(BRCoinTestNetCheckpoints)/sizeof(*BRCoinTestNetCheckpoints)
+    sizeof(BRCoinTestNetCheckpoints)/sizeof(*BRCoinTestNetCheckpoints),
+    BRCoinTestnetBetAddresses
 };
 
 #endif // BRChainParams_h

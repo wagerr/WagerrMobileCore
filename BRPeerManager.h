@@ -39,6 +39,12 @@ extern "C" {
 
 #define PEER_MAX_CONNECTIONS 3
 
+#if BITCOIN_TESTNET
+#define WAGERR_OPCODE_CUTOVER 80000
+#else
+#define WAGERR_OPCODE_CUTOVER 0        // 752900 but we start from 0 otherwise we miss txs
+#endif
+
 typedef struct BRPeerManagerStruct BRPeerManager;
 
 // returns a newly allocated BRPeerManager struct that must be freed by calling BRPeerManagerFree()

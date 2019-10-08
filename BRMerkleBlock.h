@@ -45,6 +45,7 @@ typedef struct {
     uint32_t timestamp; // time interval since unix epoch
     uint32_t target;
     uint32_t nonce;
+    UInt256 nAccumulatorCheckpoint;     // new in version 4+
     uint32_t totalTx;
     UInt256 *hashes;
     size_t hashesCount;

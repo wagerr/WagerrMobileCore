@@ -25,15 +25,15 @@
 #include "BRMerkleBlock.h"
 #include "BRCrypto.h"
 #include "BRAddress.h"
-#include "x11.h"
+#include "quark.h"
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
 #include <string.h>
 #include <assert.h>
 
-#define MAX_PROOF_OF_WORK 0x1d00ffff    // highest value for difficulty target (higher values are less difficult)
-#define TARGET_TIMESPAN   (14*24*60*60) // the targeted timespan between difficulty target adjustments
+#define MAX_PROOF_OF_WORK 0x1e0ffff0        // BTC = 0x1d00ffff    highest value for difficulty target (higher values are less difficult)
+#define TARGET_TIMESPAN   (24*60*60)       // COIN=1 day. Bitcoin=(14*24*60*60) the targeted timespan between difficulty target adjustments
 
 inline static int _ceil_log2(int x)
 {
@@ -120,6 +120,11 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
         block->nonce = UInt32GetLE(&buf[off]);
         off += sizeof(uint32_t);
         
+        if ( block->version > 3 ) {
+            block->nAccumulatorCheckpoint = UInt256Get(&buf[off]);
+            off += sizeof(UInt256);
+        }
+
         if (off + sizeof(uint32_t) <= bufLen) {
             block->totalTx = UInt32GetLE(&buf[off]);
             off += sizeof(uint32_t);
@@ -136,8 +141,12 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
             if (block->flags) memcpy(block->flags, &buf[off], len);
         }
         
-//        BRSHA256_2(&block->blockHash, buf, 80);
-        x11_hash(buf, &block->blockHash, 80);       // Coin hash function for block hash
+        if ( block->version < 4 ) {
+            quark_hash(buf, &block->blockHash);       // hash function for block hash
+        }
+        else {
+            BRSHA256_2(&block->blockHash, buf, 112);     // 80 + Uint256 nAccumulatorCheckpoint
+        }
 
     }
     
@@ -147,7 +156,7 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
 // returns number of bytes written to buf, or total bufLen needed if buf is NULL (block->height is not serialized)
 size_t BRMerkleBlockSerialize(const BRMerkleBlock *block, uint8_t *buf, size_t bufLen)
 {
-    size_t off = 0, len = 80;
+    size_t off = 0, len = ( block->version > 3 )? 112 : 80;
     
     assert(block != NULL);
     
@@ -169,6 +178,11 @@ size_t BRMerkleBlockSerialize(const BRMerkleBlock *block, uint8_t *buf, size_t b
         off += sizeof(uint32_t);
         UInt32SetLE(&buf[off], block->nonce);
         off += sizeof(uint32_t);
+        
+        if ( block->version > 3 ) {
+            UInt256Set(&buf[off], block->nAccumulatorCheckpoint);
+            off += sizeof(UInt256);
+        }
     
         if (block->totalTx > 0) {
             UInt32SetLE(&buf[off], block->totalTx);

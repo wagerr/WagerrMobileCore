@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-#define TX_FEE_PER_KB        10000ULL     // standard tx fee per kb of tx size, rounded up to nearest kb
+#define TX_FEE_PER_KB        200000ULL       // was 1000ULL for bitcoin    // standard tx fee per kb of tx size, rounded up to nearest kb
 #define TX_OUTPUT_SIZE       34          // estimated size for a typical transaction output
 #define TX_INPUT_SIZE        148         // estimated size for a typical compact pubkey transaction input
 #define TX_MIN_OUTPUT_AMOUNT (TX_FEE_PER_KB*3*(TX_OUTPUT_SIZE + TX_INPUT_SIZE)/1000) //no txout can be below this amount
@@ -47,8 +47,25 @@ extern "C" {
 #define TXIN_SEQUENCE        UINT32_MAX  // sequence number for a finalized tx input
 
 #define SATOSHIS             100000000LL
-#define MAX_MONEY            (21000000LL*SATOSHIS)
+#define MAX_MONEY            (27299680LL*SATOSHIS)
 
+#define OP_RETURN      0x6a
+    
+    // Wagerr opcodes
+#define OP_SMOKETEST                0x42
+#define OP_BET_VERSION              0x01
+#define OP_BTX_MAPPING              0x01
+#define OP_BTX_PEERLESS_EVENT       0x02
+#define OP_BTX_PEERLESS_BET         0x03
+#define OP_BTX_PEERLESS_RESULT      0x04
+#define OP_BTX_PEERLESS_UPD_ODDS    0x05
+#define OP_BTX_CHAIN_EVENT          0x06
+#define OP_BTX_CHAIN_BET            0x07
+#define OP_BTX_CHAIN_RESULT         0x08
+#define OP_BTX_PEERLESS_SPREADS_MKT 0x09
+#define OP_BTX_PEERLESS_TOTALS_MKT  0x0a
+#define OP_TIME_THRESHOLD           60*60*24*15     // 15 days
+    
 #define BR_RAND_MAX          ((RAND_MAX > 0x7fffffff) ? 0x7fffffff : RAND_MAX)
 
 // returns a random number less than upperBound (for non-cryptographic use only)
@@ -118,9 +135,6 @@ void BRTransactionAddInput(BRTransaction *tx, UInt256 txHash, uint32_t index, ui
 
 // adds an output to tx
 void BRTransactionAddOutput(BRTransaction *tx, uint64_t amount, const uint8_t *script, size_t scriptLen);
-
-// adds an output to tx +message string (BBP protocol extension)
-void BRTransactionAddOutputBBP(BRTransaction *tx, uint64_t amount, const uint8_t *script, size_t scriptLen, const char *message, size_t messageLen);
     
 // shuffles order of tx outputs
 void BRTransactionShuffleOutputs(BRTransaction *tx);
