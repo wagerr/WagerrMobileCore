@@ -226,15 +226,22 @@ static void _BRWalletUpdateBalance(BRWallet *wallet)
 
         // add outputs to UTXO set
         // TODO: don't add outputs below TX_MIN_OUTPUT_AMOUNT
-        // TODO: don't add coin generation outputs < 100 blocks deep
+        // WAGERR: don't add payout outputs < 101 blocks deep
         // NOTE: balance/UTXOs will then need to be recalculated when last block changes
+        int isPayout = tx->inCount==1 && (strlen(tx->inputs[0].address) == 0) ;
+
         for (j = 0; j < tx->outCount; j++) {
             if (tx->outputs[j].address[0] != '\0') {
                 BRSetAdd(wallet->usedAddrs, tx->outputs[j].address);
                 
                 if (BRSetContains(wallet->allAddrs, tx->outputs[j].address)) {
-                    array_add(wallet->utxos, ((BRUTXO) { tx->txHash, (uint32_t)j }));
-                    balance += tx->outputs[j].amount;
+                    int isImmaturePayout = isPayout && (wallet->blockHeight - tx->blockHeight)<=PAYOUT_MATURITY;
+                    //WalletLog("!!!_BRWalletUpdateBalance %d, %d, #%s# %"PRIu64"", isImmaturePayout, tx->inCount, tx->inputs[0].address[0], tx->outputs[j].amount );
+                    //WalletLog("!!!_BRWalletUpdateBalance %d, %d, %d, %d, %d, %s, #%d#, %"PRIu64"", isPayout, isImmaturePayout, wallet->blockHeight, tx->blockHeight, tx->inCount, tx->inputs[0].address, strlen(tx->inputs[0].address), tx->outputs[j].amount );
+                    if (!isImmaturePayout) {
+                        array_add(wallet->utxos, ((BRUTXO) {tx->txHash, (uint32_t) j}));
+                        balance += tx->outputs[j].amount;
+                    }
                 }
             }
         }
@@ -243,12 +250,14 @@ static void _BRWalletUpdateBalance(BRWallet *wallet)
         for (j = array_count(wallet->utxos); j > 0; j--) {
             if (! BRSetContains(wallet->spentOutputs, &wallet->utxos[j - 1])) continue;
             t = BRSetGet(wallet->allTx, &wallet->utxos[j - 1].hash);
+            //WalletLog("@@@_BRWalletUpdateBalance %"PRIu64" ", t->outputs[wallet->utxos[j - 1].n].amount);
             balance -= t->outputs[wallet->utxos[j - 1].n].amount;
             array_rm(wallet->utxos, j - 1);
         }
-        
+
         if (prevBalance < balance) wallet->totalReceived += balance - prevBalance;
         if (balance < prevBalance) wallet->totalSent += prevBalance - balance;
+        //WalletLog("###_BRWalletUpdateBalance %"PRIu64"/%"PRIu64"/%"PRIu64"/%"PRIu64" ", balance, prevBalance, wallet->totalReceived, wallet->totalSent);
         array_add(wallet->balanceHist, balance);
         prevBalance = balance;
     }
@@ -605,10 +614,19 @@ BRTransaction *BRWalletCreateTxForOutputs(BRWallet *wallet, const BRTxOutput out
     // TODO: avoid combining addresses in a single transaction when possible to reduce information leakage
     // TODO: use up UTXOs received from any of the output scripts that this transaction sends funds to, to mitigate an
     //       attacker double spending and requesting a refund
+    // WAGERR: don't use immature UTXOs (payout+less than PAYOUT_MATURITY=101 confirms )
     for (i = 0; i < array_count(wallet->utxos); i++) {
         o = &wallet->utxos[i];
         tx = BRSetGet(wallet->allTx, o);
         if (! tx || o->n >= tx->outCount) continue;
+        int isPayout = tx->inCount==1 && (strlen(tx->inputs[0].address)==0);
+        int isImmaturePayout = isPayout && (wallet->blockHeight - tx->blockHeight)<=PAYOUT_MATURITY;
+
+        if ( isImmaturePayout ) {
+            WalletLog("UTXO %s:%d not mature (%d/%d)", u256hexBE(tx->txHash), o->n, (wallet->blockHeight - tx->blockHeight), PAYOUT_MATURITY);
+            continue;
+        }
+
         BRTransactionAddInput(transaction, tx->txHash, o->n, tx->outputs[o->n].amount,
                               tx->outputs[o->n].script, tx->outputs[o->n].scriptLen, NULL, 0, TXIN_SEQUENCE);
         

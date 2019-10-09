@@ -1632,7 +1632,7 @@ void BRPeerManagerConnect(BRPeerManager *manager)
     assert(manager != NULL);
     pthread_mutex_lock(&manager->lock);
     if (manager->connectFailureCount >= MAX_CONNECT_FAILURES) manager->connectFailureCount = 0; //this is a manual retry
-    
+
     if ((! manager->downloadPeer || manager->lastBlock->height < manager->estimatedHeight) &&
         manager->syncStartHeight == 0) {
         manager->syncStartHeight = manager->lastBlock->height + 1;
@@ -1640,7 +1640,7 @@ void BRPeerManagerConnect(BRPeerManager *manager)
         if (manager->syncStarted) manager->syncStarted(manager->info);
         pthread_mutex_lock(&manager->lock);
     }
-    
+
     for (size_t i = array_count(manager->connectedPeers); i > 0; i--) {
         BRPeer *p = manager->connectedPeers[i - 1];
 
@@ -1657,6 +1657,7 @@ void BRPeerManagerConnect(BRPeerManager *manager)
         }
         
         array_new(peers, 100);
+        
         array_add_array(peers, manager->peers,
                         (array_count(manager->peers) < 100) ? array_count(manager->peers) : 100);
 
