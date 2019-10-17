@@ -964,7 +964,7 @@ static void _peerRelayedTx(void *info, BRTransaction *tx)
 
     //peer_log(peer, "###relayed before check height tx: %s", u256hexBE(tx->txHash));
     if ( BRWalletContainsTransaction(manager->wallet, tx) ) {
-        peer_log(peer, "###relayed BRWalletContainsTransaction tx: %s", u256hexBE(tx->txHash));
+        //peer_log(peer, "###relayed BRWalletContainsTransaction tx: %s", u256hexBE(tx->txHash));
         isWalletTx = BRWalletRegisterTransaction(manager->wallet, tx);
         if (isWalletTx) tx = BRWalletTransactionForHash(manager->wallet, tx->txHash);
     }
@@ -972,12 +972,12 @@ static void _peerRelayedTx(void *info, BRTransaction *tx)
         //peer_log(peer, "###relayed BRWalletBetTransactionGetOutput tx: %s", u256hexBE(tx->txHash));
         BRTxOutput *out = BRWalletBetTransactionGetOutput(manager->wallet, tx);
         if (out != NULL)    {
-            peer_log(peer, "###relayed bet tx: %s", u256hexBE(tx->txHash));
+            //peer_log(peer, "###relayed bet tx: %s", u256hexBE(tx->txHash));
             BRWalletRegisterBetTransaction(manager->wallet, tx);
         }
         else {
             if (manager->syncStartHeight == 0)  {
-                peer_log(peer, "###relayed syncStartHeight=0 tx: %s", u256hexBE(tx->txHash));
+                //peer_log(peer, "###relayed syncStartHeight=0 tx: %s", u256hexBE(tx->txHash));
                 isWalletTx = BRWalletRegisterTransaction(manager->wallet, tx);
                 if (isWalletTx) tx = BRWalletTransactionForHash(manager->wallet, tx->txHash);
             }
