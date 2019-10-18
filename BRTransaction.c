@@ -32,6 +32,18 @@
 #include <time.h>
 #include <unistd.h>
 
+#if defined(TARGET_OS_MAC)
+#include <Foundation/Foundation.h>
+#define TxLog(...) NSLog(__VA_ARGS__)
+#elif defined(__ANDROID__)
+#include <android/log.h>
+#define TxLog(...) __android_log_print(ANDROID_LOG_INFO, "BRTransaction", __VA_ARGS__)
+#else
+#include <stdio.h>
+#define TxLog(...) printf(__VA_ARGS__)
+#endif
+
+
 #define TX_VERSION           0x00000001
 #define TX_LOCKTIME          0x00000000
 #define SIGHASH_ALL          0x01 // default, sign all of the outputs
@@ -105,7 +117,10 @@ void BRTxInputSetSignature(BRTxInput *input, const uint8_t *signature, size_t si
         input->sigLen = sigLen;
         array_new(input->signature, sigLen);
         array_add_array(input->signature, signature, sigLen);
-        if (! input->address[0]) BRAddressFromScriptSig(input->address, sizeof(input->address), signature, sigLen);
+        if (! input->address[0]) {
+            BRAddressFromScriptSig(input->address, sizeof(input->address), signature, sigLen);
+            //TxLog("!!!BRTxInputSetSignature if !input->address[0], %s", input->address);
+        }
     }
 }
 
@@ -380,6 +395,8 @@ BRTransaction *BRTransactionParse(const uint8_t *buf, size_t bufLen)
     off += len;
     array_set_count(tx->inputs, tx->inCount);
 
+    TxLog("!!!BRTransactionParse start ");
+
     for (i = 0; off <= bufLen && i < tx->inCount; i++) {
         input = &tx->inputs[i];
         input->txHash = (off + sizeof(UInt256) <= bufLen) ? UInt256Get(&buf[off]) : UINT256_ZERO;
@@ -389,13 +406,19 @@ BRTransaction *BRTransactionParse(const uint8_t *buf, size_t bufLen)
         sLen = (size_t)BRVarInt(&buf[off], (off <= bufLen ? bufLen - off : 0), &len);
         off += len;
 
+        //TxLog("!!!BRTransactionParse if %d > 0", BRAddressFromScriptPubKey(NULL, 0, &buf[off], sLen));
+
         if (off + sLen <= bufLen && BRAddressFromScriptPubKey(NULL, 0, &buf[off], sLen) > 0) {
             BRTxInputSetScript(input, &buf[off], sLen);
             input->amount = (off + sLen + sizeof(uint64_t) <= bufLen) ? UInt64GetLE(&buf[off + sLen]) : 0;
+            //TxLog("!!!BRTransactionParse BRAddressFromScriptPubKey amount=%d, sLen=%d , %s, %s",input->amount, sLen, input->address, u256hexBE(input->txHash));
             off += sizeof(uint64_t);
             isSigned = 0;
         }
-        else if (off + sLen <= bufLen) BRTxInputSetSignature(input, &buf[off], sLen);
+        else if (off + sLen <= bufLen) {
+            BRTxInputSetSignature(input, &buf[off], sLen);
+            //TxLog("!!!BRTransactionParse BRTxInputSetSignature sLen=%d, %s ", sLen, u256hexBE(input->txHash) );
+        }
 
         off += sLen;
         input->sequence = (off + sizeof(uint32_t) <= bufLen) ? UInt32GetLE(&buf[off]) : 0;
