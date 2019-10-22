@@ -228,7 +228,7 @@ static void _BRWalletUpdateBalance(BRWallet *wallet)
         // TODO: don't add outputs below TX_MIN_OUTPUT_AMOUNT
         // WAGERR: don't add payout outputs < 101 blocks deep
         // NOTE: balance/UTXOs will then need to be recalculated when last block changes
-        int isPayout = tx->inCount==1 && (strlen(tx->inputs[0].address) == 0) ;
+        int isPayout = tx->inCount==1 && tx->outCount>=1 && (strlen(tx->outputs[0].address) == 0) ;
 
         for (j = 0; j < tx->outCount; j++) {
             if (tx->outputs[j].address[0] != '\0') {
@@ -619,7 +619,7 @@ BRTransaction *BRWalletCreateTxForOutputs(BRWallet *wallet, const BRTxOutput out
         o = &wallet->utxos[i];
         tx = BRSetGet(wallet->allTx, o);
         if (! tx || o->n >= tx->outCount) continue;
-        int isPayout = tx->inCount==1 && (strlen(tx->inputs[0].address)==0);
+        int isPayout = tx->inCount==1 && tx->outCount>=1 && (strlen(tx->outputs[0].address) == 0);
         int isImmaturePayout = isPayout && (wallet->blockHeight - tx->blockHeight)<=PAYOUT_MATURITY;
 
         if ( isImmaturePayout ) {
