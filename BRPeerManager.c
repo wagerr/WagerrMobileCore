@@ -1395,7 +1395,9 @@ static void _peerRelayedBlock(void *info, BRMerkleBlock *block)
     assert(i == 0 || (saveBlocks[i - 1]->height % BLOCK_DIFFICULTY_INTERVAL) == 0);
     pthread_mutex_unlock(&manager->lock);
     if (i > 0 && manager->saveBlocks) manager->saveBlocks(manager->info, (i > 1 ? 1 : 0), saveBlocks, i);
-    
+
+    BRWalletUpdateBalance(manager->wallet);
+
     if (block && block->height != BLOCK_UNKNOWN_HEIGHT && block->height >= BRPeerLastBlock(peer) &&
         manager->txStatusUpdate) {
         manager->txStatusUpdate(manager->info); // notify that transaction confirmations may have changed

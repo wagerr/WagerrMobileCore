@@ -228,7 +228,8 @@ static void _BRWalletUpdateBalance(BRWallet *wallet)
         // TODO: don't add outputs below TX_MIN_OUTPUT_AMOUNT
         // WAGERR: don't add payout outputs < 101 blocks deep
         // NOTE: balance/UTXOs will then need to be recalculated when last block changes
-        int isPayout = tx->inCount==1 && tx->outCount>=1 && (strlen(tx->outputs[0].address) == 0) ;
+        BRTxOutput *betOutput = BRWalletBetTransactionGetOutput(wallet, tx);
+        int isPayout = tx->inCount==1 && tx->outCount>=1 && (strlen(tx->outputs[0].address) == 0) && betOutput==NULL ;
 
         for (j = 0; j < tx->outCount; j++) {
             if (tx->outputs[j].address[0] != '\0') {
@@ -264,6 +265,13 @@ static void _BRWalletUpdateBalance(BRWallet *wallet)
 
     assert(array_count(wallet->balanceHist) == array_count(wallet->transactions));
     wallet->balance = balance;
+}
+
+void BRWalletUpdateBalance(BRWallet *wallet)
+{
+    pthread_mutex_lock(&wallet->lock);
+    _BRWalletUpdateBalance(wallet);
+    pthread_mutex_unlock(&wallet->lock);
 }
 
 // allocates and populates a BRWallet struct which must be freed by calling BRWalletFree()
@@ -619,7 +627,8 @@ BRTransaction *BRWalletCreateTxForOutputs(BRWallet *wallet, const BRTxOutput out
         o = &wallet->utxos[i];
         tx = BRSetGet(wallet->allTx, o);
         if (! tx || o->n >= tx->outCount) continue;
-        int isPayout = tx->inCount==1 && tx->outCount>=1 && (strlen(tx->outputs[0].address) == 0);
+        BRTxOutput *betOutput = BRWalletBetTransactionGetOutput(wallet, tx);
+        int isPayout = tx->inCount==1 && tx->outCount>=1 && (strlen(tx->outputs[0].address) == 0) && betOutput==NULL;
         int isImmaturePayout = isPayout && (wallet->blockHeight - tx->blockHeight)<=PAYOUT_MATURITY;
 
         if ( isImmaturePayout ) {
@@ -749,12 +758,17 @@ BRTxOutput* BRWalletBetTransactionGetOutput(BRWallet* wallet, const BRTransactio
 {
     BRTxOutput *r = NULL;
     for (size_t i = 0; ! r && i < tx->outCount; i++) {
-        if (tx->outputs[i].script[0] == OP_RETURN && tx->outputs[i].script[2] == OP_SMOKETEST)  {
+        if ( BRWalletIsOpcodeOutput(&tx->outputs[i]) == 1 )  {
             r = &tx->outputs[i];
             break;
         }
     }
     return r;
+}
+
+int BRWalletIsOpcodeOutput( const BRTxOutput *out )
+{
+    return (out->script[0] == OP_RETURN && out->script[2] == OP_SMOKETEST)?1:0;
 }
 
 int BRWalletRegisterBetTransaction(BRWallet *wallet, BRTransaction *tx)

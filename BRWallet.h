@@ -209,6 +209,9 @@ int64_t BRBitcoinAmount(int64_t localAmount, double price);
 // Wagerr: obtain the opcode output
 BRTxOutput* BRWalletBetTransactionGetOutput(BRWallet* wallet, const BRTransaction *tx);
 
+// Wagerr: is opcode output
+int BRWalletIsOpcodeOutput( const BRTxOutput *out );
+
 // Wagerr: register
 int BRWalletRegisterBetTransaction(BRWallet *wallet, BRTransaction *tx);
 
@@ -224,6 +227,9 @@ int BRWalletTransactionCheckBet(BRWallet *wallet, const BRTransaction *tx);
 // Wagerr: create bet transaction
 // result must be freed using BRTransactionFree()
 BRTransaction *BRWalletCreateBetTransaction(BRWallet *wallet, uint64_t amount, int type, int eventID, int outcome);
+
+// Wagerr: make update balance "public"
+void BRWalletUpdateBalance(BRWallet *wallet);
 
 #ifdef __cplusplus
 }
