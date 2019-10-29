@@ -395,7 +395,7 @@ BRTransaction *BRTransactionParse(const uint8_t *buf, size_t bufLen)
     off += len;
     array_set_count(tx->inputs, tx->inCount);
 
-    TxLog("!!!BRTransactionParse start ");
+    //TxLog("!!!BRTransactionParse start ");
 
     for (i = 0; off <= bufLen && i < tx->inCount; i++) {
         input = &tx->inputs[i];
