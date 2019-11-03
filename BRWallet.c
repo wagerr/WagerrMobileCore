@@ -258,7 +258,7 @@ static void _BRWalletUpdateBalance(BRWallet *wallet)
 
         if (prevBalance < balance) wallet->totalReceived += balance - prevBalance;
         if (balance < prevBalance) wallet->totalSent += prevBalance - balance;
-        //WalletLog("###_BRWalletUpdateBalance %"PRIu64"/%"PRIu64"/%"PRIu64"/%"PRIu64" ", balance, prevBalance, wallet->totalReceived, wallet->totalSent);
+        WalletLog("###_BRWalletUpdateBalance %"PRIu64"/%"PRIu64"/%"PRIu64"/%"PRIu64" ", balance, prevBalance, wallet->totalReceived, wallet->totalSent);
         array_add(wallet->balanceHist, balance);
         prevBalance = balance;
     }
@@ -269,9 +269,16 @@ static void _BRWalletUpdateBalance(BRWallet *wallet)
 
 void BRWalletUpdateBalance(BRWallet *wallet)
 {
+    uint64_t prevBalance = wallet->balance;
+    uint64_t currBalance;
     pthread_mutex_lock(&wallet->lock);
     _BRWalletUpdateBalance(wallet);
+    currBalance = wallet->balance;
     pthread_mutex_unlock(&wallet->lock);
+
+    if (prevBalance!=currBalance)   {
+        if (wallet->balanceChanged) wallet->balanceChanged(wallet->callbackInfo, wallet->balance);
+    }
 }
 
 // allocates and populates a BRWallet struct which must be freed by calling BRWalletFree()
