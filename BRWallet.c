@@ -258,7 +258,7 @@ static void _BRWalletUpdateBalance(BRWallet *wallet)
 
         if (prevBalance < balance) wallet->totalReceived += balance - prevBalance;
         if (balance < prevBalance) wallet->totalSent += prevBalance - balance;
-        WalletLog("###_BRWalletUpdateBalance %"PRIu64"/%"PRIu64"/%"PRIu64"/%"PRIu64" ", balance, prevBalance, wallet->totalReceived, wallet->totalSent);
+        //WalletLog("###_BRWalletUpdateBalance %"PRIu64"/%"PRIu64"/%"PRIu64"/%"PRIu64" ", balance, prevBalance, wallet->totalReceived, wallet->totalSent);
         array_add(wallet->balanceHist, balance);
         prevBalance = balance;
     }
