@@ -1857,7 +1857,8 @@ int BRWalletTests()
     
     printf("\n");
     
-    BRWalletSetCallbacks(w, w, walletBalanceChanged, walletTxAdded, walletTxUpdated, walletTxDeleted);
+    BRWalletSetCallbacks(w, w, walletBalanceChanged, walletTxAdded, walletTxUpdated, walletBetTxUpdated, walletTxDeleted);
+
     BRKeySetSecret(&k, &secret, 1);
     BRKeyAddress(&k, addr.s, sizeof(addr));
     

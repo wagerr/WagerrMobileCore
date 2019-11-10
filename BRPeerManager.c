@@ -280,16 +280,15 @@ static void _BRPeerManagerLoadBloomFilter(BRPeerManager *manager, BRPeer *peer)
     uint32_t blockHeight = (manager->lastBlock->height > 100) ? manager->lastBlock->height - 100 : 0;
     
     size_t betAddressesCount = 0;
-    /*if (blockHeight>WAGERR_OPCODE_CUTOVER) {
-        for (size_t i = 0;manager->params->betAddresses[i];i++) {
-            betAddressesCount++;
-        }
+    for (size_t i = 0;manager->params->betAddresses[i];i++) {
+        betAddressesCount++;
     }
-    */
+
     size_t addrsCount = BRWalletAllAddrs(manager->wallet, NULL, 0) + betAddressesCount;
     BRAddress *addrs = malloc(addrsCount*sizeof(*addrs));
     size_t utxosCount = BRWalletUTXOs(manager->wallet, NULL, 0);
     BRUTXO *utxos = malloc(utxosCount*sizeof(*utxos));
+    uint32_t blockHeight = (manager->lastBlock->height > 100) ? manager->lastBlock->height - 100 : 0;
     size_t txCount = BRWalletTxUnconfirmedBefore(manager->wallet, NULL, 0, blockHeight);
     BRTransaction **transactions = malloc(txCount*sizeof(*transactions));
     BRBloomFilter *filter;
@@ -304,15 +303,12 @@ static void _BRPeerManagerLoadBloomFilter(BRPeerManager *manager, BRPeer *peer)
                               BLOOM_UPDATE_ALL); // BUG: XXX txCount not the same as number of spent wallet outputs
     
     // Add betting addresses if cutover height for new opcodes reached for faster sync
-    /* if (blockHeight>WAGERR_OPCODE_CUTOVER) {
-        for (size_t i = 0; manager->params->betAddresses[i]; i++) {
-            const char *betAddress = manager->params->betAddresses[i];
-            memset(addrs[addrsCount - i - 1].s, 0, sizeof(addrs[addrsCount - i - 1].s));
-            strncpy(addrs[addrsCount - i - 1].s, betAddress,
-                    sizeof(addrs[addrsCount - i - 1].s) - 1);
-        }
+    for (size_t i = 0; manager->params->betAddresses[i]; i++) {
+        const char *betAddress = manager->params->betAddresses[i];
+        memset(addrs[addrsCount - i - 1].s, 0, sizeof(addrs[addrsCount - i - 1].s));
+        strncpy(addrs[addrsCount - i - 1].s, betAddress,
+                sizeof(addrs[addrsCount - i - 1].s) - 1);
     }
-    */
 
     for (size_t i = 0; i < addrsCount; i++) { // add addresses to watch for tx receiveing money to the wallet
         UInt160 hash = UINT160_ZERO;
@@ -961,13 +957,25 @@ static void _peerRelayedTx(void *info, BRTransaction *tx)
         BRPeerScheduleDisconnect(peer, -1); // cancel publish tx timeout
     }
 
-    if (manager->syncStartHeight == 0 || BRWalletContainsTransaction(manager->wallet, tx)) {
+    if ( BRWalletContainsTransaction(manager->wallet, tx) ) {
         isWalletTx = BRWalletRegisterTransaction(manager->wallet, tx);
         if (isWalletTx) tx = BRWalletTransactionForHash(manager->wallet, tx->txHash);
     }
     else {
-        BRTransactionFree(tx);
-        tx = NULL;
+        BRTxOutput *out = BRWalletBetTransactionGetOutput(manager->wallet, tx);
+        if (out != NULL)    {
+            BRWalletRegisterBetTransaction(manager->wallet, tx);
+        }
+        else {
+            if (manager->syncStartHeight == 0)  {
+                isWalletTx = BRWalletRegisterTransaction(manager->wallet, tx);
+                if (isWalletTx) tx = BRWalletTransactionForHash(manager->wallet, tx->txHash);
+            }
+            else {
+                BRTransactionFree(tx);
+                tx = NULL;
+            }
+        }
     }
     
     if (tx && isWalletTx) {
@@ -1180,7 +1188,9 @@ static void _peerRelayedBlock(void *info, BRMerkleBlock *block)
     // track the observed bloom filter false positive rate using a low pass filter to smooth out variance
     if (peer == manager->downloadPeer && block->totalTx > 0) {
         for (i = 0; i < txCount; i++) { // wallet tx are not false-positives
-            if (! BRWalletTransactionForHash(manager->wallet, txHashes[i])) fpCount++;
+            if (! BRWalletTransactionForHash(manager->wallet, txHashes[i])
+            &&  ! BRWalletBetTransactionForHash(manager->wallet, txHashes[i]))
+                 fpCount++;
         }
         
         // moving average number of tx-per-block
@@ -1372,6 +1382,8 @@ static void _peerRelayedBlock(void *info, BRMerkleBlock *block)
     assert(i == 0 || (saveBlocks[i - 1]->height % BLOCK_DIFFICULTY_INTERVAL) == 0);
     pthread_mutex_unlock(&manager->lock);
     if (i > 0 && manager->saveBlocks) manager->saveBlocks(manager->info, (i > 1 ? 1 : 0), saveBlocks, i);
+    
+    BRWalletUpdateBalance(manager->wallet);
     
     if (block && block->height != BLOCK_UNKNOWN_HEIGHT && block->height >= BRPeerLastBlock(peer) &&
         manager->txStatusUpdate) {

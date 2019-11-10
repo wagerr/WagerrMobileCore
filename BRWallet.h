@@ -39,9 +39,10 @@ extern "C" {
 #define MIN_FEE_PER_KB     ((TX_FEE_PER_KB*1000 + 190)/191) // minimum relay fee on a 191byte tx
 #define MAX_FEE_PER_KB     ((1000100ULL*1000 + 190)/191) // slightly higher than a 10000bit fee on a 191byte tx
 
-    // Wagerr
+// Wagerr
 #define MIN_BET_AMOUNT 25 * SATOSHIS
 #define MAX_BET_AMOUNT 10000 * SATOSHIS
+#define PAYOUT_MATURITY 101
     
 typedef struct {
     UInt256 hash;
@@ -77,6 +78,7 @@ void BRWalletSetCallbacks(BRWallet *wallet, void *info,
                           void (*txAdded)(void *info, BRTransaction *tx),
                           void (*txUpdated)(void *info, const UInt256 txHashes[], size_t txCount, uint32_t blockHeight,
                                             uint32_t timestamp),
+                          void (*txBetUpdated)(void *info, const BRTransaction betTxs[], size_t txCount, uint32_t blockHeight,uint32_t timestamp),
                           void (*txDeleted)(void *info, UInt256 txHash, int notifyUser, int recommendRescan));
 
 // wallets are composed of chains of addresses
@@ -202,6 +204,31 @@ int64_t BRLocalAmount(int64_t amount, double price);
 // returns the given local currency amount in satoshis
 // price is local currency units (i.e. pennies, pence) per bitcoin
 int64_t BRBitcoinAmount(int64_t localAmount, double price);
+
+// Wagerr: obtain the opcode output
+BRTxOutput* BRWalletBetTransactionGetOutput(BRWallet* wallet, const BRTransaction *tx);
+
+// Wagerr: is opcode output
+int BRWalletIsOpcodeOutput( const BRTxOutput *out );
+
+// Wagerr: register
+int BRWalletRegisterBetTransaction(BRWallet *wallet, BRTransaction *tx);
+
+// Wagerr: get tx for hash
+BRTransaction *BRWalletBetTransactionForHash(BRWallet *wallet, UInt256 txHash);
+
+// Wagerr: register
+int BRWalletUnregisterBetTransaction(BRWallet *wallet, BRTransaction *tx);
+
+// Wagerr: checks if betting TX and sends though normal tx notificatino
+int BRWalletTransactionCheckBet(BRWallet *wallet, const BRTransaction *tx);
+
+// Wagerr: create bet transaction
+// result must be freed using BRTransactionFree()
+BRTransaction *BRWalletCreateBetTransaction(BRWallet *wallet, uint64_t amount, int type, int eventID, int outcome);
+
+// Wagerr: make update balance "public"
+void BRWalletUpdateBalance(BRWallet *wallet);
 
 #ifdef __cplusplus
 }
