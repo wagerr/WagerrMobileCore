@@ -415,7 +415,7 @@ static int _BRPeerAcceptTxMessage(BRPeer *peer, const uint8_t *msg, size_t msgLe
     }
     else {
         txHash = tx->txHash;
-        peer_log(peer, "got tx: %s", u256hex(txHash));
+        peer_log(peer, "got tx: %s", u256hexBE(txHash));
 
         if (ctx->relayedTx) {
             ctx->relayedTx(ctx->info, tx);

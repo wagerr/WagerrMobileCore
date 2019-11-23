@@ -334,7 +334,7 @@ void BRWalletSetCallbacks(BRWallet *wallet, void *info,
     wallet->balanceChanged = balanceChanged;
     wallet->txAdded = txAdded;
     wallet->txUpdated = txUpdated;
-    wallet->betTx = txBetUpdated;
+    wallet->txBetUpdated = txBetUpdated;
     wallet->txDeleted = txDeleted;
 }
 

@@ -288,7 +288,6 @@ static void _BRPeerManagerLoadBloomFilter(BRPeerManager *manager, BRPeer *peer)
     BRAddress *addrs = malloc(addrsCount*sizeof(*addrs));
     size_t utxosCount = BRWalletUTXOs(manager->wallet, NULL, 0);
     BRUTXO *utxos = malloc(utxosCount*sizeof(*utxos));
-    uint32_t blockHeight = (manager->lastBlock->height > 100) ? manager->lastBlock->height - 100 : 0;
     size_t txCount = BRWalletTxUnconfirmedBefore(manager->wallet, NULL, 0, blockHeight);
     BRTransaction **transactions = malloc(txCount*sizeof(*transactions));
     BRBloomFilter *filter;
@@ -939,7 +938,7 @@ static void _peerRelayedTx(void *info, BRTransaction *tx)
     size_t relayCount = 0;
     
     pthread_mutex_lock(&manager->lock);
-    peer_log(peer, "relayed tx: %s", u256hex(tx->txHash));
+    peer_log(peer, "relayed tx: %s", u256hexBE(tx->txHash));
     
     for (size_t i = array_count(manager->publishedTx); i > 0; i--) { // see if tx is in list of published tx
         if (UInt256Eq(manager->publishedTxHashes[i - 1], tx->txHash)) {
