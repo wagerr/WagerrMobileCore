@@ -40,7 +40,7 @@ extern "C" {
 #define PEER_MAX_CONNECTIONS 3
 
 #if BITCOIN_TESTNET
-#define WAGERR_OPCODE_CUTOVER 80000
+#define WAGERR_OPCODE_CUTOVER 0
 #else
 #define WAGERR_OPCODE_CUTOVER 0        // 752900 but we start before just in case
 #endif
