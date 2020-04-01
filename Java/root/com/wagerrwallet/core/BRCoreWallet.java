@@ -168,6 +168,8 @@ public class BRCoreWallet extends BRCoreJniReference
      */
     public native BRCoreTransaction createBetTransaction (long amount, int type, int eventID, int outcome);
 
+    public native BRCoreTransaction createParlayBetTransaction (long amount, int type, int eventID, int outcome);
+
     /**
      * Create a BRCoreTransaction with the provided outputs
      *

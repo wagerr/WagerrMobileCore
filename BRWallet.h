@@ -227,6 +227,7 @@ int BRWalletTransactionCheckBet(BRWallet *wallet, const BRTransaction *tx);
 // Wagerr: create bet transaction
 // result must be freed using BRTransactionFree()
 BRTransaction *BRWalletCreateBetTransaction(BRWallet *wallet, uint64_t amount, int type, int eventID, int outcome);
+BRTransaction *BRWalletCreateParlayBetTransaction(BRWallet *wallet, uint64_t amount, int type, int eventID, int outcome);
 
 // Wagerr: make update balance "public"
 void BRWalletUpdateBalance(BRWallet *wallet);
