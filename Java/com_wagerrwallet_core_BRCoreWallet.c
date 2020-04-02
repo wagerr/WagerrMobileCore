@@ -390,14 +390,20 @@ Java_com_wagerrwallet_core_BRCoreWallet_createBetTransaction
  */
 JNIEXPORT jobject JNICALL
 Java_com_wagerrwallet_core_BRCoreWallet_createParlayBetTransaction
-        (JNIEnv *env, jobject thisObject, jlong amount, jint type, jint eventID, jint outcome) {
+        (JNIEnv *env, jobject thisObject, jlong amount, jint type, jint nLegs
+                , jint eventID1, jint outcome1, jint eventID2, jint outcome2, jint eventID3, jint outcome3, jint eventID4, jint outcome4, jint eventID5, jint outcome5 ) {
     BRWallet  *wallet  = (BRWallet  *) getJNIReference(env, thisObject);
 
     // transaction may be NULL - like if the wallet does not have a large enough balance
     // to cover the transaction amount
     BRTransaction *transaction = BRWalletCreateParlayBetTransaction(wallet,
                                                               (uint64_t) amount,
-                                                              (int) type, (int) eventID, (int) outcome);
+                                                              (int) type, (int) nLegs ,
+                                                              (int) eventID1, (int) outcome1,
+                                                              (int) eventID2, (int) outcome2,
+                                                              (int) eventID3, (int) outcome3,
+                                                              (int) eventID4, (int) outcome4,
+                                                              (int) eventID5, (int) outcome5);
 
     return NULL == transaction
            ? NULL

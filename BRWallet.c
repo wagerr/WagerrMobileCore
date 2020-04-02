@@ -886,36 +886,62 @@ BRTransaction *BRWalletCreateBetTransaction(BRWallet *wallet, uint64_t amount, i
     return BRWalletCreateTxForOutputs(wallet, &o, 1);
 }
 
-BRTransaction *BRWalletCreateParlayBetTransaction(BRWallet *wallet, uint64_t amount, int type, int eventID, int outcome)
-{
+BRTransaction *BRWalletCreateParlayBetTransaction(BRWallet *wallet, uint64_t amount, int type, int nLegs
+        , int eventID1, int outcome1, int eventID2, int outcome2, int eventID3, int outcome3, int eventID4, int outcome4, int eventID5, int outcome5 ) {
     BRTxOutput o = BR_TX_OUTPUT_NONE;
 
     assert(wallet != NULL);
-    // assert(amount >= MIN_BET_AMOUNT && amount <= MAX_BET_AMOUNT);
-    assert(type == OP_BTX_PEERLESS_BET || type == OP_BTX_CHAIN_BET );
-    assert(outcome>0 && outcome<8);     // current legal outcome opcodes
+    assert(type == OP_BTX_PARLAY_BET);
+    assert(nLegs>=2);
 
     o.amount = amount;
     o.script = NULL;
-    o.scriptLen = (type == OP_BTX_PEERLESS_BET)?10:7;
+    o.scriptLen = 6 + (nLegs * 5);
     array_new(o.script, o.scriptLen);
     array_set_count(o.script, o.scriptLen);
     o.script[0] = OP_RETURN;
-    o.script[1] = o.scriptLen-2;
+    o.script[1] = o.scriptLen - 2;
     o.script[2] = OP_SMOKETEST;
     o.script[3] = OP_BET_VERSION;
-    o.script[4] = type;
-    if (type == OP_BTX_PEERLESS_BET)    {
-        o.script[8] = (eventID >> 24) & 0xFF;
-        o.script[7] = (eventID >> 16) & 0xFF;
-        o.script[6] = (eventID >> 8) & 0xFF;
-        o.script[5] = (eventID) & 0xFF;
-        o.script[9] = outcome & 0xFF;
+    o.script[4] = type & 0xFF;
+    o.script[5] = nLegs & 0xFF;
+
+    o.script[9] = (eventID1 >> 24) & 0xFF;
+    o.script[8] = (eventID1 >> 16) & 0xFF;
+    o.script[7] = (eventID1 >> 8) & 0xFF;
+    o.script[6] = (eventID1) & 0xFF;
+    o.script[10] = outcome1 & 0xFF;
+
+    o.script[14] = (eventID2 >> 24) & 0xFF;
+    o.script[13] = (eventID2 >> 16) & 0xFF;
+    o.script[12] = (eventID2 >> 8) & 0xFF;
+    o.script[11] = (eventID2) & 0xFF;
+    o.script[15] = outcome2 & 0xFF;
+
+    if (nLegs > 2) {
+        o.script[19] = (eventID3 >> 24) & 0xFF;
+        o.script[18] = (eventID3 >> 16) & 0xFF;
+        o.script[17] = (eventID3 >> 8) & 0xFF;
+        o.script[16] = (eventID3) & 0xFF;
+        o.script[20] = outcome3 & 0xFF;
     }
-    else {      // type == OP_BTX_CHAIN_BET
-        o.script[6] = (eventID >> 8) & 0xFF;
-        o.script[5] = (eventID) & 0xFF;
+
+    if (nLegs > 3) {
+        o.script[24] = (eventID4 >> 24) & 0xFF;
+        o.script[23] = (eventID4 >> 16) & 0xFF;
+        o.script[22] = (eventID4 >> 8) & 0xFF;
+        o.script[21] = (eventID4) & 0xFF;
+        o.script[25] = outcome4 & 0xFF;
     }
+
+    if (nLegs > 4) {
+        o.script[8] = (eventID5 >> 24) & 0xFF;
+        o.script[7] = (eventID5 >> 16) & 0xFF;
+        o.script[6] = (eventID5 >> 8) & 0xFF;
+        o.script[5] = (eventID5) & 0xFF;
+        o.script[9] = outcome5 & 0xFF;
+    }
+
     return BRWalletCreateTxForOutputs(wallet, &o, 1);
 }
 
