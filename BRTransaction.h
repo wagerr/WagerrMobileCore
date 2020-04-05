@@ -64,6 +64,7 @@ extern "C" {
 #define OP_BTX_CHAIN_RESULT         0x08
 #define OP_BTX_PEERLESS_SPREADS_MKT 0x09
 #define OP_BTX_PEERLESS_TOTALS_MKT  0x0a
+#define OP_BTX_PARLAY_BET           0x0c
 #define OP_TIME_THRESHOLD           60*60*24*15     // 15 days
     
 #define BR_RAND_MAX          ((RAND_MAX > 0x7fffffff) ? 0x7fffffff : RAND_MAX)
