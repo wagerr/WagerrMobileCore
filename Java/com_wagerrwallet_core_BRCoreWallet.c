@@ -874,7 +874,15 @@ txBetUpdated(void *info, const BRTransaction betTxs[], size_t count, uint32_t bl
         jobject transaction = (*env)->NewObject (env, transactionClass, transactionConstructor,
                                                  (jlong) JNI_COPY_TRANSACTION(
                                                          (BRTransaction *) &betTxs[i]));
+#if defined (__ANDROID_NDK__)
+        __android_log_print(ANDROID_LOG_DEBUG, "JNI", "onBetTxUpdated before");
+#endif
+
         (*env)->CallVoidMethod(env, listener, listenerMethod, transaction);
+#if defined (__ANDROID_NDK__)
+        __android_log_print(ANDROID_LOG_DEBUG, "JNI", "onBetTxUpdated after");
+#endif
+
         (*env)->DeleteLocalRef (env, transaction);
     }
 
