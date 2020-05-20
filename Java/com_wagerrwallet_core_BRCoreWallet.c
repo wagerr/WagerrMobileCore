@@ -872,8 +872,8 @@ txBetUpdated(void *info, const BRTransaction betTxs[], size_t count, uint32_t bl
     // Invoke the callback for each of txHashes.
     for (size_t i = 0; i < count; i++) {
         jobject transaction = (*env)->NewObject (env, transactionClass, transactionConstructor,
-                                                 (jlong) JNI_COPY_TRANSACTION(&betTxs[i]));
-
+                                                 (jlong) JNI_COPY_TRANSACTION(
+                                                         (BRTransaction *) &betTxs[i]));
         (*env)->CallVoidMethod(env, listener, listenerMethod, transaction);
         (*env)->DeleteLocalRef (env, transaction);
     }
