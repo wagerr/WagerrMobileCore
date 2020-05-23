@@ -34,8 +34,13 @@ extern "C" {
 
 // bloom filters are explained in BIP37: https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki
 
+#if BITCOIN_TESTNET
+#define BLOOM_DEFAULT_FALSEPOSITIVE_RATE 0.001 // use 0.00005 for less data, 0.001 for good anonymity
+#define BLOOM_REDUCED_FALSEPOSITIVE_RATE 0.0005
+#else
 #define BLOOM_DEFAULT_FALSEPOSITIVE_RATE 0.0005 // use 0.00005 for less data, 0.001 for good anonymity
 #define BLOOM_REDUCED_FALSEPOSITIVE_RATE 0.00005
+#endif
 #define BLOOM_UPDATE_NONE                0
 #define BLOOM_UPDATE_ALL                 1
 #define BLOOM_UPDATE_P2PUBKEY_ONLY       2
