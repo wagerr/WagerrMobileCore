@@ -935,11 +935,11 @@ BRTransaction *BRWalletCreateParlayBetTransaction(BRWallet *wallet, uint64_t amo
     }
 
     if (nLegs > 4) {
-        o.script[8] = (eventID5 >> 24) & 0xFF;
-        o.script[7] = (eventID5 >> 16) & 0xFF;
-        o.script[6] = (eventID5 >> 8) & 0xFF;
-        o.script[5] = (eventID5) & 0xFF;
-        o.script[9] = outcome5 & 0xFF;
+        o.script[29] = (eventID5 >> 24) & 0xFF;
+        o.script[28] = (eventID5 >> 16) & 0xFF;
+        o.script[27] = (eventID5 >> 8) & 0xFF;
+        o.script[26] = (eventID5) & 0xFF;
+        o.script[30] = outcome5 & 0xFF;
     }
 
     return BRWalletCreateTxForOutputs(wallet, &o, 1);
