@@ -281,10 +281,8 @@ static void _BRPeerManagerLoadBloomFilter(BRPeerManager *manager, BRPeer *peer)
 
     size_t betAddressesCount = 0;
 
-    if (blockHeight>WAGERR_OPCODE_CUTOVER) {
-        for (size_t i = 0;manager->params->betAddresses[i];i++) {
-            betAddressesCount++;
-        }
+    for (size_t i = 0;manager->params->betAddresses[i];i++) {
+        betAddressesCount++;
     }
 
     size_t addrsCount = BRWalletAllAddrs(manager->wallet, NULL, 0) + betAddressesCount;
@@ -305,14 +303,11 @@ static void _BRPeerManagerLoadBloomFilter(BRPeerManager *manager, BRPeer *peer)
                               BLOOM_UPDATE_ALL); // BUG: XXX txCount not the same as number of spent wallet outputs
 
     // Add betting addresses if cutover height for new opcodes reached for faster sync
-
-    if (blockHeight>WAGERR_OPCODE_CUTOVER) {
-        for (size_t i = 0; manager->params->betAddresses[i]; i++) {
-            const char *betAddress = manager->params->betAddresses[i];
-            memset(addrs[addrsCount - i - 1].s, 0, sizeof(addrs[addrsCount - i - 1].s));
-            strncpy(addrs[addrsCount - i - 1].s, betAddress,
-                    sizeof(addrs[addrsCount - i - 1].s) - 1);
-        }
+    for (size_t i = 0; manager->params->betAddresses[i]; i++) {
+        const char *betAddress = manager->params->betAddresses[i];
+        memset(addrs[addrsCount - i - 1].s, 0, sizeof(addrs[addrsCount - i - 1].s));
+        strncpy(addrs[addrsCount - i - 1].s, betAddress,
+                sizeof(addrs[addrsCount - i - 1].s) - 1);
     }
 
     for (size_t i = 0; i < addrsCount; i++) { // add addresses to watch for tx receiveing money to the wallet
