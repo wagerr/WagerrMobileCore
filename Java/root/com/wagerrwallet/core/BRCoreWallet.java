@@ -171,6 +171,8 @@ public class BRCoreWallet extends BRCoreJniReference
     public native BRCoreTransaction createParlayBetTransaction (long amount, int type, int nLegs
             , int eventID1, int outcome1, int eventID2, int outcome2, int eventID3, int outcome3, int eventID4, int outcome4, int eventID5, int outcome5);
 
+    public native BRCoreTransaction createDiceBetTransaction (long amount, int type, int diceGameType, int selectedOutcome);
+
     /**
      * Create a BRCoreTransaction with the provided outputs
      *
