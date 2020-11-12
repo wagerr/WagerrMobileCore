@@ -982,7 +982,7 @@ BRTransaction *BRWalletCreateDiceBetTransaction(BRWallet *wallet, uint64_t amoun
         o.script[10] = (selectedOutcome >> 16) & 0xFF;
         o.script[11] = (selectedOutcome >> 24) & 0xFF;
     }
-    
+
     return BRWalletCreateTxForOutputs(wallet, &o, 1);
 }
 

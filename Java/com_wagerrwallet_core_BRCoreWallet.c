@@ -412,6 +412,28 @@ Java_com_wagerrwallet_core_BRCoreWallet_createParlayBetTransaction
 
 /*
  * Class:     com_breadwallet_core_BRCoreWallet
+ * Method:    createDiceBetTransaction
+ * Signature: (JLcom/wagerrwallet/core/BRCoreAddress;)Lcom/wagerrwallet/core/BRCoreTransaction;
+ */
+JNIEXPORT jobject JNICALL
+Java_com_wagerrwallet_core_BRCoreWallet_createDiceBetTransaction
+        (JNIEnv *env, jobject thisObject, jlong amount, jint type, jint diceGameType, jint selectedOutcome ) {
+    BRWallet  *wallet  = (BRWallet  *) getJNIReference(env, thisObject);
+
+    // transaction may be NULL - like if the wallet does not have a large enough balance
+    // to cover the transaction amount
+    BRTransaction *transaction = BRWalletCreateDiceBetTransaction(wallet,
+                                                                    (uint64_t) amount,
+                                                                    (int) type,
+                                                                    (int) diceGameType ,
+                                                                    (int) selectedOutcome);
+    return NULL == transaction
+           ? NULL
+           : (*env)->NewObject(env, transactionClass, transactionConstructor, (jlong) transaction);
+}
+
+/*
+ * Class:     com_breadwallet_core_BRCoreWallet
  * Method:    createTransactionForOutputs
  * Signature: ([Lcom/wagerrwallet/core/BRCoreTransactionOutput;)Lcom/wagerrwallet/core/BRCoreTransaction;
  */
