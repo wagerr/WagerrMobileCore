@@ -67,7 +67,18 @@ extern "C" {
 #define OP_BTX_PEERLESS_SPREADS_MKT 0x09
 #define OP_BTX_PEERLESS_TOTALS_MKT  0x0a
 #define OP_BTX_PARLAY_BET           0x0c
-    #define OP_TIME_THRESHOLD           60*60*24*15     // 15 days
+#define OP_BTX_QUICK_GAMES          0x0d
+#define OP_TIME_THRESHOLD           60*60*24*15     // 15 days
+
+// quick games (dice) types
+#define OP_QG_TYPE_DICE            0x00
+
+#define OP_QG_DICE_EQUAL            0x00
+#define OP_QG_DICE_NOT_EQUAL        0x01
+#define OP_QG_DICE_OVER             0x02
+#define OP_QG_DICE_UNDER            0x03
+#define OP_QG_DICE_EVEN             0x04
+#define OP_QG_DICE_ODD              0x05
 
 // returns a random number less than upperBound (for non-cryptographic use only)
 uint32_t BRRand(uint32_t upperBound);
