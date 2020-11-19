@@ -931,6 +931,47 @@ BRTransaction *BRWalletCreateParlayBetTransaction(BRWallet *wallet, uint64_t amo
     return BRWalletCreateTxForOutputs(wallet, &o, 1);
 }
 
+// Wagerr: create dice (chaingames) bet
+BRTransaction *BRWalletCreateDiceBetTransaction(BRWallet *wallet, uint64_t amount, int type, int diceGameType, int selectedOutcome)
+{
+    BRTxOutput o = BR_TX_OUTPUT_NONE;
+    int vectorLen = 0;
+
+    assert(wallet != NULL);
+    assert(type == OP_BTX_QUICK_GAMES );
+    assert(diceGameType>=0 && diceGameType<6);     //  available dice game types
+    assert(selectedOutcome>1 && selectedOutcome<13);     //  available outcomes for dice
+
+    o.amount = amount;
+    o.script = NULL;
+    if ( diceGameType == OP_QG_DICE_EVEN || diceGameType == OP_QG_DICE_ODD )    {
+        o.scriptLen = 8;
+        vectorLen = 1;
+    } else{
+        o.scriptLen = 12;
+        vectorLen = 5;
+    }
+    array_new(o.script, o.scriptLen);
+    array_set_count(o.script, o.scriptLen);
+    o.script[0] = OP_RETURN;
+    o.script[1] = o.scriptLen-2;
+    o.script[2] = OP_SMOKETEST;
+    o.script[3] = OP_BET_VERSION;
+    o.script[4] = OP_BTX_QUICK_GAMES;
+    o.script[5] = OP_QG_TYPE_DICE;
+    o.script[6] = vectorLen;
+    o.script[7] = diceGameType;
+
+    if ( vectorLen == 5 ) {
+        o.script[8] = (selectedOutcome) & 0xFF;
+        o.script[9] = (selectedOutcome >> 8) & 0xFF;
+        o.script[10] = (selectedOutcome >> 16) & 0xFF;
+        o.script[11] = (selectedOutcome >> 24) & 0xFF;
+    }
+    
+    return BRWalletCreateTxForOutputs(wallet, &o, 1);
+}
+
 
 // Wagerr end
 
