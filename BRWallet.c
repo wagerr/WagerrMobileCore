@@ -977,7 +977,7 @@ BRTransaction *BRWalletCreateDiceBetTransaction(BRWallet *wallet, uint64_t amoun
     o.script[7] = diceGameType;
 
     if ( vectorLen == 5 ) {
-        o.script[8] = (selectedOutcome) && 0xFF;
+        o.script[8] = (selectedOutcome) & 0xFF;
         o.script[9] = (selectedOutcome >> 8) & 0xFF;
         o.script[10] = (selectedOutcome >> 16) & 0xFF;
         o.script[11] = (selectedOutcome >> 24) & 0xFF;
