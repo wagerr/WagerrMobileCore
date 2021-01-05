@@ -46,7 +46,9 @@ static const char *BRCoinTestNetDNSSeeds[] = {
 
 static const char *BRCoinBetAddresses[] = {
     "WcsijutAF46tSLTcojk9mR9zV9wqwUUYpC",
-    "Weqz3PFBq3SniYF5HS8kuj72q9FABKzDrP"
+    "Weqz3PFBq3SniYF5HS8kuj72q9FABKzDrP",
+    "WdAo2Xk8r1MVx7ZmxARpJJkgzaFeumDcCS",
+    "WhW3dmThz2hWEfpagfbdBQ7hMfqf6MkfHR"
     , NULL
 };
 
@@ -82,7 +84,8 @@ static const BRCheckPoint BRCoinCheckpoints[] = {
     {  695857, uint256("680a170b5363f308cc0698a53ab6a83209dab06c138c98f91110f9e11e273778"), 1560967688, 0x1a508433 },
     {  720000, uint256("63fc356380b3b8791e83a9d63d059ccc8d0e65dab703575ef4ca070e26e02fc7"), 1562424165, 0x1a47f2b0 },
     {  732900, uint256("5d832b3de9b207e03366fb8d4da6265d52015f5d1bd8951a656b5d4508a1da8e"), 1563200722, 0x1a40bac9 },
-    {  891270, uint256("eedb1794ca9267fb0ef88aff27afdd376ac93a54491a7b812cbad4b6c2e28d25"), 1572600959, 0x1a2be1d8 }
+    {  891270, uint256("eedb1794ca9267fb0ef88aff27afdd376ac93a54491a7b812cbad4b6c2e28d25"), 1572600959, 0x1a2be1d8 },
+    { 1427000, uint256("2ee16722a21094f4ae8e371021c28d19268d6058de42e37ea0d4c90273c6a42e"), 1605485238, 0x1a7aadee }
 };
 
 static int BRCoinVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
