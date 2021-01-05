@@ -46,7 +46,9 @@ static const char *BRWagerrTestNetDNSSeeds[] = {
 
 static const char *BRWagerrBetAddresses[] = {
         "WcsijutAF46tSLTcojk9mR9zV9wqwUUYpC",
-        "Weqz3PFBq3SniYF5HS8kuj72q9FABKzDrP"
+        "Weqz3PFBq3SniYF5HS8kuj72q9FABKzDrP",
+        "WdAo2Xk8r1MVx7ZmxARpJJkgzaFeumDcCS",
+        "WhW3dmThz2hWEfpagfbdBQ7hMfqf6MkfHR"
         , NULL
 };
 
@@ -67,25 +69,26 @@ static const BRCheckPoint BRWagerrTestNetCheckpoints[] = {
 // blockchain checkpoints - these are also used as starting points for partial chain downloads, so they must be at
 // difficulty transition boundaries in order to verify the block difficulty at the immediately following transition
 static const BRCheckPoint BRWagerrCheckpoints[] = {
-    {       1, uint256("000001364c4ed20f1b240810b5aa91fee23ae9b64b6e746b594b611cf6d8c87b"), 1518743781, 0x1e0fffff },          // First PoW premine block
-    {     101, uint256("0000005e89a1fab52bf996e7eb7d653962a0eb064c16c09887504797deb7feaf"), 1518746959, 0x1d769f71 },          // Last premine block
-    {    1001, uint256("0000002a314058a8f61293e18ddbef5664a2097ac0178005f593444549dd5b8c"), 1518803284, 0x1d307420 },          // Last PoW block
-    {    5530, uint256("b3a8e6eb90085394c1af916d5690fd5b83d53c43cf60c7b6dd1e904e0ede8e88"), 1519055199, 0x1a0a131e },          // Block on which switch off happened, 5531, 5532 differed
-    {   14374, uint256("61dc2dbb225de3146bc59ab96dedf48047ece84d004acaf8f386ae7a7d074983"), 1519653932, 0x1a0dde43 },
-    {   70450, uint256("ea83266a9dfd7cf92a96aa07f86bdf60d45850bd47c175745e71a1aaf60b4091"), 1523055044, 0x1a0cb4c0 },
-    {  257142, uint256("eca635870323e7c0785fec1e663f4cb8645b7e84b5df4511ba4c189e580bfafd"), 1534374855, 0x1a14f60f },
-    {  290000, uint256("5a70e614a2e6035be0fa1dd1a67bd6caa0a78e396e889aac42bbbc08e11cdabd"), 1536367184, 0x1a0d4db7 },
-    {  294400, uint256("01be3c3c84fd6063ba27080996d346318242d5335efec936408c1e1ae3fdb4a1"), 1536634958, 0x1a14c311 },
-    {  320000, uint256("9060f8d44058c539653f37eaac4c53de7397e457dda264c5ee1be94293e9f6bb"), 1538190282, 0x1a15305d },         // tx 671130
-    {  695857, uint256("680a170b5363f308cc0698a53ab6a83209dab06c138c98f91110f9e11e273778"), 1560967688, 0x1a508433 },
-    {  720000, uint256("63fc356380b3b8791e83a9d63d059ccc8d0e65dab703575ef4ca070e26e02fc7"), 1562424165, 0x1a47f2b0 },
-    {  732900, uint256("5d832b3de9b207e03366fb8d4da6265d52015f5d1bd8951a656b5d4508a1da8e"), 1563200722, 0x1a40bac9 },
-    {  891270, uint256("eedb1794ca9267fb0ef88aff27afdd376ac93a54491a7b812cbad4b6c2e28d25"), 1572600959, 0x1a2be1d8 }
+        {       1, uint256("000001364c4ed20f1b240810b5aa91fee23ae9b64b6e746b594b611cf6d8c87b"), 1518743781, 0x1e0fffff },          // First PoW premine block
+        {     101, uint256("0000005e89a1fab52bf996e7eb7d653962a0eb064c16c09887504797deb7feaf"), 1518746959, 0x1d769f71 },          // Last premine block
+        {    1001, uint256("0000002a314058a8f61293e18ddbef5664a2097ac0178005f593444549dd5b8c"), 1518803284, 0x1d307420 },          // Last PoW block
+        {    5530, uint256("b3a8e6eb90085394c1af916d5690fd5b83d53c43cf60c7b6dd1e904e0ede8e88"), 1519055199, 0x1a0a131e },          // Block on which switch off happened, 5531, 5532 differed
+        {   14374, uint256("61dc2dbb225de3146bc59ab96dedf48047ece84d004acaf8f386ae7a7d074983"), 1519653932, 0x1a0dde43 },
+        {   70450, uint256("ea83266a9dfd7cf92a96aa07f86bdf60d45850bd47c175745e71a1aaf60b4091"), 1523055044, 0x1a0cb4c0 },
+        {  257142, uint256("eca635870323e7c0785fec1e663f4cb8645b7e84b5df4511ba4c189e580bfafd"), 1534374855, 0x1a14f60f },
+        {  290000, uint256("5a70e614a2e6035be0fa1dd1a67bd6caa0a78e396e889aac42bbbc08e11cdabd"), 1536367184, 0x1a0d4db7 },
+        {  294400, uint256("01be3c3c84fd6063ba27080996d346318242d5335efec936408c1e1ae3fdb4a1"), 1536634958, 0x1a14c311 },
+        {  320000, uint256("9060f8d44058c539653f37eaac4c53de7397e457dda264c5ee1be94293e9f6bb"), 1538190282, 0x1a15305d },         // tx 671130
+        {  695857, uint256("680a170b5363f308cc0698a53ab6a83209dab06c138c98f91110f9e11e273778"), 1560967688, 0x1a508433 },
+        {  720000, uint256("63fc356380b3b8791e83a9d63d059ccc8d0e65dab703575ef4ca070e26e02fc7"), 1562424165, 0x1a47f2b0 },
+        {  732900, uint256("5d832b3de9b207e03366fb8d4da6265d52015f5d1bd8951a656b5d4508a1da8e"), 1563200722, 0x1a40bac9 },
+        {  891270, uint256("eedb1794ca9267fb0ef88aff27afdd376ac93a54491a7b812cbad4b6c2e28d25"), 1572600959, 0x1a2be1d8 },
+        { 1427000, uint256("2ee16722a21094f4ae8e371021c28d19268d6058de42e37ea0d4c90273c6a42e"), 1605485238, 0x1a7aadee }
 };
 
 static int BRWagerrVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
 {
-       return 1;
+    return 1;
 }
 
 static int BRWagerrTestNetVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
@@ -94,25 +97,25 @@ static int BRWagerrTestNetVerifyDifficulty(const BRMerkleBlock *block, const BRS
 }
 
 static const BRChainParams BRWagerrParams = {
-    BRWagerrDNSSeeds,
-    55002,                // standardPort
-    0xfd612d84,          // magicNumber
-    0, // services
-    BRWagerrVerifyDifficulty,
-    BRWagerrCheckpoints,
-    sizeof(BRWagerrCheckpoints)/sizeof(*BRWagerrCheckpoints),
-    BRWagerrBetAddresses
+        BRWagerrDNSSeeds,
+        55002,                // standardPort
+        0xfd612d84,          // magicNumber
+        0, // services
+        BRWagerrVerifyDifficulty,
+        BRWagerrCheckpoints,
+        sizeof(BRWagerrCheckpoints)/sizeof(*BRWagerrCheckpoints),
+        BRWagerrBetAddresses
 };
 
 static const BRChainParams BRWagerrTestNetParams = {
-    BRWagerrTestNetDNSSeeds,
-    55004,               // standardPort
-    0x99d19e87,          // magicNumber
-    0, // services
-    BRWagerrTestNetVerifyDifficulty,
-    BRWagerrTestNetCheckpoints,
-    sizeof(BRWagerrTestNetCheckpoints)/sizeof(*BRWagerrTestNetCheckpoints),
-    BRWagerrTestnetBetAddresses
+        BRWagerrTestNetDNSSeeds,
+        55004,               // standardPort
+        0x99d19e87,          // magicNumber
+        0, // services
+        BRWagerrTestNetVerifyDifficulty,
+        BRWagerrTestNetCheckpoints,
+        sizeof(BRWagerrTestNetCheckpoints)/sizeof(*BRWagerrTestNetCheckpoints),
+        BRWagerrTestnetBetAddresses
 };
 
 #endif // BRChainParams_h
