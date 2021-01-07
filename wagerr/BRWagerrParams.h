@@ -83,7 +83,8 @@ static const BRCheckPoint BRWagerrCheckpoints[] = {
         {  720000, uint256("63fc356380b3b8791e83a9d63d059ccc8d0e65dab703575ef4ca070e26e02fc7"), 1562424165, 0x1a47f2b0 },
         {  732900, uint256("5d832b3de9b207e03366fb8d4da6265d52015f5d1bd8951a656b5d4508a1da8e"), 1563200722, 0x1a40bac9 },
         {  891270, uint256("eedb1794ca9267fb0ef88aff27afdd376ac93a54491a7b812cbad4b6c2e28d25"), 1572600959, 0x1a2be1d8 },
-        { 1427000, uint256("2ee16722a21094f4ae8e371021c28d19268d6058de42e37ea0d4c90273c6a42e"), 1605485238, 0x1a7aadee }
+        { 1427000, uint256("2ee16722a21094f4ae8e371021c28d19268d6058de42e37ea0d4c90273c6a42e"), 1605485238, 0x1a7aadee },
+        { 1501000, uint256("ad7c8865b49b51da4ae163ac731c97ce8704d26da0d205a91f343c5c846bc384"), 1610026380, 0x1b0912cd }
 };
 
 static int BRWagerrVerifyDifficulty(const BRMerkleBlock *block, const BRSet *blockSet)
