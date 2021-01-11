@@ -614,7 +614,7 @@ BRTransaction *BRWalletCreateTxForOutputs(BRWallet *wallet, const BRTxOutput out
     // TODO: avoid combining addresses in a single transaction when possible to reduce information leakage
     // TODO: use up UTXOs received from any of the output scripts that this transaction sends funds to, to mitigate an
     //       attacker double spending and requesting a refund
-    // WAGERR: don't use immature UTXOs (payout+less than PAYOUT_MATURITY=101 confirms )
+    // WAGERR: don't use immature UTXOs (payout+less than PAYOUT_MATURITY confirms )
     for (i = 0; i < array_count(wallet->utxos); i++) {
         o = &wallet->utxos[i];
         tx = BRSetGet(wallet->allTx, o);

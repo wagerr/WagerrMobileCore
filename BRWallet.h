@@ -42,7 +42,7 @@ extern "C" {
 // Wagerr
 #define MIN_BET_AMOUNT 25 * SATOSHIS
 #define MAX_BET_AMOUNT 10000 * SATOSHIS
-#define PAYOUT_MATURITY 101
+#define PAYOUT_MATURITY 60
     
 typedef struct {
     UInt256 hash;
