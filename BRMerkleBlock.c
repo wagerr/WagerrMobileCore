@@ -131,7 +131,7 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
         block->nonce = UInt32GetLE(&buf[off]);
         off += sizeof(uint32_t);
 
-        if ( block->version > 3 ) {
+        if ( block->version > 3 && block->version < 7 ) {
             block->nAccumulatorCheckpoint = UInt256Get(&buf[off]);
             off += sizeof(UInt256);
         }
@@ -155,8 +155,11 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
         if ( block->version < 4 ) {
             quark_hash(buf, &block->blockHash);       // hash function for block hash
         }
-        else {
+        else if ( block->version < 7 ) {
             BRSHA256_2(&block->blockHash, buf, 112);     // 80 + Uint256 nAccumulatorCheckpoint
+        }
+        else {      // version 7
+            BRSHA256_2(&block->blockHash, buf, 80);     // no more nAccumulatorCheckpoint
         }
     }
     
